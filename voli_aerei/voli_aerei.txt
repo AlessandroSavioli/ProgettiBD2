@@ -1,0 +1,48 @@
+
+1. Voli:
+
+	1.1. Codice
+	1.2. Durata
+	1.3. Compagnia aerea
+	1.4. Aeroporti di partenza ed arrivo
+	1.5. Voli charter (sottoclasse)
+		1.5.1. modello di aereo usato
+		1.5.2. tappe intermedie negli aeroporti
+
+2. Compagnie Aeree:
+
+	2.1. Nome
+	2.2. Anno di fondazione
+	2.3. Città (Classe, vedi pt. 3.3.) in cui ha sede la direzione
+	
+3. Aeroporti
+
+	3.1. Codice
+	3.2. Nome
+	3.3. Città (Classe!):
+		3.3.1. Nome
+		3.3.2. Numero di abitanti
+		3.3.3. Nazione (Classe!)
+			3.3.3.1 Nome
+
+
+
+
+
+
+
+
+
+
+I dati di interesse per il sistema sono voli, compagnie aeree ed aeroporti.
+Dei voli interessa rappresentare codice, durata, compagnia aerea ed aeroporti di
+partenza e arrivo.
+Degli aeroporti interessa rappresentare codice, nome, città (con nome e numero di
+abitanti) e nazione.
+Delle compagnie aeree interessa rappresentare nome, anno di fondazione, e la città
+in cui ha sede la direzione
+Un tipo particolare di voli sono voli charter. Questi possono prevedere tappe intermedie in aeroporti. Delle tappe intermedie di un volo charter interessa mantenere l’ordine
+con cui esse si susseguono (ad esempio, un certo volo che parte da “Milano Linate” e
+arriva a “Palermo Punta Raisi”, prevede tappe intermedie prima nell’aeroporto di Bologna
+e poi in quello di Napoli). Dei voli charter interessa rappresentare anche il modello di
+velivolo usato.

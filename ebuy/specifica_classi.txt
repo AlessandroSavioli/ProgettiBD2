@@ -1,0 +1,91 @@
+# SPECIFICA DELLE CLASSI
+- CLASSE POST
+	[V.Post.istante]
+		Per ogni p:Post, sia u:Utente tale che (u,p):ute_post.
+			Deve essere: u.registrazione <= p.istante.
+
+
+- CLASSE POSTCONFEEDBACK
+	[V.PostConFeedback.solo_se_acquistato]
+		per ogni p:PostConFeedback
+		deve essere vero che:
+			- se p è istanza di Asta
+				- p.conclusa() deve essere uguale a True
+				- p.ultimo_bid() deve restituire un b:Bid
+
+			- se p è istanza di CompraSubito
+				-p deve partecipare ad un link acquirente
+			
+
+- CLASSE ASTA
+	[V.Asta.scadenza_dopo_inizio]
+		per ogni a:Asta, si ha:
+			a.istante < a.scadenza_asta
+
+	prezzo_corrente(): Reale >= 0
+		pre: 
+			nessuna
+		post:
+			Sia B l'insieme di tutti i b:Bid tali che (b,this):bid_asta.
+
+			Se B è vuoto, allora
+				result = this.prezzo
+			Altrimenti
+				sia b_ultimo:Bid tale che:
+					- b_ultimo in B
+					- ha valore massimo per l'attributo "istante" tra tutti gli elementi di B
+					
+				result = b_ultimo.prezzo() + this.rialzo
+
+- ASSOCIAZIONE ACQUIRENTE
+	[V.acquirente.istante]
+		per ogni (u:Utente, p:CompraSubito):acquirente, deve essere:
+			- (u,p).istante >= u.registrazione
+			- (u,p).istante >= p.istante
+
+
+
+	
+- CLASSE BID
+	[V.Bid.istante]
+		per ogni b:Bid, deve essere:
+			sia a:Asta tale che (b,a):bid_asta
+			Deve essere
+				b.istante >= a.istante
+				e
+				b.istante <= a.scadenza
+
+	[V.Bid.utente]
+		per ogni b:Bid, siano:
+			- u:Utente tale che (b,u):ute_bid
+			- a:Asta tale che (b,a):bid_asta
+
+		La coppia (u,a) non deve definire un link di associazione "ute_post"
+			
+	ammontare(): Reale >= 0
+		pre: 
+			nessuna
+		post: 
+			sia a:Asta tale che (this,a):bid_asta.
+
+			result = a.prezzo + (a.rialzo * N)
+
+			dove N è il numero di oggetti b:Bid tali che:
+				- (b,a):bid_asta
+				- b.istante < this.istante
+
+
+- CLASSE CATEGORIA
+	[V.Categoria.non_genitore_se_stessa]
+		per ogni c:Categoria
+		non deve esistere il link (c:genitore, c:figlia):gerarchia
+
+	[V.Categoria.gerarchia_non_simmetrica]
+		per ogni c1:Categoria, c2:Categoria
+		se esiste il link (c1:genitore, c2:figlia):gerarchia
+		allora non deve esistere il link (c2:genitore, c1:figlia):gerarchia
+
+	[V.Categoria.gerarchia_no_cicli]
+		la gerarchia delle categorie non deve formare cicli.
+	
+		

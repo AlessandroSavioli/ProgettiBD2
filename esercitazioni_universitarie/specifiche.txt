@@ -1,0 +1,41 @@
+1. Insegnamento
+	1.1. nome
+	1.2. crediti 
+	1.3. docenti (anche più di uno) (ass)
+	1.4. anno accademico
+	1.5. esercitazioni (ass)
+	
+2. Docente
+	2.1. matricola (ID)
+	2.2. nome
+	2.3. cognome
+
+3. Esercitazione
+	3.1. data
+	3.2. esercizi (ass)
+	
+4. Esercizio
+	4.1. testo
+	4.2. soluzioni (ass)
+	(Sottoclassi)
+	4.3. presentato (svolto in modo autonomo)
+		(Sottoclasse)
+		4.3.1. risolto in classe
+			4.3.1.1. quale soluzione è stata mostrata
+5. Soluzione
+	5.1. testo
+	
+	
+	
+	I dati di interesse per il sistema sono insegnamenti universitari e le esercitazioni ivi
+	erogate.
+	Di ogni insegnamento interessa sapere il nome, il relativo numero di crediti formativi
+	universitari, i docenti (possono essere più d’uno) e l’anno accademico di riferimento. Dei
+	docenti interessa matricola, nome e cognome.
+	Un insegnamento può prevedere diverse esercitazioni, ognuna erogata in una certa
+	data e composta da molti esercizi, scelti tra quelli disponibili nel sistema.
+	Di ogni esercizio, il sistema deve rappresentare il testo e la o le relative soluzioni
+	disponibili (anche nessuna). Per ogni esercizio presentato in una esercitazione, il sistema
+	deve mantenere l’informazione circa il fatto che questo sia stato solo presentato (per
+	essere svolto in modo autonomo dagli studenti), oppure anche risolto in aula (e, in
+	questo caso, quale delle soluzioni disponibili è stata mostrata).

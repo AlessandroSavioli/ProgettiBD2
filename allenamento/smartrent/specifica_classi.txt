@@ -1,0 +1,28 @@
+# SPECIFICA DELLE CLASSI
+
+- CLASSE UTENTE 
+
+	età(oggi): Intero >= 0
+		pre:
+			nessuna
+		post:
+			result = oggi - this.data_nascita
+
+- CLASSE NOLEGGIO
+
+	[V.Noleggio.intervallo_valido]
+		per ogni oggetto n:Noleggio deve valere:
+			se n.fine è valorizzato, allora n.inizio < n.fine
+
+	costo(): Reale > 0
+		pre:
+			this.fine deve essere valorizzato
+		post:
+			Sia m la differenza in minuti tra this.fine e this.inizio
+
+			Sia v:Veicolo tale che (this, v):nol_veic
+
+			Se v è di classe più specifica Automobile, allora:
+				result = 1 + (m * 0,5)
+			Altrimenti, se v è di classe più specifica Monopattino, allora:
+				result = (m * 0,2)

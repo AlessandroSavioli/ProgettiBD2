@@ -1,0 +1,49 @@
+1. Docenti universitari
+	1.1. nome
+	1.2. cognome
+	1.3. data di nascita
+	1.4. matricola
+	1.5. posizione universitaria:
+		1.5.1. ricercatore, professore associato, professore ordinario
+	1.6. progetti ai quali partecipa
+
+2. Progetti ricerca
+	2.1. nome
+	2.2. acronimo	
+	2.3. data di inizio
+	2.4. data di fine
+	2.5. docenti che vi partecipano
+
+3. Work Package	
+	3.1. nome
+	3.2. data di inizio
+	3.3. data di fine
+	3.4. progetto a cui fa riferimento
+
+4. Impegni docente	
+	4.1. giorno in cui avvengono
+	4.2. durata in ore
+	4.3. tipologia impegno:
+		4.3.1. assenza
+			4.3.1.1. per chiusura universitaria, malattia, gravidanza, etc.
+		4.3.2. impegni istituzionali
+			4.3.2.1. didattica, ricerca, missione, consiglio di dipartimento, consiglio di area di-
+dattica, etc
+		4.3.3. impegni progettuali
+			4.3.3.1. Ricerca e Sviluppo, Dimostrazione,
+Management, etc.
+
+
+
+
+I dati di interesse per il sistema sono i docenti universitari, i progetti di ricerca e le
+attività dei docenti.
+Di ogni docente interessa conoscere il nome, il cognome, la data di nascita, la matricola, la posizione universitaria (ricercatore, professore associato, professore ordinario)
+e i progetti ai quali partecipa.
+Dei progetti interessa il nome, un acronimo, la data di inizio, la data di fine e i
+docenti che vi partecipano.
+Un progetto è composto da molti Work Package (WP). Oltre al progetto a cui fa
+riferimento, del WP interessa sapere il nome, la data di inizio e la data di fine.
+Il sistema deve permettere ai docenti di registrare impegni di diverso tipo. Degli
+impegni interessa sapere il giorno in cui avvengono, la durata in ore e la tipologia di
+impegno con relativa motivazione.

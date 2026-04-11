@@ -1,0 +1,111 @@
+SPECIFICA DEGLI USE-CASE
+
+- USE-CASE REGISTRAZIONE
+
+	nuovo_utente(n:Stringa):Utente
+		pre:
+			non esiste u:Utente tale che u.nickname = n
+		post:
+			viene creato e restituito un nuovo oggetto result:Utente con:
+				- result.nickname = n
+				- result.registrazione = adesso
+
+- USE-CASE STRUMENTI VENDITORI
+
+	nuovo_post_asta(
+		modalità: {asta, comprasubito}
+		stato:{nuovo,usato}
+		d:Stringa,
+		p:Reale>=0, 
+		c:Stringa, 
+		metodo_pagam:{bonifico,carta},
+		anni_gar:Intero >= 0,
+		cond:Condizioni[0..1],
+		rialzo:Reale > 0 [0..1],
+		scadenza:DataOra [0..1],
+		val:Valuta
+	):Post
+		pre:
+			-se modalità = asta, allora e solo allora 
+				rialzo e scadenza sono valorizzati
+			- se stato = nuovo, allora anni_gar >= 2
+			- cond è valorizzato se e solo se stato = usato
+			- scadenza > adesso
+			
+		post:
+			viene creato e restituito result:Post tale che:
+				- result.istante = adesso
+				- result.metodi_pagam = metodi_pagam
+				- result.prezzo = prezzo
+				- result.descrizione = d
+				- result.categoria = c
+				- result.anni_garanzia = anni_gar
+
+			Se modalità = asta:
+				result è anche di classe più specifica Asta con:
+					- result.rialzo = rialzo
+					- result.scadenza = scadenza
+			Altrimenti:
+				result è anche di classe più specifica CompraSubito
+				
+			Se stato = nuovo:
+				result è anche di classe più specifica Nuovo
+			Altrimenti:
+				result è anche di classe più specifica Usato con:
+					-result.cond = cond
+
+			Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione
+			
+			vengono creati i seguenti link:
+				- (result, val):post_val
+				- (u, result):ute_post
+			
+
+	bid_aggiudicatario(a:Asta):Bid [0..1]
+		pre:
+			- a.scadenza < adesso
+			- Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione,
+		      allora deve essere:
+		      	(u, a):ute_post
+		     
+		post:
+			Sia B l'insieme degli oggetti b:Bid tali che (b, a):bid_asta
+
+			Se B è vuoto:
+				l'operazione non restituisce alcun valore
+			
+			Altrimenti:
+				result è l'elemento di B che ha valore massimo per l'attributo "istante"
+
+	
+	
+- USE-CASE STRUMENTI ACQUIRENTE
+
+	nuovo_bid( a:Asta ):Bid
+		pre:
+			Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione
+			
+			- a.istante <= adesso
+			- a.scadenza > adesso
+			- (u, a) non è un link di associazione ute_post
+			
+		post:
+			Viene creato e restituito result:Bid tale che:
+				-result.istante = adesso
+			 
+			Vengono creati i seguiti link:
+				- (result, a):bid_asta
+				- (result, u):ute_bid
+				
+	compra_subito( p:CompraSubito ):
+		pre: 
+			Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione
+
+			- (u, p) non è un link di associazione ute_post
+			- non esiste alcun u':Utente tale che:
+				(u',p):ute_post
+
+		post:
+			viene creato il link (u,p):acquirente con:
+				(u, p).istante = adesso
+		

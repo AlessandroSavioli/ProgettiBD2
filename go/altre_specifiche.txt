@@ -1,0 +1,10 @@
+SPECIFICHE DI GO
+
+SPECIFICA DEGLI ATTRIBUTI
+1. Indirizzo : (Via: Stringa, Civico: [0-9]{1-4}, Cap: [0-9]{5})
+
+SPECIFICA DEI VINCOLI
+1. V.Partita.Giocatore_bianco_o_nero
+	Per ogni p:Partita non devono esistere g1:Giocatore e g2: Giocatore tali che:
+	- g1 != g2
+	- (g1, p): nero and (g2, p): nero or (g1, p): bianco and (g2, p): bianco

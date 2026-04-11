@@ -1,0 +1,36 @@
+1. Giocatore
+	1.1. Nickname (ID)
+	1.2. Nome
+	1.3. Cognome
+	1.4. Indirizzo 
+	1.5. Rank dichiarato (intero > 0)
+	
+	
+2. Torneo
+	2.1. nome (ID)
+	2.2. descrizione
+	2.3. edizione (anno) (ID)
+	
+3. Partite
+	3.1. Data in cui si è svolta
+	3.2. Luogo 
+	3.3. regole di conteggio (giapponesi o cinesi)
+	3.4. quale giocatore gioca con le bianche e quale con le nere (*)
+	3.5. fattore komi (reale tra 0 e 10) (*) 
+	3.6. Esito (*)
+		3.6.1. Può essere rinuncia di uno dei due oppure da una coppia di punteggi di bianco e nero interi non negativi
+	3.7. a quale torneo si riferiscono
+	
+	
+	I dati di interesse per il sistema sono i giocatori, i tornei e le partite.
+	Di un giocatore interessa conoscere il nick-name (univoco), il nome, il cognome,
+	l’indirizzo e il rank dichiarato (un intero positivo).
+	Due giocatori si possono sfidare in una partita. Di una partita interessa sapere la
+	data e il luogo in cui è giocata, le regole di conteggio usate (giapponesi o cinesi), quale
+	giocatore gioca con le pietre bianche e quale con le pietre nere, il fattore di deficit
+	chiamato komi (numero reale non negativo, tra 0 e 10) e l’esito. L’esito può essere
+	rappresentato da una rinuncia di uno dei due giocatori, oppure da una coppia di punteggi
+	di bianco e di nero (interi non negativi).
+	Le partite si possono anche riferire a un torneo.
+	Di un torneo interessa sapere il nome, una descrizione testuale, e l’edizione in termini
+	dell’anno in cui si svolge.

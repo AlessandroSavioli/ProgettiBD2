@@ -1,0 +1,66 @@
+# SPECIFICA DEGLI USE-CASE
+
+- specifica use-case Strumenti Riparazione
+
+	nuova_riparazione(
+		codice: Intero > 0,
+		v: Veicolo
+		o: Officina
+	):Riparazione
+
+		pre:
+			non deve esistere r':Riparazione tale che r'.codice = codice
+		post:
+			viene creato e restituito un nuovo oggetto result:Riparazione tale che:
+				- result.codice = codice
+				- result.accettazione = adesso
+
+			vengono creati i seguenti link:
+				- (o, result):off_ripa
+				- (v, result):veic_ripa
+
+	termina_riparazione(
+		r: Riparazione
+	):
+
+		pre: 
+			il campo r.riconsegna non deve essere valorizzato
+		post:
+			r.riconsegna = adesso
+
+			
+- specifica use-case Registrazione Veicoli
+
+	nuovo_modello( n: Stringa ):Modello
+		pre:
+			non deve esistere m':Modello tale che m'.nome = n 
+		post:
+			viene creato e restituito un nuovo oggetto result:Modello tale che:
+				- result.nome = n
+
+	nuova_tipologia( n: Stringa ):Tipologia
+			pre:
+				non deve esistere t':Tipologia tale che t'.nome = n 
+			post:
+				viene creato e restituito un nuovo oggetto result:Tipologia tale che:
+					- result.nome = n
+
+	nuovo_veicolo(
+		t: Targa
+		p: Proprietario
+		m: Modello
+		tip: Tipologia
+	): Veicolo
+
+		pre:
+			- non deve esistere v':Veicolo tale che v'.targa = t
+			- imm <= oggi
+		post:
+			viene creato e restituito un nuovo oggetto result:Veicolo tale che:
+				- result.targa = t
+				- result.immatricolazione = imm
+
+			vengono creati i seguenti link:
+				- (p, result):prop_veic
+				- (m, result):mod_veic
+				- (tip, result):tipo_veic

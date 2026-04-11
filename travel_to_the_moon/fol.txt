@@ -1,0 +1,91 @@
+# Alfabeto
+
+	F = {}
+	
+	P = { Nave/1, Crociera/1, Itinerario/1, Stringa/1, Destinazione/1, CrocieraLunaDiMiele/1, CrocieraPerFamiglie/1, Tocca/2, Nome/2, Segue/2, Utilizza/2}
+
+# Formula
+
+		Not EXISTS n [Nave(n) and Crociera(n)] 							# Tipizzazione dei dati
+		and
+		ALL c, n utilizza(c, n) -> Nave(n) and Crociera(c) 					# Tipizzazione dell'associazione
+		and 
+		ALL c Crociera(c) -> EXISTS n Utilizza(c, n) 						# Almeno una nave
+		and
+		ALL c Crociera(c) -> Not ( EXISTS n1, n2 						# Non più di una nave	
+						Utilizza(c,n1) and Utilizza(c,n2) and (n1 != n2)
+					 )
+		and 
+		Not EXISTS i [Itinerario(i) and Nave(i)]
+		and 
+		Not EXISTS i [Itinerario(i) and Crociera(i)]
+		and 
+		ALL c, i Segue(c, i) -> Itinerario(i) and Crociera(c)
+		and 
+		ALL c Crociera(c) -> EXISTS i Segue(c, i)
+		and 
+		ALL c Crociera(c) -> not ( EXISTS i1, i2
+						Segue(c, i1) and Segue(c, i2) and (i1 != i2)
+					 )
+		and
+		Not EXISTS s [Stringa(s) and Nave(s)]
+		and
+		Not EXISTS s [Stringa(s) and Crociera(s)]
+		and
+		Not EXISTS s [Stringa(s) and Itinerario(s)]
+		and
+		ALL i, s Nome(i, s) -> Itinerario(i) and Stringa(s)
+		and 
+		
+			# Questo si può compattare con ALL i Itinerario(i) -> EXISTS ! s Nome(i, s) ## Esiste ed è Unico!!!
+			|
+			|	ALL i Itinerario(i) -> EXISTS s Nome(i, s)						
+			|	and
+			|	ALL i Itinerario(i) -> not ( EXISTS s1, s2					
+			|					Nome(i, s1) and Nome(i, s2) and (s1 != s2)
+			|				   )
+		and
+		ALL s Stringa(s) -> not ( EXISTS i1, i2							# Univocità del nome
+						Nome(i1, s) and Nome(i2, s) and (i1 != i2)
+					)
+		and
+		Not EXISTS d [Destinazione(d) and Nave(d)]
+		and
+		Not EXISTS d [Destinazione(d) and Crociera(d)]
+		and
+		Not EXISTS d [Destinazione(d) and Itinerario(d)]
+		and
+		Not EXISTS d [Destinazione(d) and Stringa(d)]
+		and 
+		ALL c, d Tocca(c, d) -> Crociera(c) and Destinazione(d)
+		and 
+		ALL c Crociera(c) -> EXISTS d Tocca(c, d)
+		and
+		# 5° Richiesta
+		ALL c Crociera(c) -> ( CrocieraLunaDiMiele(c) and Not ( CrocieraPerFamiglie(c) ) ) or ( Not ( CrocieraLunaDiMiele(c) )  and CrocieraPerFamiglie(c) ) 
+		and 
+		All c CrocieraLunaDiMiele(c) -> ( Crociera(c) and Not (  Nave(c) or Itinerario(c) or Stringa(c) or Destinazione(c) or CrocieraPerFamiglie(c) ) )
+		and
+		All c CrocieraPerFamiglie(c) -> ( Crociera(c) and Not (  Nave(c) or Itinerario(c) or Stringa(c) or Destinazione(c) or CrocieraLunaDiMiele(c) ) ) 
+		
+		
+					
+		
+# Richieste 
+
+1. Ogni crociera viene effettuata utilizzando una nave
+2. Ogni crociera segue un itinerario
+3. Gli itinerari hanno un nome univoco
+4. Ogni crociera tocca un certo insieme non vuoto di destinazioni
+5. Le crociere si dividono in crociere di luna di miele e crociere per famiglia.		
+		
+		
+		
+		
+# Esempi di Interpretazione
+
+	Tocca = {
+		c1 --> Roma
+		c2 --> Roma
+		c1 --> Napoli
+	}

@@ -1,0 +1,66 @@
+# Richieste
+
+1. Tutte le persone hanno almeno un numero di telefono
+2. Ogni persona ha esattamente un nome
+3. Non ci sono dipendenti che lavorano in più di due dipartimenti
+4. Ogni dipartimento ha esattamente un direttore che è una persona.
+
+# Alfabeto
+
+	F = {}
+	
+	P = {Persona/1, NumTelefono/1, Stringa/1, Dipendente/1, Dipartimento/1, Direttore/1, Dirigenza/2, Lavora/2, HaNome/2, HaNumero/2}
+	
+# Formula
+
+	ALL p Persona(p) -> ( Not ( NumTelefono(p) ) )
+	and
+	ALL p, n HaNumero(p, n) -> ( Persona(p) And NumTelefono(n) ) 
+	and
+	ALL p Persona(p) -> EXISTS n HaNumero(p, n)
+	and
+	ALL s Stringa(s) -> ( Not ( Persona(s) Or NumTelefono(s) ) )
+	and
+	ALL p, n HaNome(p, n) -> ( Persona(p) And Stringa(n) )
+	and
+	ALL p Persona(p) -> EXISTS ! n HaNome(p, n)
+	and
+	ALL d Dipendente(d) -> ( Persona(d) And Not ( NumTelefono(d) Or Stringa(d) ) )
+	and
+	ALL d Dipartimento(d) -> ( Not ( Persona(d) Or NumTelefono(d) Or Stringa(d) Or Dipendente(d) ) )
+	and
+	ALL dipe, dipa Lavora(dipe, dipa) -> ( Dipendente(dipe) And Dipartimento(dipa) )
+	and
+	ALL dipe Dipendente(dipe) -> Not ( EXISTS
+						dipa1, dipa2, dipa3
+						Lavora(dipe, dipa1) And Lavora(dipe, dipa2) And Lavora(dipe, dipa3) And ( dipa1 != dipa2 And dipa1 != dipa3 And dipa2 != dipa3 )
+					 )
+	and
+	ALL d Direttore(d) -> ( Persona(d) And Not ( NumTelefono(d) Or Stringa(d) Or Dipartimento(d) ) ) # Qui lascio la possibilità ad un direttore di essere anche dipendente perché non è esplicitato
+	and
+	ALL dir, dip Dirigenza(dir, dip) -> ( Direttore(dir) And Dipartimento(dip) ) 
+	and
+	ALL dip Dipartimento(dip) -> EXISTS ! dir Dirigenza(dir, dip) 
+	
+	
+# Esempio di interpretazione
+
+	Dominio = { Alessandro, 123456789, Francesco, 213456789, alpha, beta, Ricerca }
+	
+	# Simboli di predicato con arità 1
+	
+	I(Persona) = { alpha, beta }
+	I(NumTelefono) = { 123456789, 213456789 }
+	I(Stringa) = { Alessandro, Francesco }
+	I(Dipendente) = { beta }
+	I(Dipartimento) = { Ricerca }
+	I(Direttore) = { alpha }
+	
+	# Simboli di predicato con arità 2
+	
+	I(Dirigenza) = { (alpha, Ricerca) }
+	I(Lavora) = { (beta, Ricerca) }
+	I(HaNome) = { (alpha, Alessandro), (beta, Francesco) }
+	I(HaNumero) = { (alpha, 123456789), (beta, 213456789) }
+	
+	

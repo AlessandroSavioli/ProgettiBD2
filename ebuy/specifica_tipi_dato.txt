@@ -1,0 +1,10 @@
+# SPECIFICA DEI TIPI DI DATO
+
+- Condizioni: (
+	{ottimo, buono, discreto, da sistemare}
+)
+
+- URL: (
+	Stringa secondo standard RFC 1738.
+)
+

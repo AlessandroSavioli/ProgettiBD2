@@ -1,0 +1,66 @@
+# Alfabeto
+
+	F = {}
+	
+	P = {Reparto/1, Ospedale/1, Medico/1, Stringa/1, Letto/1, Paziente/1, Dispone/2, Matricola/2, Lavora/2, Situato/2}
+	
+# Formula
+
+	ALL r Reparto(r) -> Not (Ospedale(r))
+	and
+	ALL r, o Situato(r, o) -> ( Reparto(r) and Ospedale(o) )
+	and
+	ALL r Reparto(r) -> EXISTS o Situato(r, o)
+	and
+	ALL r Reparto(r) -> Not (EXISTS o1, o2
+					Situato(r, o1) and Situato(r, o2) and o1 != o2
+				)
+	and
+	ALL m Medico(m) -> Not ( Reparto(m) or Ospedale(m) ) 
+	and 
+	ALL m, r Lavora(m, r) -> ( Medico(m) and Reparto(r) )
+	and
+	ALL m Medico(m) -> EXISTS r Lavora(m, r)
+	and
+	ALL m Medico(m) -> Not (EXISTS r1, r2
+					Lavora(m, r1) and Lavora(m, r2) and r1 != r2
+				)
+	and
+	ALL s Stringa(s) -> Not ( Reparto(s) or Ospedale(s) or Medico(s) )
+	and
+	ALL m, s Matricola(m, s) -> ( Medico(m) and Stringa(s) )
+	and 
+	ALL m Medico(m) -> EXISTS ! s Matricola(m, s)
+	and 
+	ALL s Stringa(s) -> Not (EXISTS m1, m2
+					Matricola(m1, s) and Matricola(m2, s) and m1 != m2
+				)
+	and
+	ALL l Letto(l) -> Not ( Reparto(l) or Ospedale(l) or Medico(l) or Stringa(l) )
+	and
+	ALL r, l Dispone(r, l) -> ( Reparto(r) and Letto(l) )
+	and 
+	ALL r Reparto(r) -> EXISTS l Dispone(r, l)
+	and
+	ALL l Letto(l) -> Not (EXISTS r1, r2
+					Dispone(r1, l) and Dispone(r2, l) and r1 != r2
+			      )
+	and
+	ALL p Paziente(p) -> Not ( Reparto(p) or Ospedale(p) or Medico(p) or Stringa(p) or Letto(p) )
+	
+	
+	
+	
+# Esempio di interpretazione
+
+# Requisiti 
+
+1. Ogni reparto si trova all'interno di un singolo ospedale.
+
+2. Ogni medico lavora in esattamente un reparto.
+
+3. Ogni medico possiede un numero di matricola univoco (una stringa).
+
+4. Ogni reparto dispone di un insieme non vuoto di letti.
+
+5. (Regola Bonus): Nessun medico può essere contemporaneamente un paziente.

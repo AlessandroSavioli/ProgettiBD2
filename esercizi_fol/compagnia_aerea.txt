@@ -1,0 +1,43 @@
+# Requisiti 
+
+1. (Assegnazione obbligatoria): Ogni Volo deve essere operato da esattamente un Aereo.
+
+2. (Molti-a-Molti asimmetrico): Un Passeggero può essere prenotato su quanti voli vuole (anche zero, magari si è solo registrato al sito), ma un Volo per esistere deve avere almeno un Passeggero prenotato.
+
+3. (Il paradosso del comandante): Un Pilota non può mai essere prenotato come Passeggero sul Volo specifico che lui stesso sta pilotando.
+
+# Alfabeto 
+
+	F = {}
+
+	P = {Aereo/1, Volo/1, Passegero/1, Pilota/1, Operato/2, Prenota/2, Comanda/2}
+	
+# Formula
+
+	ALL a Aereo(a) -> Not Volo(a)
+	and 
+	ALL v, a Operato(v, a) -> ( Volo(v) and Aereo(a) )
+	and 
+	ALL v Volo(v) -> EXISTS ! a Aereo(a) Operato(v, a)
+	and 
+	# (Molti-a-Molti asimmetrico):
+	# Un Passeggero può essere prenotato su quanti voli vuole (anche zero, magari si è solo registrato al sito), ma un Volo per esistere deve avere almeno un Passeggero prenotato.
+	
+	ALL p Passegero(p) -> ( Not ( Volo(p) Or Aereo(p)))
+	and
+	#specifica dell operazione
+	ALL p,v Prenota(p, v) -> ( Passegero(p) and Volo(v))
+	and 
+	# specifica moteplicita
+	All v Volo(v) -> EXIST p Passeggero(p) Prenota(p, v)
+	and 
+	# Un Pilota non può mai essere prenotato come Passeggero sul Volo specifico che lui stesso sta pilotando.
+	# distinzione tipi dato
+	All p Pilota(p) -> (Not (Volo(p) Or Aereo(p))
+	and 
+	ALL c,v Comanda(c, v) -> (Pilota(c) and Volo(v))
+	and 
+	ALL v Volo(v) -> EXIST ! c Pilota(c) Comanda(c, v)
+	and 
+	ALL c,v Comanda(c, v) -> not (Prenota(c,v))
+	

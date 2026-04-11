@@ -1,0 +1,38 @@
+# Alfabeto 
+	
+	F = {}
+
+	P = {Assistente/1, Studente/1, Professore/1, Corso/1, Tenuto/2, Assegnato/2, Iscritto/2}
+	
+# Formula
+	
+	ALL a Assistente(a) -> ( Studente(a) and Not ( Professore(a) or Corso(a) ) )
+	and
+	ALL c Corso(c) -> Not ( Assistente(c) or Studente(c) or Professore(c) )
+	and
+	ALL s, c Iscritto(s, c) -> ( Studente(s) and Corso(c) )
+	and 
+	ALL c, p Tenuto(c, p) -> ( Corso(c) and Professore(p) )
+	and
+	ALL c Corso(c) -> EXISTS ! p Tenuto(c, p)
+	and 
+	ALL a, c Assegnato(a, c) -> ( Assistente(a) and Corso(c) )
+	and 
+	ALL c Corso(c) -> Not (EXISTS a1, a2
+					Assegnato(a1, c) and Assegnato(a2, c) and a1 != a2
+			      )
+	and
+	ALL c, p Tenuto(c, p) -> Not ( Iscritto(p, c) ) 
+	
+
+# Requisiti
+
+1. (Sottoclasse): Ogni Assistente è prima di tutto uno Studente. (Di conseguenza, le altre entità come Professore e Corso sono disgiunte da loro).
+
+2. (Molti-a-Molti opzionale): Uno Studente può essere iscritto a quanti Corsi desidera (anche zero), e un Corso può avere qualsiasi numero di studenti iscritti (anche zero).
+
+3. (1-a-Molti con zero): Ogni Corso deve essere tenuto da esattamente un Professore, ma un Professore può anche essere in anno sabbatico e non tenere alcun corso.
+
+4. (Opzionalità 0..1): Un Corso può avere al massimo un Assistente assegnato come supporto (può averne uno, ma può anche non averne nessuno).
+
+5. (Vincolo incrociato): Un Professore non può mai essere iscritto come studente a un Corso che lui stesso insegna.

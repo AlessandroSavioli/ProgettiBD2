@@ -1,0 +1,13 @@
+Specifica dei tipi di dato
+
+DeltaDataOra:
+	- giorno: Intero > 0
+	- ora: Ora
+	
+FO: 
+	- (ora1 : Ora, ora2 : Ora) 
+		tale che ora2 > ora1
+		
+GiornoSettimana:
+	{Lunedì, Martedì, Mercoledì, Giovedì, Venerdì, Sabato, Domenica}
+	

@@ -1,0 +1,87 @@
+SPECIFICA DEGLI USE CASE
+
+
+GestionePrenotazioni:
+
+	nuovo_cliente(nome: Stringa, cognome: Stringa, nascita: Data, indirizzo: Indirizzo, cit: Città) : Cliente
+		pre: 
+			nascita < l'istante corrente
+		post: 
+			Viene creato e restituito un nuovo oggetto result:Cliente tale che:
+				- result.nome = nome
+				- result.cognome = cognome
+				- result.nascita = nascita
+				- result.indirizzo = indirizzo
+			
+			Viene creato il link (result, cit):cliente_città
+
+
+	nuova_prenotazione(cl:Cliente, cr: Crociera, posti: Intero > 0): Prenotazione
+		pre: 
+			- cr.posti_disponibili() >= posti
+			- cr.inizio > l'istante corrente
+		post:
+			Viene creato e restituito l'oggetto result:Prenotazione tale che:
+				- result.istante = l'istante corrente
+				- result.posti = posti
+			
+			Viene creato il link (result, cl):pren_cliente
+			Viene creato il link (result, cr):pren_croc
+	
+	cancella_prenotazione(p: Prenotazione) # Esercizio
+		pre:
+		
+		post:
+
+
+Statistiche:
+	
+	eta_media_clienti_crociere_esotiche(inizio: DataOra, fine: DataOra): Reale >= 0
+		pre:
+			inizio <= fine
+
+			Sia D_es l'insieme degli oggetti d:Destinazione tali che d.esotica() = True
+			Sia I l'insieme degli oggetti i:Itinerario tali che, esiste almeno un d:D_es, per il quale almeno almeno una delle 				seguenti è vera:
+				- (i, d):partenza_iniziale
+				- (i, d):arrivo_finale
+				- esiste t:TappaIntermedia tale che (i,t):itin_tappa e (t,d):tappa_dest
+			
+			Sia Cr l'insieme degli oggetti cr:Crociera tali che esiste almeno un i:I per cui (cr, i):croc_itin
+
+			Sia Pr l'insieme degli oggetti pr:Prenotazione tali che:	
+				- pr.istante >= inizio and pr.istante <= fine
+				- esiste cr:Cr per cui (pr,cr):pren_croc
+			
+			Sia Cl l'insieme di tutti gli oggetti cl:Cliente tali che:
+				- esiste pr:Pr per cui (pr,cl):pren_cliente
+
+			Cl != vuoto
+
+		post:
+			
+			result è il valore medio dei valori dell'operazione età(oggi) invocata su tutti gli oggetti in Cl
+
+
+
+	
+	percentuale_dest_gettonate(inizio: DataOra, fine: DataOra): Reale tra 0 e 1
+		pre:
+			inizio <= fine
+			Sia D l'insieme di tutti gli oggetti d:Destinazione
+			|D| > 0
+
+		post:
+			Sia G l'insieme di tutti gli oggetti d:D tali che d.Gettonata(periodo) = True
+			
+			result |G| / |D|
+
+
+
+
+
+
+
+
+
+
+			

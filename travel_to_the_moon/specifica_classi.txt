@@ -1,0 +1,51 @@
+Specifica classe Crociera
+
+	fine(): Data
+		pre: nessuna
+		post:
+			Sia i:Itinerario t.c. (this,i):croc_itin.			
+			result = this.inizio + i.durata_g()
+	
+	Specifica sottoclasse LunaDiMiele
+		
+		tipo(): {Trad, altern}
+			dati c:Crociera, i:Itinerario, d:Destinazione, t:Tipologia
+			e il link (((c,i):croc_itin,(i,d):dest), (d,tipologia):des_tipo):tipologiaTappa
+			pre: 
+				deve esistere almeno un link del tipo tipologiaTappa specificato prima 
+			post: 
+				result = 
+					1. trad sse la sommatoria dei link tipologiaTappa.tipo = "romantica" >= la sommatoria dei link tipologiaTappa.tipo = "divertente"
+
+------------------------------------------------------------------------------
+
+Specifica classe Destinazione
+
+	esotica(): Booleano
+		pre: nesuna
+		post:
+			L'operazione non fa side-effect.
+
+			Sia c:Continente tale che (this,c):dest_cont.
+			result = true se e solo se c.esotico = True
+
+------------------------------------------------------------------------------
+
+Specifica classe Itinerario
+
+	durata_g(): Intero > 0
+		pre: nessuna
+		post: 
+			Sia (this,d) il link di assoc. arrivo_finale che coinvolge 'this' (con una qualche Destinazione d).
+
+			result = (this, d).istante.giorno
+			
+------------------------------------------------------------------------------
+
+Specifica classe Cliente
+	
+	età(): Intero > 0
+		pre: 
+		post: 
+			result = DataOggi - this.data_nascita			
+			

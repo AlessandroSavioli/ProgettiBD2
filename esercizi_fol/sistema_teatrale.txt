@@ -1,0 +1,48 @@
+# Richiesta 
+
+1. (Assegnazione Luogo): Ogni Spettacolo va in scena in esattamente un Teatro. (Ovviamente un teatro può ospitare molti spettacoli nel corso della stagione).
+
+2. (Regia Singola): Ogni Spettacolo deve essere diretto da esattamente un Regista.
+
+3. (Cast Minimo): Ogni Spettacolo deve avere nel suo cast almeno un Attore che vi recita (altrimenti è solo un palco vuoto!).
+
+4. (Sottoclassi e Disgiunzioni): Attore e Regista sono considerati ruoli. Chiunque ricopra almeno uno di questi due ruoli fa parte della macro-categoria Professionista. Come sempre, il mondo umano (Professionista) deve essere rigidamente disgiunto dal mondo inanimato (Spettacolo, Teatro).
+
+5. (Il Vincolo Anti-Vanità): Per evitare favoritismi, una regola del sindacato impone che un Regista non possa mai far parte del cast (quindi recitare come Attore) nello Spettacolo specifico che lui stesso sta dirigendo.
+
+# Alfabeto 
+
+	F = {}
+	
+	P = {Spettacolo/1, Teatro/1, Regista/1, Attore/1, Professionista/1, Cast/2, Diretto/2, Scena/2}
+
+# Formula
+
+	ALL s Spettacolo(s) -> ( Not ( Teatro(s) ) )
+	and
+	ALL s, t Scena(s, t) -> ( Spettacolo(s) and Teatro(t) )
+	and
+	ALL s Spettacolo(s) -> EXISTS ! t Scena(s, t) 
+	and
+	ALL r Regista(r) -> ( Not ( Spettacolo(r) or Teatro(r) ) )
+	and
+	ALL r, s Diretto(r, s) -> ( Regista(r) and Spettacolo(s) )
+	and
+	ALL s Spettacolo(s) -> EXISTS ! r Diretto(r, s) 
+	and
+	ALL a Attore(a) -> ( Not ( Spettacolo(a) or Teatro(a) ) )
+	and
+	ALL s, a Cast(s, a) -> ( Spettacolo(s) and Attore(a) )
+	and
+	ALL s Spettacolo(s) -> EXISTS a Cast(s, a)
+	and
+	ALL p Professionista(p) -> ( ( Regista(p) or Attore(p) ) and Not ( Spettacolo(p) or Teatro(p) ) )
+	and
+	ALL r Regista(r) -> Professionista(r)
+	and 
+	ALL a Attore(a) -> Professionista(a)
+	and
+	ALL r, s Diretto(r, s) -> ( Not Cast(s, r) )
+	
+	
+	

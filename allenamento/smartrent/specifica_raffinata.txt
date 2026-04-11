@@ -1,0 +1,57 @@
+# SPECIFICA RAFFINATA
+
+1. requisiti sui veicoli 
+	1.1. targa
+	1.2. stato attuale: (libero, in uso, in manutenzione)
+
+	2 sottoclassi
+	1.3. monopattino elettrico
+		1.3.1. livello batteria (da 0  a 100)
+	1.4. automobili
+		1.4.1. livello di carburante
+
+2. requisiti sugli utenti
+	2.1. codice fiscale
+	2.2. anno nascita
+	2.3. se ha o meno la patente
+
+3. requisiti sui noleggi
+	3.1. istante inizio
+	3.2. istante fine ([0..1])
+	3.3. costo del noleggio (solo se è concluso)
+	3.4. veicolo noleggiato (v. punto 1)
+	3.5. utente che noleggia (v. punto 2)
+	
+4. use-cases
+	4.1. UtenteWeb -> (registrazione)
+	4.2. UtenteRegistrato -> (noleggio)
+	
+
+
+# RICHIESTE
+
+Un'azienda gestisce una flotta di Veicoli (con Targa e stato attuale: Libero, InUso, InManutenzione). I veicoli si dividono in due tipi esatti:
+
+    Monopattini Elettrici: Hanno un livello di batteria (da 0 a 100). Costano 0,20€ al minuto.
+
+    Automobili: Hanno il livello di carburante e costano 0,50€ al minuto + 1€ fisso di sblocco.
+
+I Clienti (Codice Fiscale, Anno di Nascita, possesso della patente - boolean) possono effettuare dei Noleggi. Di un noleggio interessa l'istante di inizio e l'istante di fine (che all'inizio è nullo).
+
+Regole di Business (Trabocchetti OCL):
+
+    Un cliente può noleggiare un'auto solo se ha la patente e ha almeno 21 anni. Per i monopattini bastano 14 anni (e niente patente).
+
+    Non si può noleggiare un monopattino se la batteria è sotto il 15%.
+
+    Un cliente non può avere più di un noleggio "attivo" (cioè senza istante di fine) nello stesso momento.
+
+    Il sistema deve poter calcolare il costo_totale() di un noleggio concluso (sapendo che la durata in minuti è ricavabile dalla differenza tra fine e inizio).
+
+Cosa devi produrre (in 45 min):
+
+    Diagramma delle Classi UML.
+
+    Specifica dei vincoli (Invarianti) per le classi Automobili e Monopattini riguardo l'età e la patente.
+
+    Specifica del Caso d'Uso avvia_noleggio(veicolo, cliente).

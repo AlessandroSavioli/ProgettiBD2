@@ -1,0 +1,47 @@
+# Richieste
+
+1. (Concetto vs Oggetto Fisico): Il catalogo distingue tra il Libro (es. "Il Signore degli Anelli", l'opera astratta) e la Copia (il volume fisico sullo scaffale). Ogni Copia appartiene a esattamente un Libro. (Ovviamente un Libro può avere molte Copie).
+
+2. (Il Prestito come Entità): Un Prestito è un evento registrato a sistema. Ogni Prestito deve essere associato a esattamente un Utente e riguardare esattamente una Copia.
+
+3. (Disgiunzione Totale): I mondi sono rigorosamente separati: Utente (persone umane), Libro (opere intellettuali), Copia (oggetti fisici di carta) e Prestito (eventi/transazioni) sono classi totalmente disgiunte tra loro. Nessuna sovrapposizione.
+
+4. (Disponibilità Fisica): Una specifica Copia fisica non può mai essere coinvolta in più di un Prestito contemporaneamente. (Cardinalità massima 1).
+
+5. (La Regola Anti-Accaparramento - Vincolo Incrociato): Per garantire a tutti di leggere, un Utente non può avere in Prestito due copie fisiche diverse che appartengono allo stesso Libro.
+
+# Alfabeto
+	
+	F = {}
+	
+	P = {Libro/1, Copia/1, Utente/1, Prestito/2, Is_copy/2}
+	
+# Formula
+	
+	ALL c Copia(c) -> Not Libro(c)
+	and 
+	ALL l, c Is_copy(l, c) -> ( Libro(l) and Copia(c) )
+	and
+	ALL c Copia(c) -> EXISTS ! l Is_copy(l, c) 
+	and
+	ALL u Utente(u) -> Not ( Libro(u) or Copia(u) )
+	and
+	ALL p Prestito(p) -> Not ( Libro(p) or Copia(p) or Utente(p) )
+	and
+	ALL p, u Effettua(p, u) -> ( Prestito(p) and Utente(u) )
+	and
+	ALL p Prestito(p) -> EXISTS ! u Effettua(p, u)
+	and
+	ALL p, c Riguarda(p, c) -> ( Prestito(p) and Copia(c) )
+	and
+	ALL p Prestito(p) -> EXISTS ! c Riguarda(p, c)
+	and 
+	ALL c Copia(c) -> Not ( EXISTS p1, p2 Riguarda(p1, c) and Riguarda(p2, c) and p1 != p2 )
+	and 
+	ALL u Utente(u) -> Not ( EXISTS p1, p2, c1, c2, l 
+				    Effettua(p1, u) and Effettua(p2, u) and 
+				    Riguarda(p1, c1) and Riguarda(p2, c2) and 
+				    Is_copy(l, c1) and Is_copy(l, c2) and c1 != c2 
+				)
+	
+	

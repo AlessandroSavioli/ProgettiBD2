@@ -1,0 +1,44 @@
+1. Studenti
+	1.1. Nome
+	1.2. Codice fiscale
+	1.3. Matricola
+	1.4. Data di nascita
+	1.5. Luogo di nascita:
+		1.5.1. Città (Classe!)
+		1.5.2. Regione (Classe!)
+	1.6. Corso di laurea a cui è iscritto:
+		1.6.1. Anno di iscrizione
+	1.7. Insegnamenti di cui ha superato l'esame
+
+2. Professori
+	2.1. Nome
+	2.2. Data di nascita
+	2.3. Codice fiscale
+	2.4. Luogo di nascita (Vedi punto 1.5)
+	2.5. insegnamenti erogati
+
+3. Facoltà
+	3.1. Nome
+
+4. Corsi
+	4.1. Nome
+	4.2. Facoltà (1 o più) di appartenenza
+
+5. Insegnamenti
+	5.1. Codice
+	5.2. Nome
+	5.3. Ore di lezione totali
+	5.4. Corsi a cui appartiene
+
+
+
+I dati di interesse per il sistema sono studenti, facoltà, professori e corsi.
+Di ogni studente interessa conoscere il nome, il codice fiscale, il numero di matricola,
+la data di nascita, il luogo di nascita (città e regione), il corso di laurea a cui è iscritto
+(con l’anno di iscrizione), e gli insegnamenti di cui ha superato l’esame.
+Dei professori interessa il nome, la data di nascita, il codice fiscale, il luogo di nascita
+e gli insegnamenti erogati.
+Dei corsi di laurea interessa il nome e la o le facoltà di appartenenza. Di queste
+ultime interessa il nome.
+Di ogni insegnamento interessa il codice, il nome, il numero di ore di lezione, e i corsi
+di laurea a cui appartiene

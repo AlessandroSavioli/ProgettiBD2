@@ -1,0 +1,77 @@
+# SPECIFICA DEGLI USE-CASE
+
+USE-CASE DEGLI UTENTI WEB
+
+	- Registrazione
+		registra_utente(cf:CF, nascita:Data, pat:Booleano):Utente
+			pre:
+				non esiste u' tale che u'.cf = cf
+			post: 
+				viene creato e restituito un oggetto result:Utente tale che:
+					- result.cf = cf
+					- result.data_nascita = nascita
+					- result.hapatente = pat
+
+USE-CASE DEGLI UTENTI REGISTRATI
+
+	- Strumenti noleggio
+		inizia_noleggio(v:veicolo):Noleggio
+			pre: 
+				sia u:Utente l'utente che ha invocato questo use-case
+				per ogni n:Noleggio che ha un link (u, n):ut_nol, n.fine deve essere valorizzato
+
+				v.in_manutenzione deve essere False
+				se v è di tipo Automobile, allora 
+					- u.età(oggi) deve essere >= 21
+					- u.ha_patente = True
+				se v è di tipo Monopattino, allora
+					- u .età(oggi) deve essere >= 14
+					- v.livello_batteria >= 15
+				
+				per ogni n:Noleggio che ha un link (n, v):nol_veic, n.fine deve essere valorizzato
+			post:
+				viene creato e restituito un oggetto result:Noleggio tale che:
+					- result.inizio = adesso
+
+				vengono creati i seguenti link:
+					- (u, result):ut_nol
+					- (v, result):nol_veic
+
+		termina_noleggio(n:Noleggio, v:Veicolo):
+			pre:
+				sia u:Utente l'utente che ha invocato questo use-case, allora
+				deve esistere il link (u, n):ut_nol e fine non deve essere valorizzata
+				deve esistere il link (n, v):nol_veic 
+			post:
+				n.fine = adesso
+
+USE-CASE DEGLI AMMINISTRATORI
+
+	- Strumenti veicoli
+		aggiungi_veicolo(targa:Stringa, 
+						 man:Booleano, 
+						 tipo:{Automobile, Monopattino},
+						 livello_carburante:0..100 [0..1],
+						 livello_batteria:0..100 [0..1]
+						 ):Veicolo
+			pre: 
+				non deve esistere v' tale che v'.targa = targa
+				se tipo = Automobile, allora livello_carburante deve essere valorizzato
+				se tipo = Monopattino, allora livello_batteria deve essere valorizzato
+			post:
+				viene creato e restituito un oggetto result:Veicolo tale che:
+					- result.targa = targa
+					- result.in_manutenzione = man
+				se tipo = Automobile allora result sarà anche di classe più specifica Automobile e
+					- result.livello_carburante = livello_carburante
+				se tipo = Monopattino allora result sarà anche di classe più specifica Monopattino e
+					- result.livello_batteria = livello_batteria
+
+		cambia_stato_manutenzione(v:Veicolo):
+			pre:
+				nessuna
+			post:
+				se v.in_manutenzione = True
+					v.in_manutenzione = False
+				altrimenti
+					v.in_manutenzione = True

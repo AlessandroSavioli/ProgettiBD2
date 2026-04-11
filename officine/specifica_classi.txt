@@ -1,0 +1,20 @@
+# SPECIFICA DELLE CLASSI
+
+- Classe Officina
+
+	num_dipendenti(): Intero >= 0
+		pre:
+			nessuna
+		post:
+			sia D l'insieme degli oggetti d:Dipendente tali che (d, this):dip_off
+
+			result = numero di elementi in D
+
+- Association Class dip_off
+
+	anni_servizio(): Intero >= 0
+		pre:
+			nessuna
+		post:
+			result = oggi - this.inizio_contratto
+

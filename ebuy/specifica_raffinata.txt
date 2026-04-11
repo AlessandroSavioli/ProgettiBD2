@@ -1,0 +1,83 @@
+# SPECIFICA RAFFINATA
+
+1. INFORMAZIONI SUGLI UTENTI
+	1.1. nickname
+	1.2. data registrazione
+	1.3. se privato o professionale (v. punti 5 e 6)
+
+2. INFORMAZIONI SUI POST
+	2.0. il venditore, un utente (v. punto 1)
+	Due tipologie diverse:
+	2.1. con asta a rialzo
+		2.1.1. prezzo iniziale asta
+		2.1.2. costo del rialzo
+		2.1.3. istante scadenza asta
+		2.1.4. se conclusa, l'informazione sul bid vincente (vedi punto 3)
+	2.2. compra subito
+		2.2.1. prezzo di vendita
+		2.2.2. eventuale utente privato (v. punto 5) acquirente
+	2.3. descrizione prodotto
+	2.5. prezzo di vendita
+	2.6. metodi di pagamento accettati (bonifico o carta di credito)
+	2.7. se è nuovo o usato
+		2.7.1. se nuovo, il venditore deve garantire almeno 2 anni di garanzia
+		2.7.2. se usato
+			2.7.2.1. nessun obbligo sulla garanzia  ma può comunque essere prevista
+			2.7.2.2. condizioni dell'oggetto (ottimo, buono, discreto, da sistemare)  
+	2.8. post al quale è collegato (vedi punto 2)
+
+3. INFORMAZIONI SUI BID
+	3.1. istante in cui è stato proposto
+	3.2. utente privato  offerente (vedi punto 5)
+	3.3. ammontare del bid (funzione che prende l'ultimo bid e ci aggiunge il rialzo)
+
+4. INFORMAZIONI SULLE CATEGORIE
+	4.1. nome
+	4.2. a quale oggetto si riferiscono (v. punto 2)
+	4.3. categroia genitore, anche nessuna
+	4.4. categorie figlie, anche nessuna
+
+5. INFORMAZIONI SUI VENDITORI PROFESSIONALI
+	5.1. sono utenti
+	5.2. URL al loro sito
+	5.3. popolarità (Operazione):
+		- Sia s la somma di tutti i bid e gli acquisiti dei loro prodotti 
+		  fatti dagli utenti negli ultimi 12 mesi, allora la popolarità sarà:
+		  	- bassa se s < 50
+		  	- media se 50 <= s <= 300
+		  	- alta se s > 300
+
+6. INFORMAZIONI SUI VENDITORI PRIVATI
+	6.1. sono utenti
+
+7. INFORMAZIONI SUI FEEDBACK
+	7.1. post a cui è relativo
+		7.1.1. il post deve essere stato acquistato
+	7.2. l'utente privato  che ha dato il feedback
+	7.3. voto, un intero tra 0 e 5
+	7.4. commento testuale, opzionale
+
+
+#  USE CASES
+	UtentiWeb -> (Registrazione)
+	UtentiRegistrati -> (Strumenti venditori, Strumenti acquirente)
+	VenditoriProfessionali -> (Strumenti venditori)
+
+	
+# SPECIFICA INIZIALE
+
+Per favorire l’esclusione dal sistema dei venditori scorretti, il sistema deve inoltre per-
+mettere, agli utenti che si aggiudicano un’asta e a quelli che acquistano oggetti secondo
+la modalità “compralo subito”, di esprimere un giudizio sulla qualità della transazione e
+sul loro grado generale di soddisfazione. Tali giudizi sono denominati feedback e consi-
+stono in un voto numerico da 0 (non soddisfatto) a 5 (molto soddisfatto), al quale può 55
+aggiungersi un commento testuale.
+Per ogni utente, il sistema deve permettere di calcolarne l’affidabilità, che si calcola a
+partire dai feedback che ha ricevuto per gli oggetti che ha messo in vendita. In particolare,
+l’affidabilità di un venditore è data dalla media aritmetica m di tutti i feedback che ha
+ricevuto, diminuita di un fattore che è tanto più grande quanto maggiore è il numero 60
+di feedback negativi (ovvero ≤ 2). Tecnicamente, detta z la frazione dei feedback
+negativi rispetto ai feedback totali, l’affidabilità di un venditore è data da m(1 − z)/5.
+L’affidabilità è quindi sempre un reale tra 0 e 1 (dato che è pari ad m/5 ∈ [0, 1] se non ci
+sono feedback negativi (z = 0), mentre scende verso 0 all’aumentare della percentuale
+z di questi ultimi). 
