@@ -10,15 +10,15 @@ e non fanno parte di quelli rilasciati durante le lezioni!
 ### Rilasciati
 | Progetto | Stato | Documentazione |
 | :--- | :--- | :--- |
-| **voli aerei** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./voli_aerei/voli_aerei.pdf) |
-| **università** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./università/università2.pdf) |
-| **accademia** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./accademia/accademia2.pdf) |
-| **impiegati e studenti** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./impiegati_e_studenti/impiegati_studenti.pdf) |
-| **esercitazioni universitarie**| ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./esercitazioni_universitarie/esercitazioni_universitarie.pdf) |
-| **go** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./go/go.pdf) |
-| **travel to the moon** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./travel_to_the_moon/travel_to_the_moon2.pdf) |
-| **ebuy** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./ebuy/ebuy.pdf) |
-| **officine** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./officine/officine.pdf) |
+| **voli aerei** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/voli_aerei/voli_aerei.pdf) |
+| **università** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/università/università2.pdf) |
+| **accademia** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/accademia/accademia2.pdf) |
+| **impiegati e studenti** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/impiegati_e_studenti/impiegati_studenti.pdf) |
+| **esercitazioni universitarie**| ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/esercitazioni_universitarie/esercitazioni_universitarie.pdf) |
+| **go** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/go/go.pdf) |
+| **travel to the moon** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./progetti/travel_to_the_moon/travel_to_the_moon2.pdf) |
+| **ebuy** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./progetti/ebuy/ebuy.pdf) |
+| **officine** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/officine/officine.pdf) |
 
 ### Allenamento
 | Progetto | Stato | Documentazione |
