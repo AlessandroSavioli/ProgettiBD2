@@ -37,6 +37,24 @@
 					
 				result = b_ultimo.prezzo() + this.rialzo
 
+	conclusa(): Booleano
+		pre:
+			nessuna
+		post:
+			result = True se e solo se adesso <= this.scadenza_asta
+
+	ultimo_bid(): Bid[0..1]
+		pre:
+			nessuna
+		post:
+			Sia B l'insieme degli oggetti b:Bid tali che
+				- (b, this):bid_asta
+
+			Se il numero di elementi in B è > 0:
+				result = elemento in B che ha valore massimo sull'attributo istante
+			Altrimenti:
+				result = null
+			
 - ASSOCIAZIONE ACQUIRENTE
 	[V.acquirente.istante]
 		per ogni (u:Utente, p:CompraSubito):acquirente, deve essere:
@@ -88,4 +106,47 @@
 	[V.Categoria.gerarchia_no_cicli]
 		la gerarchia delle categorie non deve formare cicli.
 	
-		
+
+- CLASSE UTENTE
+	affidabilità(): Reale 0..1
+		pre:
+			deve esistere almeno un link del tipo (p:PostConFeedBack, this):ute_post
+		post:
+			Sia P l'insieme degli oggetti p:Post di classe più specifica PostConFeedback
+			tali che (this, p):ute_post, allora:
+				m = (sommatoria di p.voto per tutti gli oggetti p in P) / numero di elementi in P
+
+				Sia Z l'insieme degli oggetti p in P con p.voto <= 2
+				Sia z =  numero di elementi in Z / numero di elementi in P
+				
+				result = m(1 - z) / 5
+
+- SOTTOCLASSE PROFESSIONALE (UTENTE)
+	popolarità():{alta, media, bassa}
+		pre:
+
+		post:
+			Sia UBid l'insieme degli oggetti u:Utente tali che:
+				- (u, b:Bid):ute_bid
+				- la differenza tra adesso e b.istante è al massimo 12 mesi
+				- (b, a:Asta): bid_asta
+				- (this, a): ute_post
+
+			Sia UCompra l'insieme degli elementi u:Utente tali che:
+				- (u, c:CompraSubito):acquirente
+				- la differenza tra adesso e (u, c):acquirente.istante è al massimo 12 mesi
+				- (this, c):ute_post
+
+			Sia UTot = UBid union UCompra
+
+			Sia n il numero di elementi in UTot, allora:
+				- se n < 50:
+					result = bassa
+				- se n >= 50 e n <= 300:
+					result : media
+				- se n > 300:
+					result: alta
+		 
+			
+
+				
