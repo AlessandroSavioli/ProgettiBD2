@@ -12,12 +12,12 @@ SPECIFICA DEGLI USE-CASE
 
 - USE-CASE STRUMENTI VENDITORI
 
-	nuovo_post_asta(
+	nuovo_post(
 		modalità: {asta, comprasubito}
 		stato:{nuovo,usato}
 		d:Stringa,
 		p:Reale>=0, 
-		c:Stringa, 
+		c:Categoria, 
 		metodo_pagam:{bonifico,carta},
 		anni_gar:Intero >= 0,
 		cond:Condizioni[0..1],
@@ -38,7 +38,6 @@ SPECIFICA DEGLI USE-CASE
 				- result.metodi_pagam = metodi_pagam
 				- result.prezzo = prezzo
 				- result.descrizione = d
-				- result.categoria = c
 				- result.anni_garanzia = anni_gar
 
 			Se modalità = asta:
@@ -59,6 +58,7 @@ SPECIFICA DEGLI USE-CASE
 			vengono creati i seguenti link:
 				- (result, val):post_val
 				- (u, result):ute_post
+				- (c, result):cat_post
 			
 
 	bid_aggiudicatario(a:Asta):Bid [0..1]
@@ -103,7 +103,7 @@ SPECIFICA DEGLI USE-CASE
 
 			- (u, p) non è un link di associazione ute_post
 			- non esiste alcun u':Utente tale che:
-				(u',p):ute_post
+				(u',p):acquirente
 
 		post:
 			viene creato il link (u,p):acquirente con:

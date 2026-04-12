@@ -41,7 +41,7 @@
 		pre:
 			nessuna
 		post:
-			result = True se e solo se adesso <= this.scadenza_asta
+			result = True se e solo se adesso >= this.scadenza_asta
 
 	ultimo_bid(): Bid[0..1]
 		pre:
