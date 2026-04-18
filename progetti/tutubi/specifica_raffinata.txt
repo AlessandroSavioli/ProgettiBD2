@@ -1,0 +1,69 @@
+# SPECIFICA RAFFINATA
+
+1. requisiti sugli utenti
+	1.1. nome
+	1.2. istante di iscrizione
+	1.3. quali video ha visualizzato (v. req. 2)
+		1.3.1. istante di visualizzazione
+		1.3.2. eventuale valutazione (v. req. 5) [0..1]
+			1.3.2.1. un utente non può valutare un video caricato da se stesso
+		1.3.3. eventuali commenti [0..*] (v. req. 6)
+	1.4. video pubblicati
+
+2. requisiti sui video
+	2.1. titolo
+	2.2. durata (in secondi)
+	2.3. descrizione
+	2.4. nome del file
+	2.5. categoria a cui appartiene (unica) (v. req. 3)
+	2.6. tag [1..*] (v. req. 4)
+	2.7. se è una risposta ad un altro video
+		2.7.1 il video a cui si risponde non può essere un video caricato dallo stesso
+				utente
+	2.8. visualizzazioni totali
+	
+3. requisiti sulle categorie
+	3.1. nome
+
+4. requisiti sui tag
+	4.1. nome
+
+5. requisiti sulle valutazioni
+	5.1. valore valutazione (0..5)
+
+6. requisiti sui commenti testuali
+	6.1. testo
+	6.2. istante di pubblicazione
+
+7. requisiti sulle playlist
+	7.1. nome
+	7.2. istante di creazione
+	7.3. se pubblica o privata
+		7.3.1. se pubblica gli altri utenti posso vederla, altrimenti no
+	7.4. collezione di video (v. req. 2)
+	7.5. utente che l'ha creata (v. req. 1)
+
+8. requisiti sulle censure
+	8.1. motivo della censura
+	8.2. quale video è stato censurato
+
+9. requisiti use-case
+	9.1. gli utenti si devono poter registrare
+	9.2. gli utenti devono poter caricare o visualizzare video 
+	9.3. gli utenti devono poter esprimere valutazioni e commenti sui video visti
+	9.4. gli utenti devono poter caricare video risposta ad altri video
+	9.5. gli utenti devono poter vedere la loro cronologia
+	9.6. gli utenti devono poter creare delle playlist o visualizzare le playlist 
+			pubbliche di un altro utente scelto
+	9.7. gli utenti devono poter cercare un video
+		9.7.1. data una categoria, un insieme di tag ed un intero v tra 0 e 5,
+					si avranno tutti i video disponibili di quella categoria
+					che posseggono almeno un tag tra quelli indicati e che abbiano una
+					valutazione media di almeno v (se un video non ha valutazioni,
+					verrà mostrato lo stesso)
+		9.7.2. data una categoria, si avranno i video che hanno il maggiore numero
+					di risposte	
+	9.8. il sistema deve poter censurare i video
+	
+
+
