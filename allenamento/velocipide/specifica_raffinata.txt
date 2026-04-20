@@ -1,0 +1,58 @@
+# SPECIFICA RAFFINATA
+
+1. requisiti sugli utenti
+	1.1. codice fiscale
+	1.2. nome
+	1.3. credito residuo 
+
+2. requisiti sulle stazioni
+	2.1. nome
+	2.2. indirizzo
+	2.3. capacità massima
+
+3. requisiti biciclette
+	3.1. codice identificativo {id}
+	3.2. stato {disponibile, in uso, guasta}
+
+4. requisiti sui noleggi
+	4.1. l'utente che noleggia (v. req. 1)
+	4.2. l'ora di inizio del noleggio
+	4.3. stazione di prelievo (v. req. 2)
+	4.4. stazione di rilascio (v. req. 2) (non deve per forza essere la stessa del prelievo)
+	4.5. ora di fine noleggio [0..1]
+	4.6. costo totale del noleggio (operazione)
+
+5. use-case
+	5.1. un manutentore può segnalare una bici come guasta
+	5.2. un utente deve poter noleggiare una bici (se disponibile)
+	5.3. un utente deve poter terminare un noleggio 	
+	
+
+
+
+
+# SPECIFICA INIZIALE
+
+Il sistema deve gestire il noleggio di biciclette in una città.
+
+    Utenti: Ogni utente è identificato da un codice fiscale e possiede un nome
+     e un credito residuo (in Euro).
+
+    Stazioni e Bici: Le biciclette sono distribuite in stazioni. Di ogni
+     stazione interessa il nome, l'indirizzo e la capacità massima di posti 
+     bici.
+     Ogni bicicletta ha un identificativo univoco e uno stato (disponibile,
+      in uso, guasta).
+
+    Il Noleggio: Un utente può prelevare una bici disponibile da una stazione.
+     L'operazione registra l'ora di inizio. Al termine, l'utente riporta la
+      bici in una 
+    stazione (non necessariamente la stessa) che abbia posti liberi. Il sistema
+     registra l'ora di fine e calcola il costo (tariffa fissa: 2€ l'ora, 
+     calcolata sui
+     minuti effettivi).
+
+    Manutenzione: Solo un manutentore (attore speciale) può segnalare una bici 
+    come "guasta". Una bici guasta non può essere noleggiata finché non viene 
+    riparata 
+    (riportata allo stato "disponibile").
