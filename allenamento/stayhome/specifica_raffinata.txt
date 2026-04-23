@@ -1,0 +1,51 @@
+# SPECIFICA RAFFINATA 
+
+1. requisiti sugli utenti 
+	1.1. nome
+	1.2. email
+	1.3. documento d'identità
+	1.4. sottoclasse Host
+	1.5. sottoclasse Guest
+
+2. requisiti sugli alloggi
+	2.1. titolo 
+	2.2. indirizzo 
+	2.3. prezzo per notte
+	2.4. categoria (appartamento, villa, stanza)
+	2.5. proprietario (Host, v. req. 1)
+
+3. requisiti sulle prenotazioni 
+	3.1. il Guest che vuole prenotare (v. req. 1)
+	3.2. intervallo della prenotazione
+	3.3. istante in cui viene registrata
+	3.4. costo totale
+
+4. requisiti sulle recensioni
+	4.1. voto (1..5)
+	4.2. commento testuale
+	4.3. Guest che l'ha lasciata (deve aver terminato il suo soggiorno)
+	4.4. eventualmente un Host può rispondere ad una recensione
+
+5. use-cases
+	5.1. un admin deve poter verificare un alloggio (aggiungendo la data di verifica)	
+
+# SPECIFICA INIZIALE 
+
+Progetto 3: StayHome
+1. I Requisiti
+
+Il sistema deve gestire la pubblicazione di annunci di alloggi e le relative prenotazioni.
+
+    Utenti: Si dividono in Host (chi affitta) e Guest (chi viaggia). Di entrambi servono nome, email (id) e un documento d'identità.
+
+    Alloggi: Ogni alloggio ha un titolo, un indirizzo, un prezzo per notte e una categoria (es. Appartamento, Villa, Stanza). Ogni alloggio 
+    è di proprietà di un unico Host.
+
+    Prenotazioni: Un Guest può prenotare un alloggio per un intervallo di date [inizio,fine]. La prenotazione deve registrare l'istante in cui viene
+     effettuata e il costo totale.
+
+    Recensioni: Dopo il termine di un soggiorno, il Guest può lasciare una recensione (voto 1-5 e commento testuale). L'Host può rispondere a una 
+    recensione ricevuta.
+
+    Verifica: Esiste un attore Admin che può "Verificare" un alloggio (aggiungendo la data di verifica). Solo gli alloggi verificati compaiono 
+    nei risultati di ricerca "Premium".
