@@ -16,7 +16,7 @@ e non fanno parte di quelli rilasciati durante le lezioni!
 | **impiegati e studenti** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/impiegati_e_studenti/impiegati_studenti.pdf) |
 | **esercitazioni universitarie**| ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/esercitazioni_universitarie/esercitazioni_universitarie.pdf) |
 | **go** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/go/go.pdf) |
-| **travel to the moon** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./progetti/travel_to_the_moon/travel_to_the_moon2.pdf) |
+| **travel to the moon** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./progetti/travel_to_the_moon/travel_to_the_moon.pdf) |
 | **ebuy** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./progetti/ebuy/ebuy.pdf) |
 | **officine** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./progetti/officine/officine.pdf) |
 | **tutubi** | ![In Corso](https://img.shields.io/badge/STATO-IN_CORSO-yellow?style=flat-square) | [Visualizza PDF](./progetti/tutubi/tutubi.pdf) |

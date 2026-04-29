@@ -1,0 +1,91 @@
+Specifica classe Cliente
+
+	età(): Intero > 0
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			EXISTS nascita, a, m, g, an, mn, gn
+			data_nascita(this, nascita) and
+			anno(nascita, an) and
+			mese(nascita, mn) and
+			giorno(nascita, gn) and
+			anno(oggi, a) and
+			mese(oggi, m) and
+			giorno(oggi, g) and
+			(m < mn or (m = mn and g < gn)) -> result = a - an - 1
+			and
+			!(m < mn or (m = mn and g < gn)) -> result = a - an 
+
+Specifica classe Crociera
+
+	data_fine(): Data
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			EXISTS  inizio, itin, giorni 
+			data_inizio(this, inizio) and 
+			croc_iti(this, itin) and 
+			durata_giorni(itin, giorni) and 
+			result = inizio + giorni  
+
+Specifica classe LunaDiMiele
+
+	tipo(): {trad,altern}
+		pre:
+			EXISTS iti, tappa
+			croc_iti(this, iti) and 
+			iti_tappa(iti, tappa)
+		post:
+			result soddisfa la seguente formula:
+				DES_ROM = { d | EXISTS t, iti, tappa, s
+						    des_tipo(d, t) and 
+						    croc_iti(this, iti) and 
+						    iti_tappa(iti, tappa) and
+						    dest_tappa(d, tappa) and
+							tipo(t, s) and 
+							s = romantica }
+
+				DES_DIV = { d | EXISTS t, iti, tappa, s
+								des_tipo(d, t) and 
+								croc_iti(this, iti) and 
+								iti_tappa(iti, tappa) and
+								dest_tappa(d, tappa) and
+								tipo(t, s) and 
+								s = divertente }
+
+			 	( |DES_ROM| >= |DES_DIV| -> result = trad )
+			 	and 
+			 	( !(|DES_ROM| >= |DES_DIV|) -> result = altern )
+							
+Specifica classe Destinazione
+
+	esotica(): Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			EXISTS cont
+			cont_des(cont, this) and 
+			esotico(cont, result)
+			
+Specifica classe Itinerario
+
+	durata_giorni(): Intero > 0
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			EXISTS dest, ist
+			arrivo_finale(dest, this) and 
+			istante(dest, this, ist) and
+			giorno(ist, result)
+
+Specifica classe TappaIntermedia
+
+	[V.TappaIntermedia.no_arrivo_dopo_ripartenza]
+		EXISTS ist1, ist2
+		arrivo(this, ist1) and
+		ripartenza(this, ist2) and
+		ist1 < ist2

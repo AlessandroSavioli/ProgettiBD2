@@ -1,0 +1,135 @@
+SPECIFICA DEGLI USE CASE
+
+Use-Case Registrazione:
+
+	nuovo_cliente(n:Stringa, c:Stringa, d:Data, i:Indirizzo): Cliente
+		pre:
+			d < oggi
+		post:
+			il modello estensionale dei dati al termine 
+			dell'esecuzione dell'operazione differisce
+			da quello di partenza come segue:
+
+			- nuovi elementi del dominio di interpretazione: alpha
+			- elementi del dominio che non esistono più: nessuno
+			- nuove ennuple di predicati:
+				1. nome(alpha, n)
+				2. cognome(alpha, c)
+				3. data_nascita(alpha, d)
+				4. indirizzo(alpha, i)
+				5. Cliente(alpha)
+			- ennuple di predicati che non esistono più: nessuna
+			- valore di ritorno: result = alpha
+
+Use-Case Gestione prenotazioni
+
+	nuova_prenotazione(cl:Cliente, cr:Crociera, np:Intero > 0): Prenotazione
+		pre:
+			EXISTS p_disp, d_inizio
+			posti_disponibili(cr, p_disp) and
+			data_inizio(cr, d_inizio) and
+			d_inizio > adesso and
+			p_disp >= np
+		post:
+			il modello estensionale dei dati al termine 
+			dell'esecuzione dell'operazione differisce
+			da quello di partenza come segue:
+			
+			- nuovi elementi del dominio: alpha
+			- elementi rimossi dal dominio: nessuno
+			- nuove ennuple:
+				1. istante_prenotazione(alpha, adesso)
+				2. posti_prenotati(alpha, np)
+				3. croc_pren(cr, alpha)
+				4. cli_pren(cl, alpha)
+				5. Prenotazione(alpha)
+			- ennuple rimosse: nessuna
+			- valore di ritorno: result = alpha
+
+	cancella_prenotazione(p:Prenotazione):
+		pre:
+			EXISTS cr, di, cli, ist, pp
+			cli_pren(cli, p) and
+			istante_prenotazione(p, ist) and
+			posti_prenotati(p, pp) and
+			croc_pren(cr, p) and
+			data_inizio(cr, di) and
+			di >= oggi
+		post:
+			il modello estensionale dei dati al termine 
+			dell'esecuzione dell'operazione differisce
+			da quello di partenza come segue:
+
+			- nuovi elementi del dominio: nessuno
+			- elementi rimossi dal dominio: p
+			- nuove ennuple: nessuna
+			- ennuple rimosse:
+				1. croc_pren(cr, p)
+				2. cli_pren(cli, p)
+				3. istante_prenotazione(p, ist)
+				4. posti_prenotati(p, pp)
+				5. Prenotazione(p)
+			- valore di ritorno: nessuno
+
+Use-Case Statistiche
+
+	eta_media_clienti_crociere_esotiche(i:DataOra, f:DataOra): Reale >= 0
+		pre:
+			Sia D_es = {d | Destinazione(d) and esotica(d, true)}
+			Sia I = {i | EXISTS d in D_es, EXISTS t
+							partenza_iniziale(d, i) or
+							arrivo_finale(d, i) or
+							iti_tappa(i, t) and dest_tappa(d, t) }
+			Sia Cr = {c | EXISTS i in I
+							croc_iti(c, i) }
+			Sia Pr = {p | EXIST c in Cr, EXISTS ist
+							istante_prenotazione(p, ist) and
+							ist >= i and
+							ist <= f and
+							croc_pren(c, p) }
+			Sia Cl = {c | EXISTS p in Pr
+							cli_pren(c, p) }
+
+			deve valere la seguente formula:
+				i <= f and
+				|Cl| > 0
+		post:
+			result deve soddisfare la seguente formula:
+			result = Sommatoria per ogni età(c, valore) con c in Cl di valore / |Cl| 
+
+	percentuale_dest_gettonate(i:DataOra, f:DataOra): Reale tra 0 e 1
+		pre:
+			sia D = {d | Destinazione(d)}
+
+			deve valere la seguente formula:
+				i <= f and
+				|D| > 0
+		post:
+			sia Cr_LM = {c | EXISTS in, fi
+							data_inizio(c, in) and
+							data_fine(c, fi) and
+							in >= i and
+							fi <= f and
+							LunaDiMiele(c) }
+			Sia ILM = {iti | EXISTS c in Cr_LM 
+							croc_iti(c, iti) }
+			Sia DesValideLM = {d | EXISTS iti in ILM, EXISTS t 
+									iti_tappa(iti, t) and
+									dest_tappa(d, t) }
+			sia Cr_PF = {c | EXISTS in, fi
+							data_inizio(c, in) and
+							data_fine(c, fi) and
+							in >= i and
+							fi <= f and
+							PerFamiglie(c) }
+			Sia IPF = {iti | EXISTS c in Cr_PF
+							croc_iti(c, iti) }
+			Sia DesValidePF = {d | EXISTS iti in IPF, EXISTS t 
+									iti_tappa(iti, t) and
+									dest_tappa(d, t) }
+			result soddisfa la seguente formula:
+            (|DesValideLM| >= 10 or |DesValidePF| >= 15) -> result = |DesValideLM U DesValidePF|/|D| and
+           	!(|DesValideLM| >= 10 or |DesValidePF| >= 15) -> result = 0	
+			
+			
+			

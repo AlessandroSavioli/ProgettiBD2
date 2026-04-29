@@ -36,7 +36,7 @@ GestionePrenotazioni:
 
 Statistiche:
 	
-	eta_media_clienti_crociere_esotiche(inizio: DataOra, fine: DataOra): Reale >= 0
+	eta_media_clienti_crociere_esotiche(inizio: DataOra, fine: DataOra): Reale >= 0 
 		pre:
 			inizio <= fine
 
