@@ -1,9 +1,9 @@
 # 📚 Progetti Basi di Dati 2
-```text
-Raccolta dei progetti per il corso di Basi di Dati 2
-N.B. I progetti sotto la dicitura (allenamento) sono progetti creati 
-e non fanno parte di quelli rilasciati durante le lezioni!
-```
+
+>[!NOTE]
+>I progetti sotto la dicitura "Allenamento" sono progetti creati da me
+>e non fanno parte dei progetti rilasciati durante le lezioni!
+
 
 ## Progetti
 
