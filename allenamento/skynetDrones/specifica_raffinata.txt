@@ -1,0 +1,71 @@
+# SPECIFICA RAFFINATA
+
+1. requisiti sui droni 
+	1.1. modello
+	1.2. peso massimo al decollo (in kg)
+	1.3. livello attuale della batteria (da 0 a 100)
+	1.4. stato operativo (disponibile, in manutenzione, in volo)
+
+2. requisiti sui piloti
+	2.1. nome
+	2.2. totale ore di volo
+	2.3. patente posseduta (A1, A2, A3)
+
+3. requisiti sulle aree di intervento 
+	3.1. nome
+	3.2. coordinate geografiche
+	3.3. grado di rischio (basso, medio, alto)
+
+4. requisiti sulle missioni
+	4.1. istante di inizio
+	4.2. istante di fine
+	
+# SPECIFICA INIZIALE
+
+PROVA D'ESAME: PROGETTAZIONE DI SISTEMI SOFTWARE - "SKYNET DRONES"
+
+Si desidera progettare un sistema per la gestione di una flotta di droni professionali destinati a missioni operative in aree a rischio.
+ Il sistema deve permettere la registrazione dei piloti, il monitoraggio dello stato dei droni e la pianificazione delle missioni.
+
+Il candidato analizzi il seguente scenario e produca la specifica formale richiesta:
+
+Il sistema gestisce Droni, caratterizzati da un modello, un peso massimo al decollo (espresso in kg), il livello attuale della batteria (da 0 a 100)
+e uno stato operativo (disponibile, in manutenzione, in volo). Ogni Pilota è registrato con il proprio nome, il numero totale di ore di volo accumulate 
+e la tipologia di patente posseduta (A1, A2 o A3). Le Aree di intervento hanno un nome, delle coordinate geografiche e un grado di rischio (basso, medio, alto). 
+Una Missione rappresenta l'impiego di un drone da parte di un pilota in una specifica area, con un istante di inizio e uno di fine.
+
+REQUISITI E VINCOLI DI INTEGRITÀ
+
+    Modellazione Classi: Si definiscano le classi e le associazioni, includendo la classe associativa Missione.  
+
+    Specifica dei Tipi: Si definiscano i tipi Batteria (Intero), Patente (Enumerativo) e StatoDrone (Enumerativo).  
+
+    Vincolo di Coerenza Patente: Un pilota può essere assegnato a una missione solo se la sua patente è compatibile con il peso del drone: 
+    Patente A1 per droni ≤ 4kg, A2 per droni tra 4kg e 25kg, A3 per droni > 25kg (Nota: Patenti superiori possono pilotare droni di categoria inferiore).  
+
+    Vincolo di Sovrapposizione: Un pilota non può essere assegnato a due missioni le cui durate temporali [inizio,fine] si sovrappongano.
+
+SPECIFICA DELLE OPERAZIONI (FOL)
+
+    Classe Drone - autonomia_residua(km: Reale): L'operazione deve restituire un Booleano che indichi se la batteria attuale è sufficiente per coprire
+    la distanza indicata, assumendo un consumo di 1 unità di batteria per ogni km e una riserva di sicurezza minima del 10%.  
+
+    Classe Pilota - ore_volo_mensili(): Si scriva la specifica per calcolare il totale delle ore di volo accumulate dal pilota in missioni concluse 
+    negli ultimi 30 giorni.
+
+USE-CASE E MODELLO ESTENSIONALE
+
+    Registrazione Missione - avvia_missione(d, p, a): Si specifichi l'operazione di creazione di una nuova missione tra un drone d, un pilota p e un'area a. 
+    La pre-condizione deve verificare che il drone sia disponibile e il pilota sia libero. La post-condizione deve descrivere la variazione del modello 
+    estensionale (nuovo elemento α, nuove ennuple, e aggiornamento dello stato del drone da disponibile a in_volo).  
+
+    Cancellazione Missione: Si specifichi la rimozione di una missione dal sistema, gestendo la corretta eliminazione delle ennuple e il ripristino dello 
+    stato del drone.
+
+STATISTICHE E AGGREGAZIONE
+
+    efficienza_aree_pericolose(): Si scriva la formula in FOL per calcolare
+     la media delle ore di volo totali dei piloti che hanno effettuato 
+    almeno 5 missioni in aree con grado di rischio "alto". La formula deve
+     prevedere la definizione degli insiemi intermedi e la gestione della 
+     cardinalità.

@@ -29,6 +29,6 @@ e non fanno parte di quelli rilasciati durante le lezioni!
 | **cinema** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./allenamento/cinema/cinema.pdf) |
 | **velocipide** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./allenamento/velocipide/velocipide.pdf) |
 | **stayhome** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./allenamento/stayhome/stayhome.pdf) |
-
+| **skynetDrones** | ![Completato](https://img.shields.io/badge/STATO-COMPLETATO-success?style=flat-square) | [Visualizza PDF](./allenamento/skynetDrones/skynetDrones.pdf) |
 ---
 *Ultimo aggiornamento: 11/04/2026*
