@@ -17,8 +17,29 @@ Specifica classe Cliente
 			and
 			!(m < mn or (m = mn and g < gn)) -> result = a - an 
 
+Specifica classe Prenotazione
+
+	[V.Prenotazione.no_dopo_inizio_crociera]
+		!EXISTS istp, datap, orap, c, inizioc, iti, pi, ora, d |
+			istante_prenotazione(this, istp) and
+			data(istp, datap) and
+			ora(istp, orap) and
+			croc_pren(c, p) and
+			data_inizio(c, inizioc) and
+			croc_iti(c, iti) and
+			partenza_iniziale(iti, d, pi) and
+			orario(pi, ora) and
+			(inizioc < datap or (inizioc = datap and ora < orap))
+
 Specifica classe Crociera
 
+	[V.Crociera.no_overbooking]
+		prenotati = Sommatoria {val | EXISTS p (croc_pren(this, p) and posti_prenotati(p, val))}
+		!EXISTS n, cap
+			croc_nave(this, n) and
+			capienza(n, cap) and
+			cap < prenotati
+		
 	data_fine(): Data
 		pre:
 			nessuna
