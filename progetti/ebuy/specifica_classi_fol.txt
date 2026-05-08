@@ -1,0 +1,183 @@
+# SPECIFICA DELLE CLASSI
+- CLASSE POST
+	[V.Post.istante]
+		!EXISTS u, reg, ist |
+			ute_post(u, this) and
+			registrazione(u, reg) and
+			istante(this, ist) and
+			reg > ist
+			
+
+- CLASSE POSTCONFEEDBACK
+	[V.PostConFeedback.solo_se_acquistato]
+		( Asta(this) -> conclusa(this, true) and 
+						EXISTS b |
+							ultimo_bid(this, b) )
+		and
+		( CompraSubito(this) -> EXISTS u | acquirente(this, u) )
+
+- CLASSE ASTA
+	[V.Asta.scadenza_dopo_inizio]
+		!EXISTS ist, scad |	
+			istante(this, ist) and
+			scadenza_asta(this, scad) and
+			scad <= ist
+			
+
+	prezzo_corrente(): Reale >= 0
+		pre: 
+			nessuna
+		post:
+			B = { b | bid_asta(b, this)}
+
+			result soddisfa la seguente formula:
+				B = {} -> prezzo(this, result)
+				and
+				B != {} -> EXISTS bid |
+								bid in B and 
+								ultimo_bid(this, bid) and 
+								ammontare(bid, result)
+							 
+	conclusa(): Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+				EXISTS scad | 
+					scadenza_asta(this, scad) 
+					and
+					scad > adesso -> result = false
+					and
+					scad <= adesso -> result = true
+
+	ultimo_bid(): Bid[0..1]
+		pre:
+			nessuna
+		post:
+			B = {b | bid_asta(b, this)}
+			IST = {ist | EXISTS b |
+							b in B and
+							istante(b, ist) }
+							
+			result soddisfa la seguente formula:
+				( B = {} -> result = null )
+				and
+				( B != {} -> EXISTS b |
+								b in B and
+								istante(b, max(IST)) and
+								result = b )
+			
+- ASSOCIAZIONE ACQUIRENTE
+	[V.acquirente.istante]
+		!EXISTS u, ureg, p, pist, istacq |
+			acquirente(u, p) and
+			registrazione(u, ureg) and
+			istante(p, pist) and
+			istante(u, p, istacq) and
+			( istacq < ureg or istacq < pist )
+
+
+
+	
+- CLASSE BID
+	[V.Bid.istante]
+		!EXISTS istb, a, ista, scada |
+			istante(this, istb) and
+			istante(a, ista) and
+			scadenza(a, scada) and
+			bid_asta(this, a) and
+			( istb < ista or istb >= scada )
+			
+
+	[V.Bid.utente]
+		!EXISTS u, a |
+			ute_bid(u, this) and
+			bid_asta(this, a) and
+			ute_post(u, a)
+			
+	ammontare(): Reale >= 0
+		pre: 
+			nessuna
+		post: 
+			result soddisfa la seguente formula:
+
+			EXISTS a | bid_asta(this, a) and
+				N = { b | EXISTS ist1, ist2 
+							bid_asta(b, a) and
+							istante(b, ist2) and
+							istante(this, ist1) and
+							ist1 > ist2 } and
+				EXISTS prez, rial |
+					prezzo(a, prez) and
+					rialzo(a, rial) and
+					result = prez + (rial * |N|)
+
+
+- CLASSE CATEGORIA
+	[V.Categoria.non_genitore_se_stessa]
+		!gerarchia(this, this)
+
+	[V.Categoria.gerarchia_non_simmetrica]
+		!EXISTS c |
+			gerarchia(this, c) and
+			gerarchia(c, this)
+
+	[V.Categoria.gerarchia_no_cicli]
+		la gerarchia delle categorie non deve formare cicli.
+
+		// si potrebbe fare aggiungendo un attributo "livello"
+		// di tipo intero >= 0 dentro categoria ed imponendo 
+		// che se una categoria è figlia di un'altra deve avere
+		// livello > livello della categoria genitore 
+	
+
+- CLASSE UTENTE
+	affidabilità(): Reale 0..1
+		pre:
+			EXISTS p |
+				postConFeedback(p) and
+				ute_post(this, p)
+		post:
+			result soddisfa la seguente formula:
+				P = { p | postConFeedback(p) and
+						  ute_post(this, p) } 
+				and
+				m = ( sommatoria p in P: v ! voto(p,v ) / |P|
+				and
+				Z = { p | p in P and
+						  EXISTS v |
+						  	voto(p, v) and
+						  	v <= 2 }
+				and
+				z = |Z| / |P|
+				and
+				result = ( m * (1 - z) ) / 5
+								
+
+- SOTTOCLASSE PROFESSIONALE (UTENTE)
+	popolarità():{alta, media, bassa}
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			UBid = { u | EXISTS b, ist, a |
+							ute_bid(u, b) and
+							istante(b, ist) and
+							adesso - ist <= 12 mesi and
+							bid_asta(b, a) and
+							ute_post(this, a) }
+			and
+			UCompra = { u | EXISTS c, ist |
+								acquirente(u, c) and
+								istante(u, c, ist) and
+								adesso - ist <= 12 mesi and
+								ute_post(this, c) }
+			and
+			UTot = UBid U UCompra
+			and
+			( |UTot| < 50 ) -> result = bassa
+			and 
+			( |UTot| >= 50 and |UTot| <= 300 ) -> result = media
+			and
+			( |UTot| > 300 ) -> result = alta

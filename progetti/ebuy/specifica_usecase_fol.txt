@@ -1,0 +1,138 @@
+SPECIFICA DEGLI USE-CASE
+
+- USE-CASE REGISTRAZIONE
+
+	nuovo_utente(n:Stringa, tipo:{prof, priv}):Utente
+		pre:
+			!EXISTS u' |
+				nickname(u', n)
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- tipo = prof -> venditoreProfessionale(alpha)
+				- tipo = priv -> Privato(alpha)
+				- nickname(alpha, n)
+				- registrazione(alpha, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+- USE-CASE STRUMENTI VENDITORI
+
+	nuovo_post(
+		modalità: {asta, comprasubito}
+		stato:{nuovo,usato}
+		d:Stringa,
+		p:Reale>=0, 
+		c:Categoria, 
+		metodo_pagam:{bonifico,carta},
+		anni_gar:Intero >= 0,
+		cond:Condizioni[0..1],
+		rialzo:Reale > 0 [0..1],
+		scadenza:DataOra [0..1],
+		val:Valuta
+	):Post
+		pre:
+			( modalità = asta ) -> (rialzo != null) and (scadenza != null) and (scadenza > adesso)
+			and
+			( stato = nuovo ) -> anni_gar >= 2
+			and
+			( stato = usato ) -> cond != null
+			
+		post:
+			il modello estensionale finale differisce da quello
+			iniziale nel seguente modo:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- istante(alpha, adesso)
+				- metodi_pagam(alpha, metodo_pagam)
+				- prezzo(alpha, p)
+				- descrizione(alpha, d)
+				- anni_garanzia(alpha, anni_gar)
+				- (modalità = asta) -> Asta(alpha), rialzo(alpha, rialzo), scadenza(alpha, scadenza)
+				- (modalità = comprasubito) -> CompraSubito(alpha)
+				- (stato = nuovo) -> Nuovo(alpha)
+				- (stato = usato) -> Usato(alpha), condizioni(alpha, cond)
+				sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+				- post_val(alpha, val)
+				- ute_post(u, alpha)
+				- cat_post(c, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+				
+			
+	bid_aggiudicatario(a:Asta):Bid [0..1]
+		pre:
+			Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione,
+
+			ute_post(u, a)
+			and
+		    EXISTS scad |
+		    	scadenza(a, scad) and
+		    	scad <= adesso
+		     
+		post:
+			non viene modificato il livello estensionale
+			result soddisfa la seguente formula:
+			
+			B = { b | bid_asta(b, a) }
+			and
+			( B = {} ) -> result = null
+			and
+			( B != {} ) -> EXISTS ist |
+							result in B and
+							istante(result, ist) and
+							FORALL b2, ist2 |
+								( (b2 in B and istante(b2, ist2)) -> ist >= ist2 )
+								
+							
+
+	
+	
+- USE-CASE STRUMENTI ACQUIRENTE
+
+	nuovo_bid( a:Asta ):Bid
+		pre:
+			Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione
+
+			!ute_post(u, a) 
+			and
+			EXISTS ist, scad |
+			    istante(a, ist) and
+			    scadenza_asta(a, scad) and 
+			    ist <= adesso and 
+			    scad > adesso
+			
+		post:
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- bid(alpha)
+				- istante(alpha, adesso)
+				- bid_asta(alpha, a)
+				- ute_bid(u, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+				
+	compra_subito( p:CompraSubito ):
+		pre: 
+			Sia u:Utente l'oggetto che rappresenta l'istanza di attore che ha invocato l'operazione
+
+			!ute_post(u, p)
+			and
+			!EXISTS u1 |
+				acquirente(u1, p)
+
+		post:
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- acquirente(u, p)
+				- istante(u, p, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: nessuno
