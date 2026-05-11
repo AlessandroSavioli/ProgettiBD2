@@ -1,0 +1,223 @@
+SPECIFICA DEGLI USE-CASE
+
+- Use-Case Registrazione/login
+
+	registrazione(nome:Stringa): Utente
+		pre:
+			!EXISTS u |
+				nome(u, nome)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Utente(alpha)
+				- nome(alpha, nome)
+				- iscrizione(alpha, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Strumenti Video
+
+	pubblica_video(
+		tit:Stringa,
+		durata:Intero > 0,
+		desc: Stringa,
+		nome_f: Stringa,
+		cat: Categoria,
+		instag:Tag[1..*],
+		vid:Video[0..1]
+	): Video
+	pre:
+		sia u:Utente l'istanza dell'attore che ha 
+		invocato lo use-case
+		
+		vid != null -> !VideoCensurato(vid) and 
+					   !ute_vid(u, vid)
+	post:
+		il livello estensionale finale differisce
+		da quello iniziale come segue:
+
+		nuovi elementi del dominio: alpha
+		elementi rimossi dal dominio: nessuno
+		nuove ennuple:
+			- Video(alpha)
+			- titolo(alpha, tit)
+			- durata_sec(alpha, durata)
+			- descrizione(alpha, desc)
+			- nome_file(alpha, nome_f) 
+			- pubblicazione(alpha, adesso)
+			- cat_vid(cat, alpha)
+			- tag_vid(tag, alpha) per ogni tag in instag
+			- vid != null -> risposte(vid, alpha)
+			- ute_vid(u, alpha)
+		ennuple rimosse: nessuna
+		valore di ritorno: result = alpha
+
+	visualizza_video(v:Video): Visualizzazione
+		pre:
+			!VideoCensurato(v)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			sia u:Utente l'istanza dell'attore
+			che ha invocato lo use-case
+			
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Visualizzazione(alpha)
+				- vid_vis(v, alpha)
+				- istante(alpha, adesso)
+				- ute_vis(u, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	rilascia_commento(tes:Stringa, vis:Visualizzazione): Commento
+		pre:
+			sia u:Utente l'istanza dell'attore
+			che ha invocato lo use-case
+
+			ute_vis(u, vis) and
+			EXISTS v |
+				vid_vis(v, vis) and
+				!VideoCensurato(v)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Commento(alpha)
+				- testo(alpha, tes)
+				- istante(alpha, adesso)
+				- comm_vis(alpha, vis)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	mostra_cronologia(): Video[0..*]
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+
+			sia u:Utente l'istanza dell'attore
+			che ha invocato lo use-case
+
+			VID = { v | !VideoCensurato(v) and
+						EXISTS vis |
+							ute_vis(u, vis) and
+							vid_vis(v, vis) }
+			and
+			result = VID
+
+	cerca_video(
+		cat:Categoria,
+		instag:Tag[0..*],
+		v:Intero 0..5 [0..1]
+	): Video[0..*]
+	pre:
+		instag valorizzato <-> v valorizzato
+	post:
+		questo use-case non modifica il livello estensionale
+
+		instag non valorizzato and v non valorizzato ->
+			VIDCATRISP = { vid | !VideoCensurato(vid) and
+									cat_vid(cat, vid) and
+									EXISTS risp |
+										conta_risposte(vid, risp) and
+										FORALL vid2, risp2 |
+											 ( !VideoCensurato(vid2) and
+											 cat_vid(cat, vid2) and
+											 conta_risposte(vid2, risp2) )
+											 -> risp >= risp2 }
+			and
+			result = VIDCATRISP
+		and
+		instag valorizzato and v valorizzato ->
+			VIDCATTAG = { vid | !VideoCensurato(vid) and
+								cat_vid(cat, vid) and
+								EXISTS t |
+									t in instag and
+									tag_vid(t, vid) }
+			and
+			VIDVAL = { vid | vid in VIDCATTAG and
+								( ( EXISTS val |
+									valutazione_media(vid, val) and
+									val >= v )
+								or
+									ha_valutazioni(vid, false) ) }
+			and
+			result = VIDVAL
+			
+
+
+- Use-Case Strumenti playlist
+
+	crea_playlist(
+		n:Stringa,
+		pub:Booleano,
+		insvid:Video[0..*]
+	): Playlist
+	pre:
+		FORALL v |
+			v in insvid -> !VideoCensurato(v)
+	post:
+		il livello estensionale finale differisce
+		da quello iniziale come segue
+
+		sia u:Utente l'istanza dell'attore
+		che ha invocato lo use-case
+
+		nuovi elementi del dominio: alpha
+		elementi rimossi dal dominio: nessuno
+		nuove ennuple: 
+			- Playlist(alpha)
+			- nome(alpha, n)
+			- creazione(alpha, adesso)
+			- is_pubblica(alpha, pub)
+			- play_ute(alpha, u)
+			- play_vid(alpha, vid) per ogni vid in insvid
+		ennuple rimosse: nessuna
+		valore di ritorno: result = alpha		
+
+
+	visualizza_playlist_altri(up:Utente): Playlist[0..*]
+		pre:
+			sia u:Utente l'istanza dell'attore
+			che ha invocato lo use-case
+
+			up != u
+		post:
+			questo use-case non modifica il livello estensionale
+
+			P = { p | is_pubblica(p, true) and
+						play_ute(p, u) }
+			and
+			result = P
+
+
+- Use-Case Strumenti censura
+
+	censura_video(v:Video, mot:Motivazione): VideoCensurato
+		pre:
+			!VideoCensurato(v)
+		post:
+			il modello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- VideoCensurato(v)
+				- istante_censura(v, adesso)
+				- mot_vidcens(mot, v)
+			ennuple rimosse:
+				- play_vid(p, v) per ogni p | Playlist(p)
+			valore di ritorno: result = v
+		
+ 

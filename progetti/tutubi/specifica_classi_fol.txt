@@ -1,0 +1,170 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe Utente
+
+	[V.Utente.no_valutazione_video_proprio]
+		!EXISTS v |
+			ute_vid(this, v) and
+			valutazione(this, v)
+
+	[V.Utente.valutazione_solo_se_visualizzato]
+		FORALL v |
+			valutazione(this, v) -> EXISTS vis | ute_vis(this, vis) and	
+												 vid_vis(v, vis)
+
+	[V.Utente.no_valutazione_video_censurato]
+		!EXISTS v, istval, istcens |
+			VideoCensurato(v) and
+			valutazione(this, v) and
+			istante(this, v, istval) and
+			istante_censura(v, istcens) and
+			istcens <= istval
+
+	[V.Utente.valutazione_video_pubblicato] 
+		!EXISTS istval, v, pub | 
+			valutazione(this, v) and
+			istante(this, v, istval) and
+			pubblicazione(v, pub) and
+			istval < pub
+
+	[V.Utente.valutazione_dopo_registrazione]
+		!EXISTS v, istval, istreg |
+			istante(this, v, istval) and 
+			iscrizione(this, istreg) and
+			istval < istreg 
+
+	[V.Utente.visualizzazione_dopo_registrazione]
+		!EXISTS vis, istiscr, istvis | 
+			ute_vis(this, vis) and
+			iscrizione(this, istiscr) and 
+			istante(vis, istvis) and 
+			istvis < istiscr		
+
+- Classe Visualizzazione
+
+	[V.Visualizzazione.visualizzazione_dopo_pubblicazione_video]
+		!EXISTS istvis, istpub, vid |
+			vid_vis(vid, this) and
+			istante(this, istvis) and
+			pubblicazione(vid, istpub) and
+			istvis < istpub
+
+	[V.Visualizzazione.no_video_censurato]
+		!EXISTS istcens, vid, istvis |
+			vid_vis(vid, this) and
+			istante(this, istvis) and
+			VideoCensurato(vid) and
+			istante_censura(vid, istcens) and
+			istvis >= istcens
+
+- Classe Commento
+
+	[V.Commento.dopo_visualizzazione]
+		!EXISTS vis, istvis, istcom |
+			comm_vis(this, vis) and
+			istante(vis, istvis) and
+			istante(this, istcom) and
+			istcom < istvis
+
+	[V.Commento.non_dopo_censura]
+		!EXISTS vis, vid, istcom, istcens |
+			VideoCensurato(vid) and
+			vid_vis(vid, vis) and
+			comm_vis(this, vis) and
+			istante(this, istcom) and
+			istante_censura(vid, istcens) and
+			istcom >= istcens
+
+- Classe Playlist
+
+	[V.Playlist.no_video_censurati]
+		!EXISTS vid |
+			VideoCensurato(vid) and
+			play_vid(this, vid)
+
+	[V.Playlist.utente_iscritto]
+		!EXISTS ute, istiscr, istcrea |
+			play_ute(this, ute) and
+			iscrizione(ute, istiscr) and
+			creazione(this, istcrea) and
+			istcrea < istiscr
+
+- Classe Video
+
+	[V.Video.no_risposta_video_caricato_stesso_utente]
+		FORALL vrisp |
+			risposte(this, vrisp) -> !EXISTS u |
+									ute_vid(u, this) and
+									ute_vid(u, vrisp)
+
+	[V.Video.no_risposta_se_stesso]
+		FORALL vrisp |
+			risposte(this, vrisp) -> this != vrisp
+
+	[V.Video.risposte_non_simmetriche]
+		!EXISTS vrisp |
+			risposte(this, vrisp) and
+			risposte(vrisp, this)
+
+	[V.Video.no_cicli]
+		le risposte non devono formare cicli
+
+		// Si potrebbe risolvere aggiungendo un
+		// attributo alla classe video che si incrementa
+		// ad ogni video risposta così da poter imporre
+		// che il link risposte deve collegare solo video
+		// che rispettano la seguenza giusta
+
+	visualizzazioni(): Intero >= 0
+		pre:
+			nessuna
+		post:
+			resuòt soddisfa la seguente formula:
+			
+			V = { vis | vid_vis(this, vis) }
+			and
+			result = |V|
+
+	conta_risposte(): Intero >= 0
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			
+			RISP = { v | risposte(this, v) }
+			and
+			result = |RISP|
+
+	valutazione_media(): Reale 0..5
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			UVAL = { u | valutazione(u, this) }
+			and
+			|UVAL| = 0 -> result = 0
+			and
+			|UVAL| > 0 -> result = 
+			( sommatoria(u in UVAL: val | valore(u, this, val)) ) / |UVAL|
+
+	ha_valutazione(): Booleano
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			EXISTS u | valutazione(u, this) <-> result = true
+
+- Classe VideoCensurato
+
+	[V.VideoCensurato.dopo_pubblicazione]
+		!EXISTS istpub, istcens |
+			pubblicazione(this, istpub) and
+			istante_censura(this, istcens) and
+			istcens < istpub
+	
+			
+
+
+

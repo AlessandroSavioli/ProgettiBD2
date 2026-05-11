@@ -19,7 +19,7 @@
 | **travel to the moon** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/travel_to_the_moon/travel_to_the_moon.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **ebuy** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/ebuy/ebuy.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **officine** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/officine/officine.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **tutubi** | 🟡 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **tutubi** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 
 <br>
 
