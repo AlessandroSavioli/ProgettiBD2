@@ -4,7 +4,8 @@
 
 >[!TIP] 
 > 🟢 &rarr; Progetto completato <br>
-> 🟡 &rarr; Progetto in lavorazione <br><br>
+> 🟡 &rarr; Progetto in lavorazione <br>
+> 🔴 &rarr; Progetto da iniziare <br><br>
 > Per visualizzare la documentazione, cliccare sul pulsante rosso del PDF che si vuole visionare 
 
 ### Rilasciati
@@ -20,7 +21,8 @@
 | **ebuy** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/ebuy/ebuy.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **officine** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/officine/officine.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/officine/officine.pdf) |
 | **tutubi** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **cielo** | 🟢 | **No** | ![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/cielo/cielo.pdf) |
+| **quickhospital** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **cielo** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/cielo/cielo.pdf) |
 
 <br>
 
