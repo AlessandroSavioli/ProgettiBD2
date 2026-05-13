@@ -20,6 +20,7 @@
 | **ebuy** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/ebuy/ebuy.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **officine** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/officine/officine.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **tutubi** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **cielo** | 🟢 | **No** | ![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/cielo/cielo.pdf) |
 
 <br>
 
