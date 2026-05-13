@@ -1,0 +1,126 @@
+SPECIFICA DEGLI USE-CASE
+
+- Use-Case Strumenti Riparazione
+
+	nuova_riparazione(
+		codice: Intero > 0,
+		v: Veicolo,
+		o: Officina
+	): Riparazione
+	pre:
+		FORALL c, r |
+			( off_ripa(o, r) and codice(r, c) ) -> c != codice
+		and 
+		!EXISTS r' |
+			!RiparazioneTerminata(r') and
+			veic_ripa(v, r')
+	post:
+		il livello estensionale finale differisce
+		da quello iniziale come segue:
+
+		nuovi elementi del dominio: alpha
+		elementi rimossi dal dominio: nessuno
+		nuove ennuple:
+			- Riparazione(alpha)
+			- codice(alpha, codice)
+			- accettazione(alpha, adesso)
+			- off_ripa(o, alpha)
+			- veic_ripa(v, alpha)
+		ennuple rimosse: nessuna
+		valore di ritorno: result = alpha
+
+	termina_riparazione(r: Riparazione): RiparazioneTerminata
+		pre:
+			!RiparazioneTerminata(r)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- RiparazioneTerminata(r)
+				- riconsegna(r, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = r
+
+
+- Use-Case Registrazione Veicoli
+
+	nuova_casaproduttrice(n:Stringa): CasaProduttrice
+		pre:
+			!EXISTS c |
+				CasaProduttrice(c) and
+				nome(c, n)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:	
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- CasaProduttrice(alpha)
+				- nome(alpha, n)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	nuova_tipologia(n:Stringa): Tipologia
+		pre:
+			!EXISTS tip |
+				Tipologia(tip) and
+				nome(tip, n)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Tipologia(alpha)
+				- nome(alpha, n)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+	
+	nuovo_modello(n:Stringa, tip:Tipologia, casa:CasaProduttrice): Modello
+		pre:
+			!EXISTS mod, n' |
+				casa_mod(casa, mod) and
+				nome(mod, n') and
+				n' = n
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Modello(alpha)
+				- nome(alpha, n)
+				- casa_mod(casa, alpha)
+				- mod_tip(alpha, tip)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	nuovo_veicolo(tar: Targa, mod: Modello, prop:Proprietario, imm:Data): Veicolo
+		pre:
+			!EXISTS v |
+				Veicolo(v) and
+				targa(v, tar)
+			and
+			imm <= oggi
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Veicolo(alpha)
+				- targa(alpha, tar)
+				- immatricolazione(alpha, imm)
+				- mod_veic(mod, alpha)
+				- prop_veic(prop, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+	

@@ -1,0 +1,54 @@
+SPECIFICA DELLE CLASSI
+
+- Classe Officina
+
+	num_dipendenti(): Intero >= 0
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			D = { dip | Dipendente(dip) AND
+						dip_off(dip, this) }
+			and
+			result = |D|
+
+- Classe Dipendente
+
+	anni_servizio(): Intero >= 0
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			EXISTS inizio, annoiniz, annooggi |
+				inizio_contratto(this, inizio) and
+				anno(inizio, annoiniz) and
+				anno(oggi, annooggi) and
+				result = annooggi - annoiniz
+			
+- Classe Riparazione
+
+	[V.Riparazione.no_prima_immatricolazione_veicolo]
+		!EXISTS acc, dataacc, v, imm |
+			veic_ripa(v, this) and
+			immatricolazione(v, imm) and
+			accettazione(this, acc) and
+			data(acc, dataacc) and
+			dataacc < imm
+
+- Classe RiparazioneTerminata
+
+	[V.RiparazioneTerminata.no_prima_accettazione]
+		!EXISTS ric, acc |
+			accettazione(this, acc) and
+			riconsegna(this, ric) and
+			ric < acc
+
+- Classe Veicolo
+
+	[V.Veicolo.no_immatricolazione_dopo_oggi]
+		!EXISTS imm |
+			immatricolazione(this, imm) and
+			imm > oggi
+
