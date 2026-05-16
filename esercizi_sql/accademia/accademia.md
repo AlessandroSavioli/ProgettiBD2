@@ -36,17 +36,43 @@
         font-family: "Fira Mono", monospace;
         font-size: 15px;
     }
+
+    /* Rimuove il blu e la sottolineatura dai link dell'indice */
+    a {
+        color: #333333; /* Grigio scuro elegante invece del blu */
+        text-decoration: none; /* Toglie la sottolineatura */
+    }
+    
+    /* Aggiunge un effetto hover se lo guardi a schermo */
+    a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+    
+    /* Aumenta un po' lo spazio tra le voci dell'indice */
+    li {
+        margin-bottom: 5px;
+    }
 </style>
 
 
 # DATABASE ACCADEMIA
 
-## Schema ER
+- [1 - Schema ER](#1---schema-er)
+- [2 - Codice SQL](#2---codice-sql)
+- [3 - Query SQL](#3---query-sql)
+  - [3.1 - Query su tabella singola](#31---query-su-tabella-singola)
+  - [3.2 - Query su tabelle multiple](#32---query-su-tabelle-multiple)
+  - [3.3 - Query con raggruppamenti ed aggregati](#33---query-con-raggruppamenti-ed-aggregati)
+
+<br><br>
+
+## 1 - Schema ER
 ![Diagramma ER del database](accademia.png)
 
 <div style="page-break-after: always;"></div>
 
-## Codice SQL
+## 2 - Codice SQL
 ```sql
 DROP DATABASE IF EXISTS accademia;
 
@@ -178,9 +204,9 @@ CREATE TABLE assenza (
 
 <div style="page-break-after: always;"></div>
 
-## Query SQL
+## 3 - Query SQL
 
-### Query su tabella singola
+### 3.1 - Query su tabella singola
 
 1. Quali sono i cognomi distinti di tutti gli strutturati?
 ```sql
@@ -254,7 +280,7 @@ ORDER BY giorno ASC
 
 <div style="page-break-after: always;"></div>
 
-### Query su tabelle multiple
+### 3.2 - Query su tabelle multiple
 
 1. Quali sono il nome, la data di inizio e la data di fine dei WP del progetto di nome ‘Pegasus’ ?
 ```sql
@@ -377,3 +403,112 @@ FROM WP AS wp1, WP AS wp2
 WHERE wp1.nome = wp2.nome AND
       wp1.progetto <> wp2.progetto
 ```
+
+<div style="page-break-after: always;"></div>
+
+### 3.3 - Query con raggruppamenti ed aggregati
+
+1. Quanti sono gli strutturati di ogni fascia?
+```sql
+SELECT posizione, COUNT(*) AS numero
+FROM persona
+GROUP BY posizione
+```
+
+2. Quanti sono gli strutturati con stipendio ≥ 40000?
+```sql
+SELECT COUNT(*) AS numero
+FROM persona
+WHERE stipendio >= 40000
+```
+
+3. Quanti sono i progetti già finiti che superano il budget di 50000?
+```sql
+SELECT COUNT(*) AS numero
+FROM progetto
+WHERE budget > 50000 AND
+      fine < CURRENT_DATE
+```
+
+4. Qual è la media, il massimo e il minimo delle ore delle attività relative al progetto ‘Pegasus’?
+```sql
+SELECT AVG(ap.oreDurata) AS media, MIN(ap.oreDurata) AS minimo,
+       MAX(ap.oreDurata) AS massimo
+FROM attivitaprogetto AS ap, progetto AS p
+WHERE p.nome = 'Pegasus' AND
+      ap.progetto = p.id 
+```
+
+<div style="page-break-after: always;"></div>
+
+5. Quali sono le medie, i massimi e i minimi delle ore giornaliere dedicate al progetto
+‘Pegasus’ da ogni singolo docente?
+```sql
+SELECT persona.id, persona.nome, persona.cognome,
+       AVG(ap.oreDurata) AS media, MIN(ap.oreDurata) AS minimo,
+       MAX(ap.oreDurata) AS massimo
+FROM attivitaprogetto AS ap, progetto AS p,
+     persona
+WHERE p.nome = 'Pegasus' AND
+      ap.progetto = p.id AND
+      ap.persona = persona.id
+GROUP BY persona.id, persona.nome, persona.cognome
+```
+
+6. Qual è il numero totale di ore dedicate alla didattica da ogni docente?
+```sql
+SELECT p.id, p.nome, p.cognome,
+       SUM(anp.oreDurata)
+FROM persona as p, attivitanonprogettuale as anp
+WHERE anp.persona = p.id AND
+      anp.tipo = 'Didattica'
+GROUP BY p.id, p.nome, p.cognome
+```
+
+7. Qual è la media, il massimo e il minimo degli stipendi dei ricercatori?
+```sql
+SELECT AVG(p.stipendio) AS media, MIN(p.stipendio) AS minimo,
+       MAX(p.stipendio) AS massimo
+FROM persona AS p
+WHERE p.posizione = 'Ricercatore'
+```
+
+8. Quali sono le medie, i massimi e i minimi degli stipendi dei ricercatori, dei professori associati e dei professori ordinari?
+```sql
+SELECT posizione, AVG(p.stipendio) AS media, 
+       MIN(p.stipendio) AS minimo, MAX(p.stipendio) AS massimo
+FROM persona as p
+WHERE p.posizione = 'Ricercatore' OR
+      p.posizione = 'Professore Associato' OR
+      p.posizione = 'Professore Ordinario'
+GROUP BY posizione
+```
+
+9. Quante ore ‘Ginevra Riva’ ha dedicato ad ogni progetto nel quale ha lavorato?
+```sql
+SELECT prog.nome, SUM(ap.oreDurata)
+FROM persona AS p, attivitaprogetto AS ap, progetto AS prog
+WHERE p.nome = 'Ginevra' AND p.cognome = 'Riva' AND
+      p.id = ap.persona AND prog.id = ap.progetto
+GROUP BY prog.nome
+```
+
+10. Qual è il nome dei progetti su cui lavorano più di due strutturati?
+```sql
+SELECT prog.nome
+FROM progetto AS prog, attivitaprogetto AS ap
+WHERE prog.id = ap.progetto
+GROUP BY prog.nome 
+HAVING COUNT(DISTINCT ap.persona) > 2
+```
+
+11. Quali sono i professori associati che hanno lavorato su più di un progetto?
+```sql
+SELECT p.id, p.nome, p.cognome
+FROM persona AS p, attivitaprogetto AS ap
+WHERE p.id = ap.persona AND
+      p.posizione = 'Professore Associato'
+GROUP BY p.id, p.nome, p.cognome
+HAVING COUNT(DISTINCT ap.progetto) > 1
+```
+
