@@ -36,18 +36,42 @@
         font-family: "Fira Mono", monospace;
         font-size: 15px;
     }
+
+    /* Rimuove il blu e la sottolineatura dai link dell'indice */
+    a {
+        color: #333333; /* Grigio scuro elegante invece del blu */
+        text-decoration: none; /* Toglie la sottolineatura */
+    }
+    
+    /* Aggiunge un effetto hover se lo guardi a schermo */
+    a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+    
+    /* Aumenta un po' lo spazio tra le voci dell'indice */
+    li {
+        margin-bottom: 5px;
+    }
 </style>
 
 
 # DATABASE CIELO
+- [1 - Schema ER](#1---schema-er)
+- [2 - Query SQL](#2---query-sql)
+  - [2.1 - Query multitabella](#21---query-multitabella)
+  - [2.2 Query con raggruppamenti ed aggregati](#22-query-con-raggruppamenti-ed-aggregati)
 
-## Schema ER
+<br><br>
+
+## 1 - Schema ER
 ![Diagramma ER del database](cielo.png)
 
 <div style="page-break-after: always;"></div>
 
-## Query SQL
+## 2 - Query SQL
 
+### 2.1 - Query multitabella
 1. Quali sono i voli (codice e nome della compagnia) la cui durata supera le 3 ore?
 ```sql
 SELECT volo.codice, comp.nome
@@ -175,4 +199,126 @@ WHERE arrpart.comp = compagnia.nome AND
       arrpart.partenza = 'FCO' AND
       arrpart.arrivo = 'JFK' AND
       compagnia.annofondaz IS NOT NULL
+```
+
+### 2.2 Query con raggruppamenti ed aggregati
+1. Quante sono le compagnie che operano (sia in arrivo che in partenza) nei diversi
+aeroporti?
+```sql
+SELECT a.codice, a.nome, COUNT(DISTINCT ap.comp) AS num_compagnie
+FROM aeroporto AS a, arrpart AS ap
+WHERE ap.arrivo = a.codice OR ap.partenza = a.codice
+GROUP BY a.codice, a.nome
+```
+
+2. Quanti sono i voli che partono dall’aeroporto ‘HTR’ e hanno una durata di almeno
+100 minuti?
+```sql
+SELECT COUNT(*) AS num_voli
+FROM arrpart AS ap, volo
+WHERE volo.codice = ap.codice AND
+      ap.partenza = 'HTR' AND
+      volo.durataMinuti >= 100
+```
+
+3. Quanti sono gli aeroporti sui quali opera la compagnia ‘Apitalia’, per ogni nazione
+nella quale opera?
+```sql
+SELECT la.nazione, COUNT(DISTINCT la.aeroporto) AS num_aeroporti
+FROM luogoaeroporto AS la, arrpart as ap
+WHERE ap.comp = 'Apitalia' AND
+      ( ap.partenza = la.aeroporto OR ap.arrivo = la.aeroporto )
+GROUP BY la.nazione
+```
+
+<div style="page-break-after: always;"></div>
+
+4. Qual è la media, il massimo e il minimo della durata dei voli effettuati dalla
+compagnia ‘MagicFly’ ?
+```sql
+SELECT AVG(volo.durataMinuti) AS media, MIN(volo.durataMinuti) AS minimo,
+       MAX(volo.durataMinuti) AS massimo
+FROM volo
+WHERE volo.comp = 'MagicFly' 
+```
+
+5. Qual è l’anno di fondazione della compagnia più vecchia che opera in ognuno degli
+aeroporti?
+```sql
+SELECT a.codice, a.nome, MIN(DISTINCT compagnia.annoFondaz) AS anno
+FROM aeroporto as a, compagnia, arrpart AS ap
+WHERE ap.comp = compagnia.nome AND
+      ( ap.partenza = a.codice OR ap.arrivo = a.codice ) 
+GROUP BY a.codice, a.nome
+```
+
+6. Quante sono le nazioni (diverse) raggiungibili da ogni nazione tramite uno o più
+voli?
+```sql
+SELECT luogopart.nazione, COUNT(DISTINCT luogoarriv.nazione) AS raggiungibili
+FROM luogoaeroporto AS luogopart, luogoaeroporto AS luogoarriv, arrpart AS ap
+WHERE ap.partenza = luogopart.aeroporto AND
+      ap.arrivo = luogoarriv.aeroporto AND
+      luogopart.nazione <> luogoarriv.nazione
+GROUP BY luogopart.nazione
+```
+
+7. Qual è la durata media dei voli che partono da ognuno degli aeroporti?
+```sql
+SELECT a.codice, a.nome, AVG(volo.durataMinuti) AS durata_media_voli
+FROM volo, arrpart, aeroporto AS a
+WHERE a.codice = arrpart.partenza AND
+      volo.codice = arrpart.codice
+GROUP BY a.codice, a.nome
+```
+
+<div style="page-break-after: always;"></div>
+
+8. Qual è la durata complessiva dei voli operati da ognuna delle compagnie fondate
+a partire dal 1950?
+```sql
+SELECT comp.nome, comp.annoFondaz, SUM(volo.durataMinuti) AS durata_complessiva_voli
+FROM compagnia AS comp, volo
+WHERE comp.annoFondaz >= 1950 AND
+      volo.comp = comp.nome
+GROUP BY comp.nome, comp.annofondaz
+```
+
+9. Quali sono gli aeroporti nei quali operano esattamente due compagnie?
+```sql
+SELECT a.codice, a.nome
+FROM aeroporto AS a, arrpart
+WHERE ( a.codice = arrpart.partenza OR a.codice = arrpart.arrivo )
+GROUP BY a.codice, a.nome
+HAVING COUNT(DISTINCT arrpart.comp) = 2
+```
+
+10. Quali sono le città con almeno due aeroporti?
+```sql
+SELECT citta
+FROM luogoaeroporto
+GROUP BY citta
+HAVING COUNT(DISTINCT aeroporto) >= 2;
+```
+
+11. Qual è il nome delle compagnie i cui voli hanno una durata media maggiore di 6
+ore?
+```sql
+SELECT comp.nome
+FROM compagnia AS comp, volo
+WHERE volo.comp = comp.nome 
+GROUP BY comp.nome 
+HAVING AVG(volo.durataMinuti) > 360
+```
+
+<div style="page-break-after: always;"></div>
+
+12. Qual è il nome delle compagnie i cui voli hanno tutti una durata maggiore di 100
+minuti?
+```sql
+SELECT comp.nome
+FROM compagnia AS comp, volo
+WHERE volo.comp = comp.nome
+GROUP BY comp.nome
+HAVING MIN(volo.durataMinuti) > 100
 ```
