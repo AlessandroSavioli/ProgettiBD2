@@ -1,0 +1,16 @@
+SPECIFICA TIPI DI DATO
+
+- Telefono
+	Segue standard 
+	Italia ~ '^[+][0-9]{12}$'
+
+- Email
+	segue standard email
+	~ '^[A-Za-z]{1..}[@][A-Za-z]{1..}[.][A-Za-z]{1..}$'
+
+- Indirizzo
+	(
+		via: Stringa
+		civico: Intero > 0
+		CAP: [0-9]{5} 
+	)

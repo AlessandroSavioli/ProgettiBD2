@@ -1,0 +1,208 @@
+SPECIFICA DEGLI USE-CASE
+
+Use-Case Strumenti visite
+
+	trova_itinerario(): 
+		\\ Come posso ordinare un insieme ?
+
+Use-Case Gestione ricoveri
+
+	nuovo_paziente(
+		nom:Stringa,
+		cogn:Stringa,
+		nasc:Data,
+		insnum:Telefono[1..*],
+		ema:Email,
+		post:Indirizzo
+	): Paziente
+		pre:
+			!EXISTS p' |
+				email(p', ema)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Persona(alpha)
+				- nome(alpha, nom)
+				- cognome(alpha, cogn)
+				- nascita(alpha, nasc)
+				- Paziente(alpha)
+				- num_telefono(alpha, tel) per ogni tel in insnum
+				- email(alpha, ema)
+				- indirizzo_postale(alpha, post)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+	nuovo_ricovero(
+		p:Paziente,
+		m:Medico,
+		l:Letto,
+		d:Data
+	): Ricovero
+		pre:
+			is_occupato(l, false)
+			and
+			d >= oggi
+			and
+			!EXISTS ric' |
+				paz_ric(p, ric') and
+				!RicoveroTerminato(ric')
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Ricovero(alpha)
+				- data(alpha, d)
+				- paz_ric(p, alpha)
+				- med_ric(m, alpha)
+				- let_ric(l, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	termina_ricovero(r:Ricovero): RicoveroTerminato
+		pre:
+			!RicoveroTerminato(r)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- RicoveroTerminato(r)
+				- dimissione(r, oggi)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = r
+
+
+Use-Case Gestione prestazioni
+
+	nuovo_pazienteEsterno(
+		nom:Stringa,
+		cogn:Stringa,
+		nasc:Data,
+		insnum:Telefono[1..*],
+		ema:Email,
+		post:Indirizzo
+	): PazienteEsterno
+		pre:
+			!EXISTS p' |
+				email(p', ema)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Persona(alpha)
+				- nome(alpha, nom)
+				- cognome(alpha, cogn)
+				- nascita(alpha, nasc)
+				- Paziente(alpha)
+				- num_telefono(alpha, tel) per ogni tel in insnum
+				- email(alpha, ema)
+				- indirizzo_postale(alpha, post)
+				- PazienteEsterno(alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	nuova_prestazione(
+		p:PazienteEsterno,
+		dat:Data
+		des:Stringa,
+		s:Specializzazione
+	): PrestazioneEsterna
+		pre:
+			dat >= oggi
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- PrestazioneEsterna(alpha)
+				- data(alpha, dat)
+				- desc(alpha, des)
+				- paz_pre(p, alpha)
+				- pre_spe(alpha, s)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	trova_medici(pres:PrestazioneEsterna): Medico[0..*]
+		pre:
+			!EXISTS med |
+				med_pres(med, pres)
+		post:
+			lo use-case non modifica il livello estensionale
+
+			result soddisfa la seguente formula
+
+			Mprim = { m | EXISTS spec |
+							pre_spe(pres, spec) and
+							primaria(m, spec) }
+			and
+			Msec = { m | EXISTS spec |
+							pre_spe(pres, spec) and
+							secondaria(m, spec) }
+			and
+			( |Mprim| > 0 ) -> result = Mprim
+			and
+			( |Mprim| = 0 and |Msec| > 0 ) -> result = Msec
+			and
+			( |Mprim| = 0 and |Msec| = 0 ) -> result = null
+
+
+Use-Case Gestione medici
+
+	nuovo_medico(
+		nom:Stringa,
+		cogn:Stringa,
+		nasc:Data,
+		sPrim:Specializzazione,
+		sSec:Specializzazione[0..*]
+	):Medico
+		pre:
+			!(sPrim in sSec)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Persona(alpha)
+				- nome(alpha, nom)
+				- cognome(alpha, cogn)
+				- nascita(alpha, nasc)
+				- Medico(alpha)
+				- primaria(alpha, sPrim)
+				- secondaria(alpha, sec) per ogni sec in sSec
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+Use-Case Gestione Specializzazioni
+
+	nuova_specializzazione(n:Stringa): Specializzazione
+		pre:
+			!EXISTS spec |
+				Specializzazione(spec) and
+				nome(spec, n)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Specializzazione(alpha)
+ 				- nome(alpha, n)
+ 			ennuple rimosse: nessuna
+ 			valore di ritorno: result = alpha

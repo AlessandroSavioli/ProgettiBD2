@@ -1,0 +1,75 @@
+SPECIFICA DELLE CLASSI
+
+Classe Ricovero
+
+	[V.Ricovero.no_prima_nascita_paziente]
+		!EXISTS paz, nasc, dric |
+			paz_ric(paz, this) and
+			nascita(paz, nasc) and
+			data(this, dric) and
+			dric < nasc
+
+Classe RicoveroTerminato
+
+	[V.RicoveroTerminato.no_dimissione_prima_inizio]
+		!EXISTS dric, dim |
+			data(this, dric) and
+			dimissione(this, dim) and
+			dim < dric
+
+Classe PrestazioneEsterna
+
+	[V.PrestazioneEsterna.no_prima_nascita_paziente]
+		!EXISTS paz, nasc, drich |
+			paz_pre(paz, this) and
+			nascita(paz, nasc) and
+			data(this, drich) and
+			drich < nasc
+
+Classe Letto
+
+	[V.Letto.un_ricovero_attivo]
+		!EXISTS r1, r2 |
+			r1 != r2 and
+			!RicoveroTerminato(r1) and
+			!RicoveroTerminato(r2) and
+			let_ric(this, r1) and
+			let_ric(this, r2)
+
+	is_occupato(): Booleano
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			( EXISTS r |
+				let_ric(this, r) and
+				!RicoveroTerminato(r) ) <-> result = true
+				
+			
+
+Classe Stanza
+
+	posti_disponibili(): Intero 0..8
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula
+
+			L = { l | 
+					let_stan(l, this) and
+					is_occupato(l, true) }
+			and
+			EXISTS pos | 
+				posti_letto(this, pos)
+			and
+			result = pos - |L|
+
+Classe Medico
+
+	[V.Medico.no_specializzazione_sia_prim_che_sec]
+		FORALL s |
+			primaria(this, s) -> !secondaria(this, s)
+
+	
+			 
