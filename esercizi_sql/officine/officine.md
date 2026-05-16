@@ -93,6 +93,8 @@ CREATE DOMAIN "Intero >= 0" AS int
     CHECK (VALUE >= 0)
 ```
 
+<div style="page-break-after: always;"></div>
+
 ## FASE 3 - RISTRUTTURAZIONE DELLE GENERALIZZAZIONI
 Scegliamo ora come modificare il diagramma UML per trasformarlo in un diagramma equivalente ma senza generalizzazioni
 
@@ -107,10 +109,12 @@ Se si vincola la possibilità di una Persona di avere entrambi i link (disjoint)
 ### Generalizzazioni Direttore, Dipendente e link dir_off
 In questo caso abbiamo deciso di accorpare le due classi in una sola, "Dipendente", e di usare il metodo della fusione
 #### -PRO: 
-Aggiungendo un'operazione alla classe Dipendente, siamo in grado di sapere se il nostro dipendente è anche un direttore e, in caso, di quale officina è direttore
+Dato che i direttori saranno pochi, non ci preoccupa avere tutti i dati dei dipendenti, direttori o non, all'interno di una sola tabella
 
 #### -CONTRO:
-Molte ennuple della tabella Dipendente avranno NULL come valore sulla colonna "officina", ovvero il riferimento all'officina di cui quel dipendente è direttore (perché in proporzione i direttori sono pochi)
+Molte ennuple della tabella Dipendente avranno NULL come valore sulla colonna "nascita", dato che quel dato ci interessa solo se il dipendente è anche direttore
+
+<div style="page-break-after: always;"></div>
 
 ### Generalizzazione RiparazioneTerminata
 Per questa generalizzazione abbiamo optato per creare due classi, "RiparazioneInCorso" e "RiparazioneTerminata" applicando il metodo della divisione
@@ -125,5 +129,82 @@ Verranno create due tabelle con le informazioni sulle riparazioni, in più, l'ag
 ![Diagramma UML aggiornato](officine_aggiornamento1.png)
 
 ## FASE 4 - IDENTIFICATORI PER OGNI CLASSE
+Ogni classe ha già un identificatore, quindi questa fase non modifica in alcun modo il diagramma UML
 
-## FASE 5 - RISTRUTTURAZIONE VINCOLI ESTERNI
+<div style="page-break-after: always;"></div>
+
+## FASE 5 - RISTRUTTURAZIONE VINCOLI ESTERNI ED OPERAZIONI/USE-CASE
+### Vincoli Esterni
+
+Dato che abbiamo rimosso la generalizzazione Staff, ora abbiamo la classe Dipendente con un attributo opzionale (nascita) proprio perché quell'informazione ci interessa solo se il dipendente è un direttore, quindi va aggiunto il vincolo:
+#### [V.Dipendente.nascita_solo_se_direttore]
+    EXISTS nasc | nascita(this, nasc) <-> EXISTS off | dirige(this, off)
+
+Serve anche vincolare che i codici delle riparazioni (sia in corso che terminate) siano
+univoci (sempre riferiti alla singola officina):
+#### [V.RiparazioneInCorso.no_stesso_codice_riparazioneTerminata]
+    !EXISTS cod, ripaTerm, off |
+        codice(this,cod) and
+        RiparazioneTerminata(ripaTerm) and
+        codice(ripaTerm, cod) and
+        off_ripa_incor(off, this) and
+        off_ripa_term(off, ripaTerm)
+
+### Operazioni
+Le operazioni scritte in fase di analisi non hanno bisogno di nessun cambiamento
+
+### Use-Case
+
+Dato che abbiamo rimosso la generalizzazione Riparazione, ora abbiamo le classi RiparazioneInCorso e RiparazioneTerminata da gestire, vanno aggiornati dunque gli use-case:
+
+<div style="page-break-after: always;"></div>
+
+#### nuova_riparazioneInCorso(cod:Intero>0, v:Veicolo,     o:Officina)
+    pre:
+        FORALL c, r |
+            ( off_ripa_incor(o, r) and codice(r, c) ) -> c != cod
+            and
+            ( off_ripa_term(o, r) and codice(r, c) ) -> c != cod
+		and 
+		!EXISTS r' |
+			veic_ripa_incor(v, r')
+        and 
+        !EXISTS
+    post:
+		il livello estensionale finale differisce
+		da quello iniziale come segue:
+
+		nuovi elementi del dominio: alpha
+		elementi rimossi dal dominio: nessuno
+		nuove ennuple:
+			- RiparazioneInCorso(alpha)
+			- codice(alpha, cod)
+			- accettazione(alpha, adesso)
+			- off_ripa_incor(o, alpha)
+			- veic_ripa_incor(v, alpha)
+		ennuple rimosse: nessuna
+		valore di ritorno: result = alpha
+
+##### termina_riparazione(r: Riparazione): RiparazioneTerminata
+    pre:
+        !RiparazioneTerminata(r)
+    post:
+        il livello estensionale finale differisce
+        da quello iniziale come segue:
+
+        EXISTS off, v |
+            off_ripa_incor(off, r)
+            veic_ripa_incor(v, r)
+
+        nuovi elementi del dominio: nessuno
+        elementi rimossi dal dominio: nessuno
+        nuove ennuple:
+            - RiparazioneTerminata(r)
+            - riconsegna(r, adesso)
+            - off_ripa_term(off, r)
+            - veic_ripa_term(v, r)
+        ennuple rimosse: 
+            - RiparazioneInCorso(r)
+            - off_ripa_incor(off, r)
+            - veic_ripa_incor(v, r)
+        valore di ritorno: result = r
