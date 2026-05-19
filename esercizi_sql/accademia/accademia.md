@@ -64,6 +64,7 @@
   - [3.1 - Query su tabella singola](#31---query-su-tabella-singola)
   - [3.2 - Query su tabelle multiple](#32---query-su-tabelle-multiple)
   - [3.3 - Query con raggruppamenti ed aggregati](#33---query-con-raggruppamenti-ed-aggregati)
+  - [3.4 - Query annidate o tabelle temporanee con WITH](#34---query-annidate-o-tabelle-temporanee-con-with)
 
 <br><br>
 
@@ -512,3 +513,111 @@ GROUP BY p.id, p.nome, p.cognome
 HAVING COUNT(DISTINCT ap.progetto) > 1
 ```
 
+<div style="page-break-after: always;"></div>
+
+### 3.4 - Query annidate o tabelle temporanee con WITH
+
+1. Qual è media e deviazione standard degli stipendi per ogni categoria di strutturati?
+```sql
+SELECT p.posizione, AVG(p.stipendio),
+       STDDEV_SAMP(p.stipendio)
+FROM persona p
+GROUP BY p.posizione
+```
+
+2. Quali sono i ricercatori (tutti gli attributi) con uno stipendio superiore alla media
+della loro categoria?
+```sql
+WITH mediaStipendio AS (
+    SELECT AVG(p.stipendio) AS media
+    FROM persona p
+    WHERE p.posizione = 'Ricercatore'
+)
+SELECT *
+FROM persona p, mediaStipendio m
+WHERE p.posizione = 'Ricercatore' AND
+      p.stipendio > m.media
+```
+
+3. Per ogni categoria di strutturati quante sono le persone con uno stipendio che
+differisce di al massimo una deviazione standard dalla media della loro categoria?
+```sql
+WITH devMedia AS (
+    SELECT p.posizione, STDDEV_SAMP(p.stipendio) AS dev, AVG(p.stipendio) AS media
+    FROM persona p
+    GROUP BY p.posizione
+)
+SELECT p.posizione, COUNT(*)
+FROM persona p, devMedia dm
+WHERE p.posizione = dm.posizione AND 
+      ABS(p.stipendio - dm.media) <= dm.dev 
+GROUP BY p.posizione
+```
+
+<div style="page-break-after: always;"></div>
+
+4. Chi sono gli strutturati che hanno lavorato almeno 20 ore complessive in attività
+progettuali? Restituire tutti i loro dati e il numero di ore lavorate.
+```sql
+WITH totOre AS (
+    SELECT p.id, SUM(ap.oreDurata) AS tot
+    FROM persona p, attivitaprogetto ap
+    WHERE p.id = ap.persona 
+    GROUP BY p.id
+)
+SELECT p.*, totOre.tot
+FROM persona p, totOre
+WHERE p.id = totOre.id AND
+      totOre.tot >= 20
+```
+
+5. Quali sono i progetti la cui durata è superiore alla media delle durate di tutti i
+progetti? Restituire nome dei progetti e loro durata in giorni.
+```sql
+WITH mediaDurata AS (
+    SELECT AVG(p.fine - p.inizio) AS media
+    FROM progetto p
+)
+SELECT p.nome, (p.fine - p.inizio) AS durata
+FROM progetto p, mediaDurata md
+WHERE (p.fine - p.inizio) > md.media
+```
+
+6. Quali sono i progetti terminati in data odierna che hanno avuto attività di tipo
+“Dimostrazione”? Restituire nome di ogni progetto e il numero complessivo delle
+ore dedicate a tali attività nel progetto.
+```sql
+WITH progDimostrazione AS (
+    SELECT progetto, SUM(oreDurata) AS totOre
+    FROM attivitaprogetto
+    WHERE tipo = 'Dimostrazione'
+    GROUP BY progetto
+)
+SELECT prog.nome, pd.totOre
+FROM progetto prog, progDimostrazione pd
+WHERE prog.id = pd.progetto AND
+      prog.fine <= CURRENT_DATE
+```
+
+7. Quali sono i professori ordinari che hanno fatto più assenze per malattia del numero di assenze medio per malattia dei professori associati? Restituire id, nome e
+cognome del professore e il numero di giorni di assenza per malattia.
+```sql
+WITH assenzeAssociati AS (
+    SELECT p.id, COUNT(a.id) AS num_assenze
+    FROM assenza a, persona p
+    WHERE p.id = a.persona AND
+          p.posizione = 'Professore Associato' AND
+          a.tipo = 'Malattia'
+    GROUP BY p.id
+), mediaAssenzeAssociati AS (
+    SELECT AVG(num_assenze) AS media
+    FROM assenzeAssociati
+)
+SELECT p.id, p.nome, p.cognome, COUNT(a.id)
+FROM persona p, assenza a, mediaAssenzeAssociati ma
+WHERE p.id = a.persona AND
+      p.posizione = 'Professore Ordinario' AND
+      a.tipo = 'Malattia'
+GROUP BY p.id, p.nome, p.cognome, ma.media  
+HAVING COUNT(a.id) > ma.media
+```
