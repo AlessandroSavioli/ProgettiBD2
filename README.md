@@ -38,5 +38,6 @@
 | **velocipide** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/velocipide/velocipide.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **stayhome** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/stayhome/stayhome.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **skynetDrones** | 🟢 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/skynetDrones/skynetDrones.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **epicGaming** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./allenamento/epicGaming/epicGaming.pdf) |
 ---
 *Ultimo aggiornamento: 06/05/2026*
