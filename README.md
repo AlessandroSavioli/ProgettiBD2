@@ -9,31 +9,31 @@
 > Per visualizzare la documentazione, cliccare sul pulsante rosso del PDF che si vuole visionare 
 
 ### Rilasciati
-| Progetto | Stato | Specifiche | Documentazione |
-| :--- | :---: | :---: | :---: |
-| **voli aerei** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/voli_aerei/voli_aerei.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **università** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/università/università2.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **accademia** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/accademia/accademia2.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/accademia/accademia.pdf) |
-| **impiegati e studenti** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/impiegati_e_studenti/impiegati_studenti.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **esercitazioni universitarie**| 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/esercitazioni_universitarie/esercitazioni_universitarie.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **go** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/go/go.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **travel to the moon** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/travel_to_the_moon/travel_to_the_moon.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **ebuy** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/ebuy/ebuy.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **officine** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/officine/officine.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/officine/officine.pdf) |
-| **tutubi** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **quickhospital** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/quickhospital/quickhospital.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **cielo** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/cielo/cielo.pdf) |
-| **out!** | 🟡 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **dormo da te** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **xFit** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **ristobook** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **travel plan** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **smart2go** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **amazzon** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **stoxx** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **colab** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **città verde** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **my precious** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| Numero | Progetto | Stato | Specifiche | Documentazione |
+| :---: | :--- | :---: | :---: | :---: |
+| 1 | **voli aerei** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/voli_aerei/voli_aerei.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 2 | **università** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/università/università2.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 3 | **accademia** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/accademia/accademia2.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/accademia/accademia.pdf) |
+| 4 | **impiegati e studenti** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/impiegati_e_studenti/impiegati_studenti.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 5 | **esercitazioni universitarie**| 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/esercitazioni_universitarie/esercitazioni_universitarie.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 6 | **go** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/go/go.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 7 | **travel to the moon** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/travel_to_the_moon/travel_to_the_moon.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 8 | **ebuy** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/ebuy/ebuy.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 9 | **officine** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/officine/officine.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/officine/officine.pdf) |
+| 10 | **tutubi** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 11 | **quickhospital** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/quickhospital/quickhospital.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 12 | **cielo** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/cielo/cielo.pdf) |
+| 13 | **out!** | 🟡 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 14 | **dormo da te** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 15 | **xFit** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 16 | **ristobook** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 17 | **travel plan** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 18 | **smart2go** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 19 | **amazzon** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 20 | **stoxx** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 21 | **colab** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 22 | **città verde** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 23 | **my precious** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 
 <br>
 
@@ -42,13 +42,13 @@
 >e non fanno parte dei progetti rilasciati durante le lezioni!
 
 ### Allenamento
-| Progetto | Stato | Specifiche | Documentazione |
-| :--- | :---: | :---: | :---: |
-| **smartrent** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/smartrent/smartrent.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **cinema** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/cinema/cinema.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **velocipide** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/velocipide/velocipide.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **stayhome** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/stayhome/stayhome.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **skynetDrones** | 🟢 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/skynetDrones/skynetDrones.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
-| **epicGaming** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./allenamento/epicGaming/epicGaming.pdf) |
+| Numero | Progetto | Stato | Specifiche | Documentazione |
+| :---: | :--- | :---: | :---: | :---: |
+| 1 | **smartrent** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/smartrent/smartrent.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 2 | **cinema** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/cinema/cinema.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 3 | **velocipide** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/velocipide/velocipide.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 4 | **stayhome** | 🟢 | **Informali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/stayhome/stayhome.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 5 | **skynetDrones** | 🟢 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/skynetDrones/skynetDrones.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| 6 | **epicGaming** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./allenamento/epicGaming/epicGaming.pdf) |
 ---
 *Ultimo aggiornamento: 21/05/2026*
