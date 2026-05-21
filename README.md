@@ -23,6 +23,17 @@
 | **tutubi** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/tutubi/tutubi.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **quickhospital** | 🟡 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./progetti/quickhospital/quickhospital.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **cielo** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./esercizi_sql/cielo/cielo.pdf) |
+| **out!** | 🟡 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **dormo da te** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **xFit** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **ristobook** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **travel plan** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **smart2go** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **amazzon** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **stoxx** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **colab** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **città verde** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
+| **my precious** | 🔴 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 
 <br>
 
@@ -40,4 +51,4 @@
 | **skynetDrones** | 🟢 | **Formali** | [![Analisi](https://img.shields.io/badge/Analisi-PDF-red?style=flat-square)](./allenamento/skynetDrones/skynetDrones.pdf)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-NO-lightgrey?style=flat-square)](#) |
 | **epicGaming** | 🟢 | **No** | [![Analisi](https://img.shields.io/badge/Analisi-NO-lightgrey?style=flat-square)](#)&emsp;[![Progettazione](https://img.shields.io/badge/Progettazione-PDF-red?style=flat-square)](./allenamento/epicGaming/epicGaming.pdf) |
 ---
-*Ultimo aggiornamento: 06/05/2026*
+*Ultimo aggiornamento: 21/05/2026*
