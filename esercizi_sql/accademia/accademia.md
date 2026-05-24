@@ -65,8 +65,9 @@
   - [3.2 - Query su tabelle multiple](#32---query-su-tabelle-multiple)
   - [3.3 - Query con raggruppamenti ed aggregati](#33---query-con-raggruppamenti-ed-aggregati)
   - [3.4 - Query annidate o tabelle temporanee con WITH](#34---query-annidate-o-tabelle-temporanee-con-with)
+  - [3.5 - Query annidate nella clausola WHERE o tabelle temporanee con WITH](#35---query-annidate-nella-clausola-where-o-tabelle-temporanee-con-with)
 
-<br><br>
+<br>
 
 ## 1 - Schema ER
 ![Diagramma ER del database](accademia.png)
@@ -620,4 +621,101 @@ WHERE p.id = a.persona AND
       a.tipo = 'Malattia'
 GROUP BY p.id, p.nome, p.cognome, ma.media  
 HAVING COUNT(a.id) > ma.media
+```
+
+<div style="page-break-after: always;"></div>
+
+### 3.5 - Query annidate nella clausola WHERE o tabelle temporanee con WITH
+
+1. Quali sono le persone (id, nome e cognome) che hanno avuto assenze solo nei
+giorni in cui non avevano alcuna attività (progettuali o non progettuali)?
+```sql
+SELECT p.id AS id, p.nome, p.cognome
+FROM persona p
+
+EXCEPT 
+
+SELECT DISTINCT p.id, p.nome, p.cognome
+FROM persona p, assenza a
+WHERE p.id = a.persona AND
+      ( a.giorno =ANY (
+        SELECT DISTINCT ap.giorno
+        FROM attivitaprogetto ap
+        WHERE p.id = ap.persona
+      )
+      OR
+        a.giorno =ANY (
+        SELECT DISTINCT anp.giorno
+        FROM attivitanonprogettuale anp
+        WHERE p.id = anp.persona
+      ) )
+
+ORDER BY id ASC
+```
+
+<div style="page-break-after: always;"></div>
+
+2. Quali sono le persone (id, nome e cognome) che non hanno mai partecipato ad
+alcun progetto durante la durata del progetto “Pegasus”?
+```sql
+WITH periodoPegasus AS (
+    SELECT inizio, fine
+    FROM progetto
+    WHERE nome = 'Pegasus'
+)
+SELECT p.id AS id, p.nome, p.cognome
+FROM persona p
+
+EXCEPT
+
+SELECT p.id, p.nome, p.cognome
+FROM persona p, attivitaprogetto ap
+WHERE p.id = ap.persona AND
+      ap.giorno > ( SELECT inizio FROM periodoPegasus ) AND
+      ap.giorno < ( SELECT fine FROM periodoPegasus )
+
+ORDER BY id ASC
+```
+
+3. Quali sono id, nome, cognome e stipendio dei ricercatori con stipendio maggiore
+di tutti i professori (associati e ordinari)?
+```sql
+SELECT id, nome, cognome, stipendio
+FROM persona
+WHERE posizione = 'Ricercatore' AND
+      stipendio > ( SELECT MAX(stipendio)
+                    FROM persona
+                    WHERE posizione = 'Professore Associato' OR
+                          posizione = 'Professore Ordinario' )
+```
+
+4. Quali sono le persone che hanno lavorato su progetti con un budget superiore alla
+media dei budget di tutti i progetti?
+```sql
+SELECT DISTINCT p.id, p.nome, p.cognome
+FROM persona p, progetto prog, attivitaprogetto ap
+WHERE p.id = ap.persona AND
+      ap.progetto = prog.id AND
+      prog.budget > ( SELECT AVG(budget)
+                          FROM progetto )
+```
+
+<div style="page-break-after: always;"></div>
+
+5. Quali sono i progetti con un budget inferiore alla media, ma con un numero
+complessivo di ore dedicate alle attività di ricerca sopra la media?
+```sql
+WITH oreRicercaProg AS (
+    SELECT ap.progetto, SUM(oreDurata) AS tot
+    FROM attivitaprogetto ap
+    WHERE ap.tipo = 'Ricerca e Sviluppo' 
+    GROUP BY ap.progetto
+)
+SELECT p.id, p.nome
+FROM progetto p, attivitaprogetto ap
+WHERE ap.progetto = p.id AND
+      ap.tipo = 'Ricerca e Sviluppo' AND
+      p.budget < ( SELECT AVG(budget) FROM progetto )
+GROUP BY p.id
+HAVING SUM(oreDurata) > ( SELECT AVG(tot) FROM oreRicercaProg)
 ```
