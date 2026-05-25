@@ -1,61 +1,3 @@
-<style>
-    /* Cambia il font di tutto il testo normale */
-    body {
-        font-family: "Fira Mono", monospace;
-        font-size: 16px;
-    }
-
-    /* Cambia il font dei titoli principali */
-    h1, h2 {
-        font-family: "Fira Mono", monospace;
-    }
-
-    h1 {
-        text-align: center;      /* Centra il testo nella pagina */
-        font-size: 36px;         /* Lo rende molto grande */
-        font-weight: bold;       /* Lo mette in grassetto */
-        margin-top: 40px;        /* Aggiunge spazio sopra */
-        margin-bottom: 40px;     /* Aggiunge spazio sotto */
-    }
-
-    h2 {
-        font-size: 22px;
-        border-bottom: 1px solid #cccccc;
-        font-weight: bold;      
-        padding-bottom: 5px;
-    }
-
-    h3 {
-        font-size: 18px;
-        font-weight: bold;
-        padding-bottom: 5px;
-    }
-
-    /* Cambia il font dentro i blocchi di codice SQL */
-    code {
-        font-family: "Fira Mono", monospace;
-        font-size: 15px;
-    }
-
-    /* Rimuove il blu e la sottolineatura dai link dell'indice */
-    a {
-        color: #333333; /* Grigio scuro elegante invece del blu */
-        text-decoration: none; /* Toglie la sottolineatura */
-    }
-    
-    /* Aggiunge un effetto hover se lo guardi a schermo */
-    a:hover {
-        color: #0056b3;
-        text-decoration: underline;
-    }
-    
-    /* Aumenta un po' lo spazio tra le voci dell'indice */
-    li {
-        margin-bottom: 5px;
-    }
-</style>
-
-
 # DATABASE CIELO
 - [1 - Schema ER](#1---schema-er)
 - [2 - Query SQL](#2---query-sql)
@@ -64,7 +6,7 @@
   - [2.3 - Query annidate o tabelle temporanee con WITH](#23---query-annidate-o-tabelle-temporanee-con-with)
   - [2.4 Query annidate nella clausola WHERE e costrutto WITH](#24-query-annidate-nella-clausola-where-e-costrutto-with)
 
-<br><br>
+<br>
 
 ## 1 - Schema ER
 ![Diagramma ER del database](cielo.png)
@@ -431,6 +373,7 @@ FROM cittaPerNazione
 WHERE num_citta = (SELECT MAX(num_citta) FROM cittaPerNazione)
 ```
 
+<div style="page-break-after: always;"></div>
 
 ### 2.4 Query annidate nella clausola WHERE e costrutto WITH
 
@@ -516,19 +459,21 @@ WHERE ap.partenza IN ( SELECT la.aeroporto
                        WHERE c1a.citta = la.citta )
 ```
 
+<div style="page-break-after: always;"></div>
+
 7. Quali sono gli aeroporti raggiungibili dall’aeroporto “JFK” tramite voli diretti e
 indiretti?
 ```sql
-
+--WORK IN PROGRESS
 ```
 
 8. Quali sono le città raggiungibili con voli diretti e indiretti partendo da Roma?
 ```sql
-
+--WORK IN PROGRESS
 ```
 
 9.  Quali sono le città raggiungibili con esattamente uno scalo intermedo partendo
 dall’aeroporto “JFK”?
 ```sql
-
+--WORK IN PROGRESS
 ```
