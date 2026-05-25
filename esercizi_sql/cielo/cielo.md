@@ -62,6 +62,7 @@
   - [2.1 - Query multitabella](#21---query-multitabella)
   - [2.2 Query con raggruppamenti ed aggregati](#22-query-con-raggruppamenti-ed-aggregati)
   - [2.3 - Query annidate o tabelle temporanee con WITH](#23---query-annidate-o-tabelle-temporanee-con-with)
+  - [2.4 Query annidate nella clausola WHERE e costrutto WITH](#24-query-annidate-nella-clausola-where-e-costrutto-with)
 
 <br><br>
 
@@ -428,4 +429,106 @@ WITH cittaPerNazione AS (
 SELECT nazione, num_citta
 FROM cittaPerNazione
 WHERE num_citta = (SELECT MAX(num_citta) FROM cittaPerNazione)
+```
+
+
+### 2.4 Query annidate nella clausola WHERE e costrutto WITH
+
+1. Quali sono i voli di durata maggiore della durata media di tutti i voli della stessa
+compagnia? Restituire il codice del volo, la compagnia e la durata.
+```sql
+SELECT v.codice, v.comp, v.durataMinuti
+FROM volo v
+WHERE durataMinuti > ( SELECT AVG(durataMinuti) 
+                       FROM volo 
+                       WHERE volo.comp = v.comp )
+GROUP BY v.codice, v.comp, v.durataminuti
+```
+
+2. Quali sono le città che hanno più di un aeroporto e dove almeno uno di questi ha
+un volo operato da “Apitalia”?
+```sql
+SELECT citta 
+FROM luogoaeroporto 
+GROUP BY citta 
+HAVING COUNT(aeroporto) > 1
+
+INTERSECT
+
+SELECT la.citta
+FROM luogoaeroporto la, arrpart ap
+WHERE la.aeroporto IN (ap.partenza, ap.arrivo) AND
+      ap.comp = 'Apitalia'
+```
+
+3. Quali sono le coppie di aeroporti (A, B) tali che esistono voli tra A e B ed il numero
+di voli da A a B è uguale al numero di voli da B ad A?
+```sql
+SELECT DISTINCT ap1.partenza, ap1.arrivo
+FROM arrpart ap1
+WHERE ( SELECT COUNT(*)
+        FROM arrpart ap2
+        WHERE ap1.partenza = ap2.partenza AND
+              ap1.arrivo = ap2.arrivo )
+      =
+      ( SELECT COUNT(*)
+        FROM arrpart ap3
+        WHERE ap1.partenza = ap3.arrivo AND
+              ap1.arrivo = ap3.partenza) 
+```
+
+4. Quali sono le compagnie che hanno voli con durata media maggiore della durata
+media di tutte le compagnie?
+```sql
+SELECT DISTINCT v1.comp
+FROM volo v1
+WHERE ( SELECT AVG(durataMinuti)
+        FROM volo v2
+        WHERE v1.comp = v2.comp ) 
+      >
+      ( SELECT AVG(durataMinuti)
+        FROM volo v3 )
+```
+
+5. Quali sono gli aeroporti da cui partono voli per almeno 2 nazioni diverse?
+```sql
+SELECT codice 
+FROM aeroporto a
+WHERE 2 <= ( SELECT COUNT(DISTINCT la.nazione)
+             FROM arrpart ap, luogoaeroporto la
+             WHERE ap.partenza = a.codice AND
+                   ap.arrivo = la.aeroporto )
+```
+
+6. Quali sono i voli che partono dalle città con un unico aeroporto? Restituire codice
+dei voli, compagnie, e gli aeroporti di partenza e di arrivo.
+```sql
+WITH citta1aeroporto AS (
+      SELECT la.citta AS citta
+      FROM luogoaeroporto la
+      GROUP BY la.citta
+      HAVING COUNT(la.aeroporto) = 1
+)
+SELECT ap.codice, ap.comp, ap.partenza, ap.arrivo
+FROM arrpart ap
+WHERE ap.partenza IN ( SELECT la.aeroporto 
+                       FROM citta1aeroporto c1a, luogoaeroporto la
+                       WHERE c1a.citta = la.citta )
+```
+
+7. Quali sono gli aeroporti raggiungibili dall’aeroporto “JFK” tramite voli diretti e
+indiretti?
+```sql
+
+```
+
+8. Quali sono le città raggiungibili con voli diretti e indiretti partendo da Roma?
+```sql
+
+```
+
+9.  Quali sono le città raggiungibili con esattamente uno scalo intermedo partendo
+dall’aeroporto “JFK”?
+```sql
+
 ```
