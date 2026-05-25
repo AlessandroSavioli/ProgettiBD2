@@ -464,16 +464,52 @@ WHERE ap.partenza IN ( SELECT la.aeroporto
 7. Quali sono gli aeroporti raggiungibili dall’aeroporto “JFK” tramite voli diretti e
 indiretti?
 ```sql
---WORK IN PROGRESS
+WITH RECURSIVE Raggiungibili AS (
+      SELECT partenza, arrivo
+      FROM arrpart
+      WHERE partenza = 'JFK'
+
+      UNION
+
+      SELECT ap.partenza, ap.arrivo
+      FROM Raggiungibili r, arrpart ap
+      WHERE r.arrivo = ap.partenza
+)
+SELECT DISTINCT arrivo
+FROM Raggiungibili
 ```
 
 8. Quali sono le città raggiungibili con voli diretti e indiretti partendo da Roma?
 ```sql
---WORK IN PROGRESS
+WITH RECURSIVE raggiungibili AS (
+      SELECT ap.partenza, ap.arrivo
+      FROM arrpart ap, luogoaeroporto la
+      WHERE ap.partenza = la.aeroporto AND
+            la.citta = 'Roma'
+
+      UNION
+
+      SELECT ap.partenza, ap.arrivo
+      FROM raggiungibili r, arrpart ap
+      WHERE r.arrivo = ap.partenza
+)
+SELECT DISTINCT la.citta
+FROM raggiungibili r, luogoaeroporto la
+WHERE r.arrivo = la.aeroporto
 ```
+
+<div style="page-break-after: always;"></div>
 
 9.  Quali sono le città raggiungibili con esattamente uno scalo intermedo partendo
 dall’aeroporto “JFK”?
 ```sql
---WORK IN PROGRESS
+WITH primovolo AS (
+      SELECT ap.arrivo AS arrivo
+      FROM arrpart ap
+      WHERE ap.partenza = 'JFK'
+)
+SELECT DISTINCT la.citta
+FROM primovolo pv, arrpart ap, luogoaeroporto la
+WHERE pv.arrivo = ap.partenza AND
+      ap.arrivo = la.aeroporto
 ```
