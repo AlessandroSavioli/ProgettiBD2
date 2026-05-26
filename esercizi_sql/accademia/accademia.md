@@ -1,61 +1,3 @@
-<style>
-    /* Cambia il font di tutto il testo normale */
-    body {
-        font-family: "Fira Mono", monospace;
-        font-size: 16px;
-    }
-
-    /* Cambia il font dei titoli principali */
-    h1, h2 {
-        font-family: "Fira Mono", monospace;
-    }
-
-    h1 {
-        text-align: center;      /* Centra il testo nella pagina */
-        font-size: 36px;         /* Lo rende molto grande */
-        font-weight: bold;       /* Lo mette in grassetto */
-        margin-top: 40px;        /* Aggiunge spazio sopra */
-        margin-bottom: 40px;     /* Aggiunge spazio sotto */
-    }
-
-    h2 {
-        font-size: 22px;
-        border-bottom: 1px solid #cccccc;
-        font-weight: bold;      
-        padding-bottom: 5px;
-    }
-
-    h3 {
-        font-size: 18px;
-        font-weight: bold;
-        padding-bottom: 5px;
-    }
-
-    /* Cambia il font dentro i blocchi di codice SQL */
-    code {
-        font-family: "Fira Mono", monospace;
-        font-size: 15px;
-    }
-
-    /* Rimuove il blu e la sottolineatura dai link dell'indice */
-    a {
-        color: #333333; /* Grigio scuro elegante invece del blu */
-        text-decoration: none; /* Toglie la sottolineatura */
-    }
-    
-    /* Aggiunge un effetto hover se lo guardi a schermo */
-    a:hover {
-        color: #0056b3;
-        text-decoration: underline;
-    }
-    
-    /* Aumenta un po' lo spazio tra le voci dell'indice */
-    li {
-        margin-bottom: 5px;
-    }
-</style>
-
-
 # DATABASE ACCADEMIA
 
 - [1 - Schema ER](#1---schema-er)
@@ -66,8 +8,7 @@
   - [3.3 - Query con raggruppamenti ed aggregati](#33---query-con-raggruppamenti-ed-aggregati)
   - [3.4 - Query annidate o tabelle temporanee con WITH](#34---query-annidate-o-tabelle-temporanee-con-with)
   - [3.5 - Query annidate nella clausola WHERE o tabelle temporanee con WITH](#35---query-annidate-nella-clausola-where-o-tabelle-temporanee-con-with)
-
-<br>
+  - [3.6 - Query generali](#36---query-generali)
 
 ## 1 - Schema ER
 ![Diagramma ER del database](accademia.png)
@@ -718,4 +659,102 @@ WHERE ap.progetto = p.id AND
       p.budget < ( SELECT AVG(budget) FROM progetto )
 GROUP BY p.id
 HAVING SUM(oreDurata) > ( SELECT AVG(tot) FROM oreRicercaProg)
+```
+
+<br><br>
+
+### 3.6 - Query generali
+
+1. Quali sono le persone (id, nome e cognome) che hanno avuto assenze solo nei
+giorni in cui non avevano alcuna attività (progettuali o non progettuali)?
+```sql
+SELECT p.id, p.nome, p.cognome
+FROM persona p 
+LEFT OUTER JOIN assenza a ON p.id = a.persona
+LEFT OUTER JOIN attivitaprogetto ap ON p.id = ap.persona AND a.giorno = ap.giorno
+LEFT OUTER JOIN attivitanonprogettuale anp ON p.id = anp.persona AND a.giorno = anp.giorno
+GROUP BY p.id, p.nome, p.cognome
+HAVING COUNT(ap.id) = 0 AND COUNT(anp.id) = 0
+ORDER BY p.id
+```
+
+<div style="page-break-after: always;"></div>
+
+2. Quali sono le persone (id, nome e cognome) che non hanno mai partecipato ad
+alcun progetto durante la durata del progetto “Pegasus”?
+```sql
+WITH intervalloPegasus AS (
+    SELECT inizio, fine
+    FROM progetto
+    WHERE nome = 'Pegasus'
+)
+SELECT id, nome, cognome
+FROM persona
+
+EXCEPT
+
+SELECT DISTINCT p.id, p.nome, p.cognome
+FROM persona p
+JOIN attivitaprogetto ap ON p.id = ap.persona
+WHERE ap.giorno BETWEEN (SELECT inizio FROM intervalloPegasus) AND
+      (SELECT fine FROM intervalloPegasus)
+```
+
+3. Quali sono id, nome, cognome e stipendio dei ricercatori con stipendio maggiore
+di tutti i professori (associati e ordinari)?
+
+#### Versione 1
+```sql
+WITH stipendioMaxAssOrd AS (
+    SELECT MAX(stipendio) AS massimo
+    FROM persona
+    WHERE posizione IN ('Professore Ordinario', 'Professore Associato')
+)
+SELECT id, nome, cognome, stipendio
+FROM persona
+WHERE posizione = 'Ricercatore' AND
+      stipendio > (SELECT massimo FROM stipendioMaxAssOrd)
+```
+
+<br>
+
+> **_NOTA:_** Questa query è logicamente corretta, ma se all'interno della tabella persona i professori avessero tutti stipendio "NULL" l'aggregato "MAX" ritornerebbe NULL come valore, che una volta messo a confronto con lo stipendio dei ricercatori farebbe fallire la query, quindi ecco una seconda versione che assicura il risultato
+
+<br>
+
+#### Versione 2
+```sql
+SELECT id, nome, cognome, stipendio
+FROM persona
+WHERE posizione = 'Ricercatore' AND
+      stipendio > ALL ( SELECT stipendio 
+                        FROM persona
+                        WHERE posizione IN ('Professore Ordinario', 'Professore Associato') )
+```
+
+4. Quali sono le persone che hanno lavorato su progetti con un budget superiore alla
+media dei budget di tutti i progetti?
+```sql
+SELECT DISTINCT p.id, p.nome, p.cognome
+FROM persona p
+JOIN attivitaprogetto ap ON p.id = ap.persona 
+JOIN progetto prog ON ap.progetto = prog.id
+WHERE prog.budget > (SELECT AVG(budget) FROM progetto)
+```
+
+5. Quali sono i progetti con un budget inferiore alla media, ma con un numero
+complessivo di ore dedicate alle attività di ricerca sopra la media?
+```sql
+WITH OreRicerca AS (
+    SELECT progetto, SUM(oreDurata) AS tot_ore
+    FROM attivitaprogetto
+    WHERE tipo = 'Ricerca e Sviluppo'
+    GROUP BY progetto
+)
+SELECT prog.id, prog.nome
+FROM progetto prog
+JOIN attivitaprogetto ap ON ap.progetto = prog.id AND ap.tipo = 'Ricerca e Sviluppo'
+WHERE prog.budget < (SELECT AVG(budget) FROM progetto)
+GROUP BY prog.id, prog.nome
+HAVING SUM(ap.oreDurata) > (SELECT AVG(tot_ore) FROM OreRicerca)
 ```
