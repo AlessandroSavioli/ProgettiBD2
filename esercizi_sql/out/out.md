@@ -9,6 +9,7 @@
 - [FASE 4 - IDENTIFICATORI PER OGNI CLASSE](#fase-4---identificatori-per-ogni-classe)
   - [Aggiornamento 2](#aggiornamento-2)
 - [FASE 5 - RISTRUTTURAZIONE VINCOLI ESTERNI ED OPERAZIONI/USE-CASE](#fase-5---ristrutturazione-vincoli-esterni-ed-operazioniuse-case)
+- [FASE 6 - TRADUZIONE DEL DIAGRAMMA RISTRUTTURATO IN TABELLE SQL](#fase-6---traduzione-del-diagramma-ristrutturato-in-tabelle-sql)
 
 <br><br>
 
@@ -97,3 +98,59 @@ Ora dobbiamo inserire un identificatore per ogni classe
 
 ## FASE 5 - RISTRUTTURAZIONE VINCOLI ESTERNI ED OPERAZIONI/USE-CASE
 Dato che nella Fase 3 abbiamo accettato la piccola ridondanza nei CF ripetuti (quando un attore vuole prenotare un biglietto per un altro spettacolo i suoi dati andranno duplicati nella tabella "Cliente") non abbiamo nessun vincolo da aggiungere.
+
+<div style="page-break-after: always;"></div>
+
+## FASE 6 - TRADUZIONE DEL DIAGRAMMA RISTRUTTURATO IN TABELLE SQL
+
+```
+Sede(_id_sede_:serial, nome:Stringa, indirizzo:Indrizzo)
+
+Sala(_id_sala_:serial, nome: Stringa, sede:Intero>0)
+    FOREIGN KEY: sede REFERENCES Sede(id_sede)
+
+Settore(_id_settore_:serial, nome:Stringa, sala:Intero>0)
+    FOREIGN KEY: sala REFERENCES Sala(id_sala)
+
+Posto(_fila_:Intero>0, _colonna_:Intero>0, _settore_:Intero>0)
+    FOREIGN KEY: settore REFERENCES Settore(id_settore)
+
+Tipologia(_nome_:Stringa)
+
+Genere(_nome_:Stringa)
+
+Spettacolo(_id_spettacolo_:serial, tipologia:Stringa, genere:Stringa, titolo:Stringa)
+    FOREIGN KEY: tipologia REFERENCES Tipologia(nome)
+    FOREIGN KEY: genere REFERENCES Genere(nome)
+    // id_spettacolo deve occorrere almeno una volta in art_spett
+
+Artista(_cf_:CF, nome:Stringa, cognome: Stringa)
+
+Evento(_id_evento_:serial, inizio_spettacolo:DataOra, durata_min:Intero>0,
+       sala:Intero>0, spettacolo:Intero>0)
+    FOREIGN KEY: sala REFERENCES Sala(id_sala)
+    FOREIGN KEY: spettacolo REFERENCES Spettacolo(id_spettacolo)
+
+art_spett(_spettacolo_:Intero>0, _artista_:CF)
+    FOREIGN KEY: spettacolo REFERENCES Spettacolo(id_spettacolo)
+    FOREIGN KEY: artista REFERENCES Artista(cf)
+
+Tariffa(_tipo_:Stringa, _evento_:Intero>0, importo:Denaro)
+    FOREIGN KEY: evento REFERENCES Evento(id_evento)
+
+Cliente(_cf_:CF, nome:Stringa, cognome:Stringa, iscrizione:DataOra)
+
+Prenotazione(_id_prenotazione_:serial, evento:Intero>0, cliente:CF)
+    FOREIGN KEY: evento REFERENCES Evento(id_evento)
+    FOREIGN KEY: cliente REFERENCES Cliente(cf)
+```
+
+<div style="page-break-after: always;"></div>
+
+```
+Biglietto(tipo:Stringa, _evento_:Intero>0, _fila_:Intero>0, _colonna_:Intero>0
+          _settore_Intero>0, prenotazione:Intero>0, emissione:DataOra)
+    FOREIGN KEY: (tipo, evento) REFERENCES Tariffa(tipo, evento)
+    FOREIGN KEY: (fila, colonna, settore) REFERENCES Posto(fila, colonna, settore)
+    FOREIGN KEY: prenotazione REFERENCES Prenotazione(id_prenotazione)
+```
