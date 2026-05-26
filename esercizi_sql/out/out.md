@@ -10,6 +10,9 @@
   - [Aggiornamento 2](#aggiornamento-2)
 - [FASE 5 - RISTRUTTURAZIONE VINCOLI ESTERNI ED OPERAZIONI/USE-CASE](#fase-5---ristrutturazione-vincoli-esterni-ed-operazioniuse-case)
 - [FASE 6 - TRADUZIONE DEL DIAGRAMMA RISTRUTTURATO IN TABELLE SQL](#fase-6---traduzione-del-diagramma-ristrutturato-in-tabelle-sql)
+- [FASE 7 - POLITICHE DI ACCESSO E TRIGGER](#fase-7---politiche-di-accesso-e-trigger)
+  - [Politiche di accesso](#politiche-di-accesso)
+  - [Trigger](#trigger)
 
 <br><br>
 
@@ -122,7 +125,7 @@ Genere(_nome_:Stringa)
 Spettacolo(_id_spettacolo_:serial, tipologia:Stringa, genere:Stringa, titolo:Stringa)
     FOREIGN KEY: tipologia REFERENCES Tipologia(nome)
     FOREIGN KEY: genere REFERENCES Genere(nome)
-    // id_spettacolo deve occorrere almeno una volta in art_spett
+    V. INCLUSIONE: id_spettacolo occorre in art_spett
 
 Artista(_cf_:CF, nome:Stringa, cognome: Stringa)
 
@@ -153,4 +156,54 @@ Biglietto(tipo:Stringa, _evento_:Intero>0, _fila_:Intero>0, _colonna_:Intero>0
     FOREIGN KEY: (tipo, evento) REFERENCES Tariffa(tipo, evento)
     FOREIGN KEY: (fila, colonna, settore) REFERENCES Posto(fila, colonna, settore)
     FOREIGN KEY: prenotazione REFERENCES Prenotazione(id_prenotazione)
+```
+
+<br><br>
+
+## FASE 7 - POLITICHE DI ACCESSO E TRIGGER 
+
+### Politiche di accesso
+Evitiamo che si possano modificare gli id artificiali
+```sql
+REVOKE UPDATE(id_sede) ON Sede FROM PUBLIC
+REVOKE UPDATE(id_sala) ON Sala FROM PUBLIC
+REVOKE UPDATE(id_settore) ON Settore FROM PUBLIC
+REVOKE UPDATE(fila, colonna, settore) ON Posto FROM PUBLIC
+REVOKE UPDATE(id_spettacolo) ON Spettacolo FROM PUBLIC
+REVOKE UPDATE(cf) ON Artista FROM PUBLIC
+REVOKE UPDATE(id_evento) ON Evento FROM PUBLIC
+REVOKE UPDATE(spettacolo, artista) ON art_spett FROM PUBLIC
+REVOKE UPDATE(tipo, evento) ON Tariffa FROM PUBLIC
+REVOKE UPDATE(cf) ON Cliente FROM PUBLIC
+REVOKE UPDATE(id_prenotazione) ON Prenotazione FROM PUBLIC
+REVOKE UPDATE(evento, fila, colonna, settore) ON Biglietto FROM PUBLIC
+```
+
+<div style="page-break-after: always;"></div>
+
+### Trigger
+#### 1. T.Evento.no_eventi_accavallati_stessa_sala
+```sql
+CREATE OR REPLACE FUNCTION V_Evento_no_eventi_accavallati_stessa_sala() RETURNS TRIGGER
+AS $V_Evento_no_eventi_accavallati_stessa_sala$
+-- La funzione vedrà "new" come argomento
+DECLARE isError boolean := false;
+BEGIN
+    isError = EXISTS (
+        SELECT *
+        FROM evento
+        WHERE new.inizio_spettacolo < inizio_spettacolo + durata_min AND
+              new.inizio_spettacolo + new.durata_min > inizio_spettacolo AND
+              new.sala = sala AND
+              new.id_evento != id_evento
+    );
+    if (isError) then raise exception 'V_Evento_no_eventi_accavallati_stessa_sala violato';
+    end if;
+    return new;
+END $V_Evento_no_eventi_accavallati_stessa_sala$
+
+CREATE CONSTRAINT TRIGGER V_Evento_no_eventi_accavallati_stessa_sala
+AFTER INSERT OR UPDATE ON Evento
+DEFERRABLE 
+FOR EACH row EXECUTE PROCEDURE V_Evento_no_eventi_accavallati_stessa_sala();
 ```
