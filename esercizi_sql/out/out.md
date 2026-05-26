@@ -19,13 +19,11 @@
 ## Diagramma UML di partenza
 ![Diagramma UML di partenza](out_iniziale.png)
 
-<br><br>
+<div style="page-break-after: always;"></div>
 
 ## FASE 1 - ELIMINAZIONE ATTRIBUTI MULTIVALORE
 In fase di analisi non sono stati inseriti attributi multivalore, di conseguenza questa
 fase non cambia in nessun modo il nostro diagramma.
-
-<div style="page-break-after: always;"></div>
 
 ## FASE 2 - SCELTA E PROGETTAZIONE DEI TIPI DI DATO
 Andiamo ora a scegliere e creare i nostri tipi di dato SQL.
