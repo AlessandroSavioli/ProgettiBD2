@@ -1,0 +1,34 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe Biglietto
+
+	[V.Biglietto.prima_inizio_evento]
+		!EXISTS b, istb, tar, eve, isteve |
+			emissione(b, istb) AND
+			bigl_tarif(b, tar) AND
+			eve_tarif(eve, tar) AND
+			inizio_spettacolo(eve, isteve) AND
+			istb > isteve
+
+- Classe Cliente
+
+	[V.Cliente.no_biglietti_prima_iscrizione]
+		!EXISTS c, iscr, pre, b, istb |
+			iscrizione(c, iscr) AND
+			clie_pren(c, pre) AND
+			bigl_pren(b, pre) AND
+			emissione(b, istb) AND
+			istb < iscr
+
+- Classe Evento
+
+	[V.Evento.no_due_eventi_contemporanei_stessa_sala]
+		!EXISTS inizio, durata, s, e', inizio' |
+			inizio_spettacolo(this, inizio) AND
+			durata_min(this, durata) AND
+			eve_sala(this, s) AND
+			eve_sala(e', s) AND
+			this != e' AND
+			inizio_spettacolo(e', inizio') AND
+			inizio' >= inizio AND
+			inizio' < inizio + durata

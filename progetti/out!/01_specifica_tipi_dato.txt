@@ -1,0 +1,14 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Indirizzo: (
+	Via: Stringa
+	Civico: Intero > 0
+	CAP: [0-9]{5}
+)
+
+- CF: segue standard codice fiscale
+
+- Denaro: (
+	valore: Reale >= 0
+	valuta: ISO-4217 (es. EUR, USD)
+)

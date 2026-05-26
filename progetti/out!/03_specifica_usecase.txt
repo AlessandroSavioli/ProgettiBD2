@@ -1,0 +1,141 @@
+- SPECIFICA DEGLI USE-CASE
+
+- Use-Case Registrazione
+
+	nuovo_cliente(n:Stringa, c:Stringa, cf:CF)
+		pre:
+			!EXISTS p |
+				cf(p, cf)
+		post:
+			il modello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Persona(alpha)
+				- Cliente(alpha)
+				- nome(alpha, n)
+				- cognome(alpha, n)
+				- cf(alpha, cf)
+				- iscrizione(alpha, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Scelta posti
+
+	scegli_posti(evento:Evento, biglietti:Intero > 0): Posto[1..*]
+		pre: 
+			Postiliberi = { p | EXISTS set, sal |
+									sett_pos(set, p) AND
+									sala_sett(sal, set) AND
+									eve_sala(evento, sal) AND
+									!EXISTS b, tar |
+										bigl_tarif(b, tar) AND
+										eve_tarif(evento, tar) AND
+										bigl_pos(b, p) }
+			AND 
+			|Postiliberi| >= biglietti
+		post:
+			questo use-case non modifica il livello estensionale
+
+			result soddisfa la seguente formula:
+
+			result = Postiliberi[1:biglietti]
+
+- Use-Case Strumenti prenotazione
+
+	nuova_prenotazione(
+		biglietti: Intero > 0,
+		tariffe: Tariffa[1..*],
+		evento: Evento
+	)
+		pre:
+			EXISTS inizio |
+				inizio_spettacolo(evento, inizio)
+			AND
+			inizio > adesso
+			AND
+			biglietti = |tariffe|
+		post:
+			il modello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: 
+				- alpha (prenotazione)
+				- un insieme di elementi B = {beta_1, ..., beta_n}
+				  con n = biglietti
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Prenotazione(alpha)
+				Sia ids = { ide | EXISTS pren |
+									id(pren, ide) }
+				- id(alpha, MAX(id in ids) + 1)
+				- eve_pren(evento, alpha)
+				
+				sia u l'istanza dell'utente che ha invocato lo use-case
+				- clie_pren(u, alpha)
+
+				// (Selezione dei posti)
+                Sia P_scelti l'esito dello use-case scegli_posti(evento, biglietti)
+                Siano p_1, p_2, ..., p_n gli elementi di P_scelti.
+                Siano t_1, t_2, ..., t_n gli elementi della lista 'tariffe'.
+                
+				per ogni i in range(1, biglietti)
+				- Biglietto(beta_i)
+				- emissione(beta_i, adesso)
+				- bigl_pren(beta_i, alpha)
+				- bigl_pos(beta_i, p_i)
+				- bigl_tarif(beta_i, t_i) 
+
+- Use-Case Strumenti ricerca
+
+	cerca_per_tip_gen_giorno(
+		tip:Tipologia,
+		gen:Genere,
+		gio:Data
+	): Evento[0..*]
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+
+			result soddisfa la seguente formula:
+
+			result = { e | EXISTS spett, inizio, dat |
+								spett_tipo(spett, tip) AND
+								gen_spett(gen, spett) AND
+								eve_spett(e, spett) AND
+								inizio_spettacolo(e, inizio) AND
+								data(inizio, dat) AND
+								dat = gio }
+
+	suggerimenti(): Evento[0..*]
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+
+			result soddisfa la seguente formula:
+
+			sia u l'istanza dell'utente che ha invocato lo use-case
+			result = { e | EXISTS eve, spett, gen, pren, id, inizio, 
+							  spette |
+							clie_pren(u, pren) AND
+							ids_u = { ide | EXISTS p' |
+												clie_pren(u, p') AND
+												id(p', ide) }
+							AND
+							id(pren, (MAX id in ids_u)) AND
+							eve_pren(eve, pren) AND
+							eve_spett(eve, spett) AND
+							gen_spett(gen, spett) AND
+							eve_spett(e, spette) AND
+							gen_spett(gen, spette) AND
+							inizio_spettacolo(e, inizio) AND
+							inizio > adesso AND
+							inizio <= oggi + 7
+							}
+
+
+			
