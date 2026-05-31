@@ -1,0 +1,5 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Genere 
+	{M, F, Altro}
+

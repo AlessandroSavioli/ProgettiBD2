@@ -1,0 +1,24 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe Ristorante
+
+	isPrenotabile(i:DataOra): Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			giorniRiposo = { g | EXISTS c |
+									RiposoSettimanale(c) AND
+									chiu_ris(c, this) AND
+									giorni(c, g) } \\ così g sarà il giorno della settimana, non la data
+			AND
+			altriGiorni = { g | Data(g) AND 
+								EXISTS c, giniz, gfin |
+									AltraChiusura(c) AND
+									chiu_ris(c, this) AND
+									isGiornaliera(c, false) AND
+									giorno_inizio(c, giniz) AND
+									giorno_fine(c, gfin) AND
+									g >= giniz AND 
+									g <= gfin }

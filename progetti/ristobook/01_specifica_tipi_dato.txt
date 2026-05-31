@@ -1,0 +1,20 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Giorno
+	{lunedì, martedì, mercoledì, giovedì, venerdì, sabato, domenica}
+
+- FO
+(
+	inizio: Ora
+	fine: Ora
+)
+
+- IVA
+	Segue standard partita iva
+
+- Indirizzo
+(
+	Via: Stringa
+	Civico: Intero > 0
+	CAP: [0-9]{5}
+)
