@@ -3,3 +3,5 @@
 - Genere 
 	{M, F, Altro}
 
+- CF 
+	segue standard codice fiscale

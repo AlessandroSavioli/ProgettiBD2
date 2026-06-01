@@ -1,0 +1,321 @@
+- SPECIFICA DEGLI USE-CASE
+
+- Use-Case Registrazione
+
+	nuovo_utente(n:Stringa, c:Stringa, s:Genere, nasc:Data, cf:CF, citt:Città): Utente
+		pre:
+			!EXISTS u' |
+				cf(u', cf)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Utente(alpha)
+				- nome(alpha, n)
+				- cognome(alpha, c)
+				- sesso(alpha, s)
+				- nascita(alpha, nasc)
+				- cf(alpha, cf)
+				- citt_ute(citt, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+		
+- Use-Case Strumenti abitazione
+
+	collega_abitazione(distcen:Intero>=0, diststaz:Intero>=0): Abitazione
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case 
+			!EXISTS a' |
+				abi_ute(a', u)
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Abitazione(alpha)
+				- dist_centro_m(alpha, distcen)
+				- dist_staz_m(alpha, diststaz)
+				sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+				- abi_ute(alpha, u)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	aggiungi_familiare_abitazione(abi:Abitazione, isA:Booleano): Persona
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			abi_ute(abi, u)
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Persona(alpha)
+				- isAdulto(alpha, isA)
+				- abi_pers(abi, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	aggiungi_stanza(abi:Abitazione, isP:Booleano): Stanza
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			abi_ute(abi, u)
+		post:
+			il livello estensionale finale differisce 
+			da quello inziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Stanza(alpha)
+				- abi_sta(abi, alpha)
+				- isPrivata(alpha, isP)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	aggiungi_postoLetto(sta:Stanza, tip:Tipo): PostoLetto
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			EXISTS abi |
+				abi_sta(abi, sta) AND
+				abi_ute(abi, u)
+		post:
+			il livello estensionale finale differisce 
+			da quello inziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- PostoLetto(alpha)
+				- pos_tipo(alpha, tip)
+				- pos_sta(alpha, sta)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Strumenti occupazione
+
+	nuova_occupazione(i:Data, f:Data): Occupato
+		pre:
+			i < f
+		post:
+			il livello estensionale finale differisce 
+			da quello inziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Occupato(alpha)
+				sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+				- occ_ute(alpha, u)
+				- inizio(alpha, i)
+				- fine(alpha, f)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha	
+
+	elimina_occupazione(occ:Occupato):
+		pre:		
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			occ_ute(occ, u)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: occ
+			nuove ennuple: nessuna
+			ennuple rimosse:
+				- Occupato(occ)
+				- occ_ute(occ, u)
+				siano i, f tali che inizio(occ, i) e fine(occ, f)
+				- inizio(occ, i)
+				- fine(occ, f)
+			valore di ritorno: nessuno
+				
+- Use-Case Strumenti richieste
+
+	cerca_abitazioni(
+		cit:Città,
+		i:Data,
+		f:Data,
+		posti:Intero>0
+	): Utente[0..*]
+		pre:
+			i < f
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			result = { u | EXISTS abi |
+							citt_ute(cit, u) AND
+							abi_ute(abi, u) AND
+							posti_disp(abi, i, f) >= posti }
+
+	inoltra_richiesta(
+		abi:Abitazione,
+		i:Data,
+		f:Data,
+		posti:PostoLetto[1..*]
+	): Richiesta
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			i < f 
+			AND
+			posti_disp(abi, i, f) >= |posti|
+			AND
+			!abi_ute(abi, u)
+			AND 
+			ALL pos in posti |
+				EXISTS sta |
+					pos_sta(pos, sta) AND
+					abi_sta(abi, sta)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Richiesta(alpha)
+				- rich_ute(alpha, u)
+				- inizio(alpha, i)
+				- fine(alpha, f)
+				- pos_rich(pos, alpha) per ogni pos in posti
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	accetta_richiesta(ric:Richiesta): RichiestaAccettata
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			EXISTS lett, sta, abi |
+				pos_rich(lett, ric) AND
+				pos_sta(lett, sta) AND
+				abi_sta(abi, sta) AND
+				abi_ute(abi, u)
+			AND
+			EXISTS ini |
+				inizio(ric, ini) AND
+				ini > oggi
+			AND
+			!( RichiestaAccettata(ric) OR RichiestaRifiutata(ric) )
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- RichiestaAccettata(ric)
+				- accettazione(ric, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = ric
+
+	rifiuta_richiesta(ric:Richiesta, mot:Stringa): RichiestaRifiutata
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			EXISTS lett, sta, abi |
+				pos_rich(lett, ric) AND
+				pos_sta(lett, sta) AND
+				abi_sta(abi, sta) AND
+				abi_ute(abi, u)
+			AND
+			EXISTS ini |
+				inizio(ric, ini) AND
+				ini > oggi
+			AND
+			!( RichiestaAccettata(ric) OR RichiestaRifiutata(ric) )
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: nessuno
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- RichiestaRifiutata(ric)
+				- motivazione(ric, mot)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = ric
+
+- Use-Case Strumenti feedback
+
+	rilascia_feed_a_guest(ric:RichiestaAccettata, v:0..5): Feedback
+		pre:
+			Sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			EXISTS let, sta, abi |
+				pos_rich(let, ric) AND
+				pos_sta(let, sta) AND
+				abi_sta(abi, sta) AND
+				abi_ute(abi, u)
+			AND
+			!EXISTS f' |
+				feed_rich(f', ric) AND
+				isFromGuest(f', false)
+			AND
+			EXISTS fin |
+				fine(ric, fin) AND
+				fin <= oggi
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Feedback(alpha)
+				- feed_rich(alpha, ric)
+				- valutazione(alpha, v)
+				- isFromGuest(alpha, false)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	rilascia_feed_a_host(ric:RichiestaAccettata, v:0..5): Feedback
+		pre:
+			Sia u:Utente l'istanza dell'attore che ha invocato lo use-case
+			rich_ute(ric, u)
+			AND
+			!EXISTS f' |
+				feed_rich(f', ric) AND
+				isFromGuest(f', true)
+			AND
+			EXISTS fin |
+				fine(ric, fin) AND
+				fin <= oggi
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Feedback(alpha)
+				- feed_rich(alpha, ric)
+				- valutazione(alpha, v)
+				- isFromGuest(alpha, true)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Strumenti statistiche
+
+	ottieni_val_guest(u:Utente): Reale>=0
+		pre: 
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			val_guest(u, result)
+
+	ottieni_val_host(u:Utente): Reale>=0
+		pre: 
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			val_host(u, result)
+			

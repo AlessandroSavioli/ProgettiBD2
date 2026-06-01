@@ -1,2 +1,183 @@
 - SPECIFICA DELLE CLASSI
 
+- Classe Utente
+
+	[V.Utente.no_occupato_prima_nascita]
+		!EXISTS occ, ini, nasc |
+			occ_ute(occ, this) AND
+			inizio(occ, ini) AND
+			nascita(this, nasc) AND
+			ini < nasc
+
+	[V.Utente.no_nuova_richiesta_senza_feedback_precedente]
+	    !EXISTS rich1, fine1, rich2, inizio2 |
+           rich_ute(rich1, this) AND
+           rich_ute(rich2, this) AND
+           rich1 != rich2 AND
+           RichiestaAccettata(rich1) AND
+           fine(rich1, fine1) AND
+           inizio(rich2, inizio2) AND
+           fine1 <= oggi AND
+           inizio2 > fine1 AND
+           !(EXISTS feed | feed_rich(feed, rich1) AND isFromGuest(feed, true))
+		 
+
+	età(): Intero >= 0
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			EXISTS nasc |
+				nascita(this, nasc) AND
+				result = oggi - nasc
+
+	val_guest(): Reale >= 0
+		pre:
+			EXISTS feed, rich |
+				rich_ute(rich, this) AND
+				RichiestaAccettata(rich) AND
+				feed_rich(feed, rich) AND
+				isFromGuest(feed, false)
+		post:
+			result soddisfa la seguente formula:
+			FeedFromHosts = { f, v | EXISTS rich |
+									rich_ute(rich, this) AND
+									RichiestaAccettata(rich) AND
+									feed_rich(f, rich) AND
+									isFromGuest(f, false) AND
+									valutazione(f, v) }
+			AND
+			result = SUM( v per ogni (f, v) in FeedFromHosts) / |FeedFromHosts|
+
+	val_host(): Reale >= 0
+		pre:
+			EXISTS feed, rich, lett, sta, abi |
+				feed_rich(feed, rich) AND
+				RichiestaAccettata(rich) AND
+				isFromGuest(feed, true) AND
+				pos_rich(lett, rich) AND
+				pos_sta(lett, sta) AND
+				abi_sta(abi, sta) AND
+				abi_ute(abi, this) 
+		post:
+			result soddisfa la seguente formula:
+			FeedFromGuests = { f, v | EXISTS rich, pos, sta, abi |
+										feed_rich(f, rich) AND
+										RichiestaAccettata(rich) AND
+										isFromGuest(f, true) AND
+										valutazione(f, v) AND
+										pos_rich(pos, rich) AND
+										pos_sta(pos, sta) AND
+										abi_sta(abi, sta) AND
+										abi_ute(abi, this) }
+			AND
+			result = SUM( v per ogni (f, v) in FeedFromGuests) / |FeedFromGuests|
+
+- Classe Occupato
+
+	[V.Occupato.no_inizio_dopo_fine]
+		!EXISTS ini, fin |
+			inizio(this, ini) AND
+			fine(this, fin) AND
+			ini >= fin
+
+- Classe Richiesta
+
+	[V.Richiesta.no_inizio_dopo_fine]
+		!EXISTS ini, fin |
+			inizio(this, ini) AND
+			fine(this, fin) AND
+			ini >= fin
+
+	[V.Richiesta.tutti_letti_stessa_abitazione]
+		!EXISTS pos1, pos2, sta1, sta2, abi1, abi2 |
+			pos1 != pos2 AND
+			pos_rich(pos1, this) AND
+			pos_rich(pos2, this) AND
+			pos_sta(pos1, sta1) AND
+			pos_sta(pos2, sta2) AND
+			abi1 != abi2 AND
+			abi_sta(abi1, sta1) AND
+			abi_sta(abi2, sta2)
+ 
+- Classe RichiestaAccettata
+
+	[V.RichiestaAccettata.prima_inizio_prenotazione]
+		!EXISTS acc, ini |
+			accettazione(this, acc) AND
+			inizio(this, ini) AND
+			acc >= ini
+
+- Classe PostoLetto
+
+	 [V.PostoLetto.no_due_richiestaAccettata_contemporanee]
+	 	!EXISTS rich1, ini1, fin1, rich2, ini2, fin2, t |
+	 		rich1 != rich2 AND
+	 		RichiestaAccettata(rich1) AND
+	 		RichiestaAccettata(rich2) AND
+	 		pos_rich(this, rich1) AND
+	 		pos_rich(this, rich2) AND
+	 		inizio(rich1, ini1) AND
+	 		fine(rich1, fin1) AND
+	 		inizio(rich2, ini2) AND
+	 		fine(rich2, fin2) AND
+	 		Data(t) AND
+	 		( t >= ini1 AND t <= fin1) AND
+	 		( t >= ini2 AND t <= fin2 )
+
+- Classe Abitazione
+
+	num_adulti(): Intero >= 0
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			Adulti = { p | abi_pers(this, p) AND
+						   isAdulto(p, true) }
+			AND
+			result = |Adulti|
+
+	num_bambini(): Intero >= 0
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			Bambini = {p | abi_pers(this, p) AND
+						   isAdulto(p, false) }
+			AND
+			result = |Bambini|
+
+	isOccupata(i:Data, f:Data): Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+			result = ( EXISTS u, occ, ini, fin |
+						 abi_ute(this, u) AND
+						 occ_ute(occ, u) AND
+						 inizio(occ, ini) AND
+						 fine(occ, fin) AND
+						 ini <= f AND i <= fin ) 
+
+	posti_disp(i:Data, f:Data): Intero >= 0
+		pre: 
+			isOccupata(this, i, f, false)
+		post:
+			result soddisfa la seguente formula:
+			P = { p | EXISTS sta |
+						pos_sta(p, sta) AND
+						abi_sta(this, sta) AND
+						!EXISTS rich, ini, fin |
+							pos_rich(p, rich) AND
+							RichiestaAccettata(rich) AND
+							inizio(rich, ini) AND
+							fine(rich, fin) AND
+							( ini <= f AND i <= fin ) }
+			AND
+			result = |P|
+			
+
+
+	 		
+
+	
