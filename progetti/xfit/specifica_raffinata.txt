@@ -1,0 +1,144 @@
+- SPECIFICA RAFFINATA
+
+1. requisiti sulle persone
+	1.1. nome
+	1.2. cognome
+	1.3. data di nascita
+	1.4. possono essere clienti oppure membri del personale (disjoint)
+
+2. requisiti sui contratti
+	2.1. tipologia di contratto:	
+		2.1.1. determinato
+			2.1.1.1. inizio
+			2.1.1.2. fine
+		2.1.2. indeterminato
+			2.1.2.1. inizio
+	2.2. livello contrattuale
+	2.3. ruolo ricoperto (Classe a sè)
+	2.4. persona a cui si riferisce il contratto (V. req. 1)
+
+*. funzionalità
+		
+- SPECIFICA INIZIALE
+
+Ogni ruolo per il personale amministrativo definisce un insieme di mansioni che i
+suoi membri possono svolgere utilizzando il sistema. Ad esempio, il personale avente
+come ruolo ‘membro di segreteria’ deve poter vendere/rinnovare contratti a clienti o
+visualizzare le informazioni che li riguardano.
+Gli istruttori non sono considerati personale stabile della società, in quanto sono
+inquadrati come liberi professionisti che prestano la loro opera in diversi centri. Di
+ogni istruttore interessa rappresentare il contratto (solo a tempo determinato) che ha in
+essere con la società che gestisce il centro e le attività sportive (ad es., fitness, spinning,
+aerobica, sala pesi) che è titolato a supervisionare.
+Il sistema deve poter rappresentare anche informazioni sui clienti. Di ogni cliente
+interessa (oltre ai dati anagrafici comuni a tutte le tipologie di persone di interesse nel
+sistema) mantenere l’insieme degli abbonamenti che questi ha sottoscritto con il centro
+nel tempo. La tipologia degli abbonamenti segue un preciso modello di business: attual-
+mente il centro offre abbonamenti trimestrali, semestrali ed annuali, ma è importante
+progettare xFit di modo che riesca a rappresentare abbonamenti di qualsivoglia durata,
+se definita dal management (ad esempio, il management potrebbe introdurre un nuovo
+abbonamento a 15 mesi). Un abbonamento non consente l’accesso indiscriminato alla
+struttura, ma esclusivamente ad alcune aree (fisiche della struttura, ad es., le diverse
+sale) dove vengono praticate le attività sportive comprese nell’abbonamento. Il sistema
+deve poter rappresentare tali aree; di ogni area è di interesse il nome e la capienza (ovvero 
+il numero massimo di clienti che possono ospitare contemporaneamente).
+Le attività sportive erogate dal centro vengono definite dal management, insieme alle
+aree fisiche della struttura (ad es., le diverse sale) e agli orari (giorno della settimana
+e intervallo orario) in cui vengono erogate. In un’area possono essere praticate più
+attività (ad es., in giorni e/o orari diversi). Le tipologie di abbonamento che possono 
+essere offerte ai clienti possono variare nel tempo e nel prezzo, e vengono definite dal
+management. Ad esempio, in questa stagione viene offerta una tipologia di abbonamento
+semestrale a EUR 150 che comprende le attività di sala pesi e fitness.
+Il sistema deve consentire al management della società di definire una nuova tipologia
+di abbonamento (decidendone prezzo, durata, attività comprese, e periodo nel quale la 
+nuova tipologia di abbonamento può essere venduta ai clienti) e al personale amministra-
+tivo di registrare la stipula di un nuovo abbonamento (tra quelli attivi in quel momento)
+da parte di un cliente; se il cliente è nuovo, deve permettere l’inserimento dei suoi dati
+anagrafici.
+I clienti utilizzano direttamente il sistema interagendo con i varchi di accesso alle 
+diverse aree (ad es., le diverse sale) della struttura. Di ogni varco il sistema deve rap-
+presentare l’insieme delle aree a cui consente l’accesso. Le informazioni sulle aree alle
+quali un varco consente l’accesso sono definite dal management. Quando un cliente
+(riconoscibile attraverso un codice1) passa attraverso un varco, xFit deve permettere al
+varco di aprirsi se e solo se il cliente ha un abbonamento attivo per almeno una delle aree 
+protette dal varco dove si sta (in quel momento) tenendo almeno un’attività compresa
+nel suo abbonamento.
+Tutti i varchi fisici sono bidirezionali. Tracciano quindi sia l’ingresso che l’uscita dei
+clienti dalle diverse aree. Tra le aree della struttura ne esiste una, chiamata ‘area comu-
+ne’ che rappresenta zone della struttura dove non si tengono attività (ad es., corridoi, 
+spogliatoi, bar) e quindi sono accessibili a tutti i clienti. (Si veda la figura alla pagina
+seguente per un esempio di disposizione dei varchi.)
+Il sistema deve offrire al management le seguenti ulteriori funzionalità statistiche:
+1. Data una fascia oraria O (ad es., dalle 17:00 alle 20:00), calcolare per ogni area
+A della struttura (ad es., piscina) il numero medio, minimo e massimo (anche se 
+zero) di clienti che hanno acceduto all’area A nella fascia oraria O nell’ultimo mese
+(le statistiche si intendono su base giornaliera).
+2. Dato un cliente C, calcolare il numero di volte in cui C ha frequentato ogni area A
+del centro nell’ultimo mese. Il risultato deve essere ordinato fornendo prima le aree
+maggiormente frequentate, terminando con quelle mai frequentate (se esistono).
+
+
+Il sistema xFit deve consentire la gestione dei clienti del centro, delle attività offerte, e del
+personale. In particolare, xFit deve rappresentare i dati anagrafici (cognome, nome e data
+di nascita) del personale amministrativo e dei clienti. Queste categorie possono essere
+considerate disgiunte. Il personale amministrativo è formato da dipendenti della società.
+Di ognuno è di interesse conoscere la tipologia di contratto (a tempo indeterminato
+o determinato, con date di inizio e –per i contratti a tempo determinato– fine) con il
+quale sono assunti, il livello contrattuale (un intero positivo) e il ruolo ricoperto (ad
+es., membro di segreteria). Di ogni dipendente è necessario mantenere anche i contratti
+passati.
+Ogni ruolo per il personale amministrativo definisce un insieme di mansioni che i
+suoi membri possono svolgere utilizzando il sistema. Ad esempio, il personale avente
+come ruolo ‘membro di segreteria’ deve poter vendere/rinnovare contratti a clienti o
+visualizzare le informazioni che li riguardano.
+Gli istruttori non sono considerati personale stabile della società, in quanto sono
+inquadrati come liberi professionisti che prestano la loro opera in diversi centri. Di
+ogni istruttore interessa rappresentare il contratto (solo a tempo determinato) che ha in
+essere con la società che gestisce il centro e le attività sportive (ad es., fitness, spinning,
+aerobica, sala pesi) che è titolato a supervisionare.
+Il sistema deve poter rappresentare anche informazioni sui clienti. Di ogni cliente
+interessa (oltre ai dati anagrafici comuni a tutte le tipologie di persone di interesse nel
+sistema) mantenere l’insieme degli abbonamenti che questi ha sottoscritto con il centro
+nel tempo. La tipologia degli abbonamenti segue un preciso modello di business: attual-
+mente il centro offre abbonamenti trimestrali, semestrali ed annuali, ma è importante
+progettare xFit di modo che riesca a rappresentare abbonamenti di qualsivoglia durata,
+se definita dal management (ad esempio, il management potrebbe introdurre un nuovo
+abbonamento a 15 mesi). Un abbonamento non consente l’accesso indiscriminato alla
+struttura, ma esclusivamente ad alcune aree (fisiche della struttura, ad es., le diverse
+sale) dove vengono praticate le attività sportive comprese nell’abbonamento. Il sistema
+deve poter rappresentare tali aree; di ogni area è di interesse il nome e la capienza (ovvero 
+il numero massimo di clienti che possono ospitare contemporaneamente).
+Le attività sportive erogate dal centro vengono definite dal management, insieme alle
+aree fisiche della struttura (ad es., le diverse sale) e agli orari (giorno della settimana
+e intervallo orario) in cui vengono erogate. In un’area possono essere praticate più
+attività (ad es., in giorni e/o orari diversi). Le tipologie di abbonamento che possono 
+essere offerte ai clienti possono variare nel tempo e nel prezzo, e vengono definite dal
+management. Ad esempio, in questa stagione viene offerta una tipologia di abbonamento
+semestrale a EUR 150 che comprende le attività di sala pesi e fitness.
+Il sistema deve consentire al management della società di definire una nuova tipologia
+di abbonamento (decidendone prezzo, durata, attività comprese, e periodo nel quale la 
+nuova tipologia di abbonamento può essere venduta ai clienti) e al personale amministra-
+tivo di registrare la stipula di un nuovo abbonamento (tra quelli attivi in quel momento)
+da parte di un cliente; se il cliente è nuovo, deve permettere l’inserimento dei suoi dati
+anagrafici.
+I clienti utilizzano direttamente il sistema interagendo con i varchi di accesso alle 
+diverse aree (ad es., le diverse sale) della struttura. Di ogni varco il sistema deve rap-
+presentare l’insieme delle aree a cui consente l’accesso. Le informazioni sulle aree alle
+quali un varco consente l’accesso sono definite dal management. Quando un cliente
+(riconoscibile attraverso un codice1) passa attraverso un varco, xFit deve permettere al
+varco di aprirsi se e solo se il cliente ha un abbonamento attivo per almeno una delle aree 
+protette dal varco dove si sta (in quel momento) tenendo almeno un’attività compresa
+nel suo abbonamento.
+Tutti i varchi fisici sono bidirezionali. Tracciano quindi sia l’ingresso che l’uscita dei
+clienti dalle diverse aree. Tra le aree della struttura ne esiste una, chiamata ‘area comu-
+ne’ che rappresenta zone della struttura dove non si tengono attività (ad es., corridoi, 
+spogliatoi, bar) e quindi sono accessibili a tutti i clienti. (Si veda la figura alla pagina
+seguente per un esempio di disposizione dei varchi.)
+Il sistema deve offrire al management le seguenti ulteriori funzionalità statistiche:
+1. Data una fascia oraria O (ad es., dalle 17:00 alle 20:00), calcolare per ogni area
+A della struttura (ad es., piscina) il numero medio, minimo e massimo (anche se 
+zero) di clienti che hanno acceduto all’area A nella fascia oraria O nell’ultimo mese
+(le statistiche si intendono su base giornaliera).
+2. Dato un cliente C, calcolare il numero di volte in cui C ha frequentato ogni area A
+del centro nell’ultimo mese. Il risultato deve essere ordinato fornendo prima le aree
+maggiormente frequentate, terminando con quelle mai frequentate (se esistono).
