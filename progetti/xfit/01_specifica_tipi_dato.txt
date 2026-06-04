@@ -1,0 +1,6 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Valuta (
+	Valore: Reale > 0
+	Valuta: Segue standard valute (EUR, USD, ecc...)
+)

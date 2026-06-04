@@ -1,0 +1,154 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe Contratto
+
+	terminato(): Booleano
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> ( EXISTS fin, fin_nat |
+									fine(this, fin) 
+									OR
+									TempoDeterminato(this) AND 
+									fine_naturale(this, fin_nat) AND
+									fin_nat <= oggi )
+
+- Classe TempoDeterminato
+
+	[V.TempoDeterminato.inizio_prima_fine_naturale]
+		!EXISTS ini, fine_nat |
+			inizio(this, ini) AND
+			fine_naturale(this, fine_nat) AND
+			fine_nat < ini
+
+- Classe TipologiaAbbonamento
+
+	[V.TipologiaAbbonamento.inizio_prima_fine]
+		!EXISTS ini, fin |
+			inizio_vendita(this, ini) AND
+			fine_vendita(this, fin) AND
+			fin < ini
+
+- Classe Abbonamento
+
+	[V.Abbonamento.no_inizio_prima_inizio_vendita]
+		!EXISTS ini, tip, iniV |
+			inizio(this, ini) AND
+			abb_tip(this, tip) AND
+			inizio_vendita(tip, iniV) AND
+			ini < iniV
+
+	fine(): Data
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			EXISTS ini, tip, dur |
+				inizio(this, ini) AND
+				abb_tip(this, tip) AND
+				durata_sett(tip, dur) AND
+				result = ini + ("7 giorni" * dur)
+
+	attivo(): Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> ( EXISTS ini, fin |
+									inizio(this, ini) AND
+									fine(this, fin) AND
+									adesso >= ini AND
+									adesso <= fin )
+
+- Classe Svolgimento
+
+	[V.Svolgimento.inizio_prima_fine]
+		!EXISTS ini, fin |
+			inizio(this, ini) AND
+			fine(this, fin) AND
+			fin < ini
+
+- Classe Area
+
+	[V.Area.no_svolgimenti_contemporanei]
+		!EXISTS svo1, ini1, fin1, svo2, ini2, fin2, t |
+			svo1 != svo2 AND
+			inizio(svo1, ini1) AND
+			fine(svo1, fin1) AND
+			inizio(svo2, ini2) AND
+			fine(svo2, fin2) AND
+			area_svo(this, svo1) AND
+			area_svo(this, svo2) AND
+			t >= ini1 AND t <= fin1 AND
+			t >= ini2 AND t <= fin2
+
+	raggiunge(a:Area): Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> ( EXISTS v, b |
+									uscita(this, v) AND
+									ingresso(b, v) AND
+									(b = a OR raggiunge(b, a)) )
+
+	accessi_giorno(g:Data, ini:Ora, fin:Ora): Intero>=0
+		pre:
+			ini < fin
+		post:
+			result soddisfa la seguente formula:
+
+			ACC = { c | EXISTS p, ip, , dp, op, v |
+							cli_pass(c, p) AND
+							istante(p, ip) AND
+							ora(ip, op) AND
+							op >= ini AND op <= fin AND
+							data(ip, dp) AND
+							dp = g AND
+							pass_var(p, v) AND
+							ingresso(this, v) }
+			AND
+			result = |ACC|
+
+- Classe AreaComune
+
+	[V.AreaComune.no_svolgimenti]
+		!EXISTS svo |
+			area_svo(this, svo)
+
+- Classe Istruttore 
+
+	[V.Istruttore.no_contratto_prima_nascita]
+		!EXISTS nasc, c, ini |
+			nascita(this, nasc) AND
+			det_ist(c, this) AND
+			inizio(c, ini) AND
+			ini < nasc
+
+	[V.Istruttore.no_ruolo_diverso_da_istruttore]
+		!EXISTS c, ruo, nom |
+			det_ist(c, this) AND
+			con_ruo(c, ruo) AND
+			nome(ruo, nom) AND
+			nom != "Istruttore"
+
+- Classe Varco
+
+	aree_ragg(): Area[1..*]
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = { b | EXISTS a |
+							ingresso(this, a) AND
+							(b = a OR raggiunge(a, b)) }
+
+
+			
+			

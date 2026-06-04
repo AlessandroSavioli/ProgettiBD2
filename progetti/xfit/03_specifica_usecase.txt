@@ -1,0 +1,193 @@
+- SPECIFICA DEGLI USE-CASE
+
+- Use-Case Strumenti passaggio
+
+	passa(v:Varco, dir:{ingresso, uscita}): Passaggio
+		pre:
+			sia c:Cliente l'istanza dell'attore che ha invocato lo use-case
+
+			dir = ingresso -> (
+			// Ha almeno un abbonamento attivo e sta entrando in un'area comune
+			EXISTS a, are |
+				abb_cli(a, c) AND
+				attivo(a, true) AND
+				ingresso(are, v) AND
+				AreaComune(are)
+
+			OR
+
+			// Sta attraversando un varco che porta ad un'area in cui si sta
+			// svolgendo un'attività per la quale ha un abbonamento attivo
+			EXISTS abb, tip, att, svo, ini, fin, areaAtt |
+				abb_cli(abb, c) AND
+				attivo(abb, true) AND
+				abb_tip(abb, tip) AND
+				att_tip(att, tip) AND
+				att_svo(att, svo) AND
+				inizio(svo, ini) AND
+				fine(svo, fin) AND
+				adesso >= ini AND adesso <= fin AND
+				area_svo(areaAtt, svo) AND
+				aree_ragg(v, areaAtt)
+			)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Passaggio(alpha)
+				- istante(alpha, adesso)
+				- cli_pass(c, alpha)
+				- pass_var(alpha, v)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Strumenti abbonamenti
+
+	nuovo_cliente(n:Stringa, cogn:Stringa, nasc:Data, cod:Stringa): Cliente
+		pre:
+			!EXISTS c' |
+				codice_biom(c', cod)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Persona(alpha)
+				- Cliente(alpha)
+				- nome(alpha, n)
+				- cognome(alpha, cogn)
+				- nascita(alpha, nasc)
+				- codice_biom(alpha, cod)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+	sottoscrivi_abbonamento(c:Cliente, tip:TipologiaAbbonamento)
+		pre:
+			EXISTS iniv, finv |
+				inizio_vendita(tip, iniv) AND
+				fine_vendita(tip, finv) AND
+				oggi >= iniv AND
+				oggi <= finv
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Abbonamento(alpha)
+				- inizio(alpha, oggi)
+				- abb_cli(alpha, c)
+				- abb_tip(alpha, tip)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Strumenti tipi abbonamenti
+
+	nuova_tipologiaAbbonamento(dur:Intero>0, pre:Valuta, iniV:Data, 
+					finV:Data, insAtt:Attività[1..*]): TipologiaAbbonamento
+		pre:
+			iniV < finV
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- TipologiaAbbonamento(alpha)
+				- durata_sett(alpha, dur)
+				- prezzo(alpha, pre)
+				- inizio_vendita(alpha, iniV)
+				- fine_vendita(alpha, finV)
+				- att_tip(att, alpha) per ogni att in insAtt
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+	
+- Use-Case Strumenti attività
+
+	nuova_attività(nom:Stringa): Attività
+		pre:
+			!EXISTS a' |
+				Attività(a') AND nome(a', nom)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Attività(alpha)
+				- nome(alpha, nom)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+				
+- Use-Case Strumenti statistiche
+
+	accessi_aree_30gg(ora_inizio:Ora, ora_fine:Ora):
+				(a:Area, avg:Reale>=0, min:Intero>=0, max:Intero>=0)[0..*]
+		pre:
+			ora_inizio < ora_fine
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			GIORNI_MESE = { d | Data(d) AND d >= oggi - "30 giorni" AND
+								d <= oggi }
+			AND
+			INGR_GIORN_AREA = { (a, ingr, d) | Area(a) AND 
+					accessi_giorno(a, d, ora_inizio, ora_fine, ingr) AND
+					d in GIORNI_MESE }
+			AND
+			result = { (a, avg, min, max) | Area(a) AND
+				avg = ( SUM(ingr) | EXISTS d | (a, ingr, d) IN 
+					INGR_GIORN_AREA ) / |GIORNI_MESE| 
+				AND
+				min = ( MIN(ingr) | EXISTS d | (a, ingr, d) 
+					IN INGR_GIORN_AREA )
+				AND
+				max = ( MAX(ingr) | EXISTS d | (a, ingr, d) 
+					IN INGR_GIORN_AREA ) }						
+
+			
+	frequenze(c:Cliente): (a:Area, n:Intero>=0)
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			PASSAGGI_AREA = { (a, p) | Area(a) AND
+								EXISTS p, ip, dp, v |
+									cli_pass(c, p) AND
+									istante(p, ip) AND
+									data(ip, dp) AND
+									dp >= oggi - "30 giorni" AND
+									dp <= oggi AND
+									pass_var(p, v) AND
+									ingresso(a, v) }
+			AND
+			FREQUENZE = { (a, n) | Area(a) AND 
+						n = |{ p | (a, p) IN PASSAGGI_AREA}| }
+			AND
+			result = ordina_risultato_frequenze(FREQUENZE)
+
+- Use-Case Utilità
+
+	ordina_risultato_frequenze(elem:(a:Area, n:Intero>=0)[0..*]): 
+				(elem:( (a:Area, n:Intero>=0), pos:Intero>=0)[0..*])
+		pre: 
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			// Gli elementi dell'insieme vengono ordinati
+			
+			
+	
