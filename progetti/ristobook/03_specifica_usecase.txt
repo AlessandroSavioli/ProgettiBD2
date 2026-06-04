@@ -1,0 +1,179 @@
+- SPECIFICA DEGLI USE-CASE
+
+- Use-Case Registrazione
+
+	nuovo_cliente(n: Stringa, mail:Email): Cliente
+		pre:
+			!EXISTS u' |
+				email(u', mail)
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Cliente(alpha)
+				- nome(alpha, n)
+				- email(alpha, mail)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+- Use-Case Strumenti prenotazione
+
+	nuova_prenotazione(num_commens:Intero>0, orario:DataOra,
+						risto:Ristorante, prom:Promozione[0..1])
+		pre:
+			Sia c:Cliente l'istanza dell'attore che ha invocato lo use-case
+
+			!EXISTS p', ora |
+				clie_pren(c, p') AND
+				orario(p', ora) AND
+				ora = orario
+			AND
+			isPrenotabile(risto, orario, true)
+			AND
+			prom != null ->
+				EXISTS dOrario, oOrario, ini, fin, oraIni,
+									 oraFin, gio, rim |
+					data(orario, dOrario) AND
+					ora(orario, oOrario) AND
+					inizio(prom, ini) AND
+					fine(prom, fin) AND
+					ora_inizio(prom, oraIni) AND
+					ora_fine(prom, oraFin) AND
+					dOrario >= ini AND dOrario <= fin AND
+					oOrario >= oraIni AND oOrario <= oraFin AND
+					DayOfTheWeek(orario, gio) AND
+					giorni(prom, gio) AND
+					coperti_rimanenti(prom, dOrario, rim ) AND
+					rim >= num_commens AND
+					pro_ris(prom, risto)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Prenotazione(alpha)
+				- clie_pren(c, alpha)
+				- orario(alpha, orario)
+				- commensali(alpha, num_commens)
+				- istante_pren(alpha, adesso)
+				- pre_ris(alpha, risto)
+				- prom != null -> pre_pro(alpha, prom)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+	
+- Use-Case Strumenti ricerca
+
+cerca_promozioni_citta(x:Città, C:Cucina[1..*], 
+                           s:1..100, d:Data, num_commens:Intero>0): Ristorante[0..*]
+        pre:
+            nessuna
+        post:
+            questo use-case non modifica il livello estensionale
+            result soddisfa la seguente formula:
+
+            RIS_CUC_VAL = { r | EXISTS c |
+                                  c IN C AND
+                                  cuc_ris(c, r) AND
+                                  cit_ris(x, r) }
+            AND
+            RIS_PROM_VAL = { r | r IN RIS_CUC_VAL AND
+                              EXISTS prom, ini, fin, perc, gio, rim |
+                                  pro_ris(prom, r) AND
+                                  inizio(prom, ini) AND
+                                  fine(prom, fin) AND
+                                  percentuale(prom, perc) AND
+                                  perc >= s AND
+                                  d >= ini AND d <= fin AND
+                                  DayOfTheWeek(d, gio) AND
+                                  giorni(prom, gio) AND
+                                  coperti_rimanenti(prom, d, rim) AND
+                                  rim >= num_commens }
+            AND 
+            result = RIS_PROM_VAL
+			
+- Use-Case Strumenti statistiche
+
+	statistica_promozioni(ini:Data, fin:Data): 
+							(pro:Promozione, avg:Reale>=0)[0..*]
+		pre:
+			sia r:Ristorante l'istanza dell'attore che ha 
+			invocato lo use-case
+
+			ini <= fin
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			GIORNI = { d | Data(d) AND
+						   d >= ini AND
+						   d <= fin }
+			AND
+			PROM = { (p, numC, gio) | gio in Giorni AND
+								num_clie_giorn(r, gio, p, numC) }
+			AND
+			( EXISTS p | 
+			  pro_ris(p, r) AND
+			  pro(result, p) AND
+			  avg(result, SUM(numC | EXISTS d | d in Giorni AND
+		(p, numC, d) in PROM)) / |{gio | (p, numC, gio) in PROM}| )
+			  			
+- Use-Case Strumenti chiusure
+
+	nuova_chiusura(mot:Stringa, ini:DataOra, 
+								fin:DataOra): ChiusuraPrenotazioni
+		pre:
+			sia r:Ristorante l'istanza dell'attore che ha invocato 
+			lo use-case
+
+			ini < fin
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- ChiusuraPrenotazioni(alpha)
+				- motivazione(alpha, mot)
+				- inizio(alpha, ini) 
+				- fine(alpha, fin)
+				- chiu_ris(alpha, r)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+- Use-Case Strumenti promozioni
+
+	nuova_promozione(perc:1..100, di:Data, df:Data,
+					oi:Ora, of:Ora, insgiorni:Giorno[1..7],
+					maxc:Intero>0):Promozione
+		pre:
+			sia ris:Ristorante l'istanza dell'attore che 
+			ha invocato lo use-case
+
+			di <= df 
+			AND 
+			oi < of
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Promozione(alpha)
+				- pro_ris(alpha, ris)
+				- percentuale(alpha, perc)
+				- inizio(alpha, di)
+				- fine(alpha, df) 
+				- ora_inizio(alpha, oi)
+				- ora_fine(alpha, of)
+				- giorni(alpha, gio) per ogni gio in insgiorni
+				- max_coperti_gio(alpha, maxc)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			

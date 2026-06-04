@@ -1,24 +1,141 @@
 - SPECIFICA DELLE CLASSI
 
+- Classe ChiusuraPrenotazioni
+
+	[V.ChiusuraPrenotazioni.inizio_prima_fine]
+		!EXISTS ini, fin |
+			inizio(this, ini) AND
+			fine(this, fin) AND
+			fin < ini
+
 - Classe Ristorante
 
 	isPrenotabile(i:DataOra): Booleano
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> (!EXISTS chiu, ini, fin |
+									chiu_ris(chiu, this) AND
+									inizio(chiu, ini) AND
+									fine(chiu, fin) AND
+									i >= ini AND
+									i <= fin )
+
+	num_clie_giorn(d:Data, p:Promozione): Intero>=0
+		pre:
+			pro_ris(p, this)
+		post:
+			result soddisfa la seguente formula:
+
+			CLIENTI = { c, commens | EXISTS pre, orPre, dPre |
+								clie_pren(c, pre) AND
+								orario(pre, orPre) AND
+								data(orPre, dPre) AND
+								dPre = d AND
+								commensali(p, commens) AND
+								Completata(pre) AND
+								pre_pro(pre, p) AND
+								pro_ris(p, this) }	
+			AND 
+			result = SUM( commens | EXISTS c | 
+									(c, commens) in CLIENTI )
+						
+- Classe Promozione 
+
+	[V.Promozione.no_inizio_dopo_fine]
+		!EXISTS ini, fin |
+			inizio(this, ini) AND
+			fine(this, fin) AND
+			fin < ini
+
+	[V.Promozione.no_orainizio_dopo_orafine]
+		!EXISTS ini, fin |
+			ora_inizio(this, ini) AND
+			ora_fine(this, fin) AND
+			fin < ini
+
+    coperti_rimanenti(d:Data): Booleano
+    	pre:
+    		nessuna
+    	post:
+    		result soddisfa la seguente formula:
+
+    		PREN = { (p, comm) | EXISTS gio |
+    						pre_pro(p, this) AND
+    						Accettata(p) AND
+    						!Annullata(p) AND
+    						giorno(p, gio) AND
+    						gio = d AND
+    						commensali(p, comm) }
+    		AND
+    		EXISTS max |
+    			max_coperti_gio(this, max) AND
+    			result = max - SUM( comm | EXISTS p | (p, comm) IN PREN )
+
+- Classe Prenotazione
+
+	[V.Prenotazione.no_istpren_dopo_orario]
+		!EXISTS istpren, ora |
+			istante_pren(this, istpren) AND
+			orario(this, ora) AND
+			istpren > ora
+
+	[V.Prenotazione.no_prenotazioni_se_rist_non_prenotabile]
+		!EXISTS ora, risto|
+			orario(this, ora) AND
+			pre_ris(this, risto) AND
+			isPrenotabile(risto, ora, false)
+
+	[V.Prenotazione.non_rifiutata_prima_istpren]
+		!EXISTS istpren, rif |
+			Rifiutata(this) AND
+			istante_pren(this, istpren) AND
+			rifiutata(this, rif) AND
+			rif < istpren
+
+	[V.Prenotazione.non_annullata_prima_istpren]
+			!EXISTS istpren, annull |
+				Annullata(this) AND
+				istante_pren(this, istpren) AND
+				istante(this, annull) AND
+				annull < istpren
+
+	[V.Prenotazione.non_accettata_prima_istpren]
+			!EXISTS istpren, acc |
+				Accettata(this) AND
+				istante_pren(this, istpren) AND
+				rifiutata(this, acc) AND
+				acc < istpren
+
+	[V.Prenotazione.non_completata_prima_accettazione]
+			!EXISTS acc, compl |
+				Completata(this) AND
+				accettazione(this, acc) AND
+				completamento(this, compl) AND
+				compl < acc
+
+	giorno(): Giorno
 		pre:
 			nessuna
 		post:
 			result soddisfa la seguente formula:
 
-			giorniRiposo = { g | EXISTS c |
-									RiposoSettimanale(c) AND
-									chiu_ris(c, this) AND
-									giorni(c, g) } \\ così g sarà il giorno della settimana, non la data
-			AND
-			altriGiorni = { g | Data(g) AND 
-								EXISTS c, giniz, gfin |
-									AltraChiusura(c) AND
-									chiu_ris(c, this) AND
-									isGiornaliera(c, false) AND
-									giorno_inizio(c, giniz) AND
-									giorno_fine(c, gfin) AND
-									g >= giniz AND 
-									g <= gfin }
+			EXISTS ora, dat |
+				orario(this, ora) AND
+				data(ora, dat) AND
+				result = DayOfTheWeek(dat)
+
+	non_usata():Booleano
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> ( EXISTS ora |
+									orario(this, ora) AND
+									oggi >= ora + "12 ore" AND
+									Accettata(this) AND
+									!Completata(this) AND	
+									!Annullata(this) )

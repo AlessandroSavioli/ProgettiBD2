@@ -3,12 +3,6 @@
 - Giorno
 	{lunedì, martedì, mercoledì, giovedì, venerdì, sabato, domenica}
 
-- FO
-(
-	inizio: Ora
-	fine: Ora
-)
-
 - IVA
 	Segue standard partita iva
 
