@@ -78,14 +78,12 @@ Per questa generalizzazione abbiamo optato per il metodo della fusione.
 - PRO: query molto più veloci
 - CONTRO: alcune tuple avranno "NULL" nella colonna "luogo_arrivo"
 Dobbiamo ricordarci di inserire il vincolo "esiste un link 'arrivo' solo se tipoAtt è 'spostamento' "
-  
-<div style="page-break-after: always;"></div>
 
 ### Aggiornamento 1
 
 ![Diagramma UML aggiornato](travelplan_agg1.png)
 
-<br><br>
+<div style="page-break-after: always;"></div>
 
 ## FASE 4 - IDENTIFICATORI PER OGNI CLASSE
 Ora dobbiamo inserire un identificatore per ogni classe 
@@ -150,7 +148,11 @@ AttivitàComposta(_id_attc_:serial, nome:Stringa, viaggio:Intero>=0)
 attcomp_att(_attc_:Intero>=0, _att_:Intero>=0)
     FOREIGN KEY: att REFERENCES Attività(id_att)
     FOREIGN KEY: attc REFERENCES AttivitàComposta(id_attc)
+```
 
+<div style="page-break-after: always;"></div>
+
+```
 feedback(_utente_:Email, _viaggio_:Intero>=0, voto:1..5, istante:DataOra)
     FOREIGN KEY: (utente, viaggio) REFERENCES partecipa(utente, viaggio) 
 
@@ -173,7 +175,7 @@ Evitiamo che si possano modificare gli id artificiali
 Qui vanno inseriti tutti i REVOKE necessari
 ```
 
-<br>
+<div style="page-break-after: always;"></div>
 
 ### Trigger
 
@@ -200,6 +202,8 @@ Return NULL;
 
 -- Questo trigger non tiene conto dei pernottamenti "impliciti" (ovvero quelli in cui l'attività non ha nessun utente specificato)
 ```
+
+<div style="page-break-after: always;"></div>
 
 ### Funzionalità
 
