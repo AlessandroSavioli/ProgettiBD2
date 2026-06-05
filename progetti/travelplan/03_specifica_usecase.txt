@@ -1,0 +1,225 @@
+- SPECIFICA DEGLI USE-CASE
+
+- Use-Case Registrazione
+
+	nuovo_utente(n:Stringa, c:Stringa, e:Email, citt:Città): Utente
+		pre:
+			!EXISTS u' |
+				email(u', e)
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple: 
+				- Utente(alpha)
+				- nome(alpha, n)
+				- cognome(alpha, c)
+				- email(alpha, e)
+				- citt_ute(citt, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+- Use-Case Strumenti viaggi
+
+	crea_viaggio(n:Stringa, minp:Intero>0, maxp:Intero>0): Viaggio
+		pre: 
+			nessuna
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Viaggio(alpha)
+				- nome(alpha, n)
+				- min_part(alpha, minp)
+				- max_part(alpha, maxp)
+				- creazione(alpha, adesso)
+				sia u:Utente l'istanza dell'utente che ha invocato
+				lo use-case
+				- organizza(u, alpha)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+
+	aggiungi_attività_semplice(v:Viaggio, n:Stringa, ini:DataOra,
+							dur:Intero>=0, pre:Denaro,
+							inspren:Prenotazione[0..*], luo:Luogo,
+							tipo:{semplice, spostamento, pernott},
+							luo_fine:Luogo[0..1], inf:Stringa
+						): Attività
+		pre:
+			sia u:Utente l'istanza dell'utente che ha invocato 
+			lo use-case
+
+			organizza(u, v)
+			AND 
+			tipo = spostamento <-> luo_fine != null
+			AND 
+			EXISTS crea |
+				creazione(v, crea) AND
+				crea < ini
+		post:
+			il livello estensionale finale differisce 
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- Attività(alpha)
+				- tipo = spostamento -> Spostamento(alpha)
+										arrivo(alpha, luo_fine)
+				- tipo = pernottamento -> Pernottamento(alpha)
+				- nome(alpha, n)
+				- att_via(alpha, v)
+				- att_luo(alpha, luo)
+				- inizio(alpha, ini)
+				- durata_min(alpha, dur)
+				- prezzo(alpha, pre)
+				- info(alpha, inf)
+				- att_pre(alpha, pre) per ogni pre in inspren
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+				
+	aggiungi_attività_composta(n:Stringa,v:Viaggio, 
+						insa:Attività[1..*]): AttivitàComposta
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato
+			lo use-case
+			
+			FORALL att |
+				att in insa -> att_via(att, v)
+			AND
+			organizza(u, v)
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- AttivitàComposta(alpha)
+				- nome(alpha, n)
+				- attcomp_via(alpha, v)
+				- attcomp_att(alpha, att) per ogni att in insa
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha			
+	
+- Use-Case Strumenti ricerca
+
+	trova_viaggi_dest(luo:Luogo, ini:DataOra, fin:DataOra): Viaggio[0..*]
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			result = { via | EXISTS att, iniv, finv |
+								att_via(att, via) AND
+								inizio(via, iniv) AND
+								fine(via, finv) AND
+								iniv >= ini AND
+								finv <= fin AND
+								( att_luo(att, luo)
+								 OR arrivo(att, luo) ) }
+
+	trova_città_popolari(ini:DataOra, fin:DataOra): Città[0..*]
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+
+			POPOLARITÀ = { (c, n) | Città(c) AND
+					n = |{ via | EXISTS att, luo, iniv, finv |
+							att_via(att, via) AND
+							inizio(via, iniv) AND
+							fine(via, finv) AND
+							iniv >= ini AND
+							finv <= fin AND
+							( att_luo(att, luo) 
+							 OR arrivo(att, luo) ) AND
+							citt_luo(c, luo) AND}| }
+			AND
+			maxn = max( n | EXISTS c | (c, n) in POPOLARITÀ )
+			AND
+			result = { c | EXISTS num | 
+							(c, num) in POPOLARITÀ AND
+							num = maxn }
+
+	calcola_viaggi_nazione(naz:Nazione, ini:DataOra, 
+							fin:DataOra): (r:Regione, nv:Intero>=0)	
+		pre: 
+			nessuna
+		post: 
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:	
+
+			REGIONI = { r | naz_reg(naz, r) }
+			AND
+			result = { (r, nvis) | r in REGIONI AND
+				nvis = |{ via | EXISTS att, luo, c, iniv, finv |
+                         att_via(att, via) AND
+                         inizio(via, iniv) AND
+                         fine(via, finv) AND
+                         iniv >= ini AND
+                         finv <= fin AND
+                         ( att_luo(att, luo) OR arrivo(att, luo) ) AND
+                         citt_luo(c, luo) AND
+                         citt_reg(c, r) }|
+
+- Use-Case Strumenti feedback
+
+	lascia_feedback(via:Viaggio, v:1..5): feedback
+		pre:
+			sia u:Utente l'istanza dell'attore che ha invocato 
+			lo use-case
+
+			partecipa(u, via)
+			AND
+			!organizza(u, via) 
+			AND
+			!feedback(u, via)
+			AND
+			EXISTS fin |
+				fine(via, fin) AND fin < adesso
+		post:
+			il livello estensionale finale differisce
+			da quello iniziale come segue:
+
+			nuovi elementi del dominio: alpha
+			elementi rimossi dal dominio: nessuno
+			nuove ennuple:
+				- feedback(u, via)
+				- voto(u, via, v)
+				- istante(u, via, adesso)
+			ennuple rimosse: nessuna
+			valore di ritorno: result = alpha
+			
+- Use-Case Strumenti statistiche
+
+	calcola_viaggi_città_anno(cit:Città): (mese:1..12, nv)[12]
+		pre:
+			nessuna
+		post:
+			questo use-case non modifica il livello estensionale
+			result soddisfa la seguente formula:
+			
+			anno_rif = anno(adesso) - 1
+			result { (nm, nvis) | 
+				nm in {1,2,...,12} AND
+	            nvis = |{ via | EXISTS att, iniv, finv, luo, ini_m, fin_m |
+                    att_via(att, via) AND
+                    
+                    data_inizio_mese(anno_rif, nm, ini_m) AND
+                    data_fine_mese(anno_rif, nm, fin_m) AND
+
+                    inizio(via, iniv) AND
+                    fine(via, finv) AND
+                    iniv <= fin_m AND 
+                    finv >= ini_m AND
+
+                    ( att_luo(att, luo) OR arrivo(att, luo) ) AND
+                    citt_luo(cit, luo) }| }

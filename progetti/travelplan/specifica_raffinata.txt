@@ -1,0 +1,148 @@
+- SPECIFICA RAFFINATA
+
+1. requisiti sugli utenti
+	1.1. nome
+	1.2. cognome
+	1.3. email
+	1.4. città di provenienza (v. req. 2)
+	1.5. data di iscrizione
+	1.6. il suo punteggio:
+		Il punteggio p di un utente è così calcolato: p è uguale a 0 
+		se la media aritmetica dei voti ricevuti è ≤ 3, 
+		altrimenti p è uguale alla parte intera inferiore del 10% 
+		del numero dei feedback ricevuti con voto ≥ 4.	
+
+2. requisiti sulle città
+	2.1. nome {id}
+	2.2. regione (Classe a sè)
+		2.2.1. nazione (Classe a sè)
+
+3. requisiti sui viaggi
+	3.1. nome
+	3.2. num minimo e massimo di partecipanti
+	3.3. attività alle quali è associato (v. req. 4)
+
+4. requisiti sulle attività
+	4.1. nome
+	4.2. istante di inizio
+	4.3. durata in minuti
+	4.4. prezzo
+	4.5. luogo in cui si tiene (v. req. 5)
+	4.6. info testuali
+	4.7. insieme di codici identificativi di biglietti/prenotazioni (?)
+	4.8. utenti che vi partecipano (v. req. 1)
+		4.8.1. se non ci sono link con utenti, si da per scontato che
+			   tutti gli utenti del viaggio la compiano
+	4.9. possono essere composte:
+		4.9.1. raggruppano più attività semplici
+	4.10. gli spostamenti sono attività:
+		4.10.1. in questo caso 4.5. sarà il luogo di partenza
+		4.10.2. luogo di arrivo (v. req. 5)
+	4.11. i pernottamenti sono attività
+		4.11.1. non più di un pernottamento al giorno per utente
+
+5. requisiti sui luoghi
+	5.1. indirizzo
+	5.2. città (v. req. 2)
+
+6. requisiti sui feedback
+	6.1. voto (da 1 a 5)
+	6.2. partecipante che lo rilascia
+	6.3. viaggio a cui si riferisce
+
+	
+
+7. funzionalità
+	7.1. Utente:
+		7.1.1. può creare viaggi come organizzatore
+		7.1.2. aggiungere attività al viaggio
+		7.1.3. può partecipare ai viaggi
+		7.1.4. può cercare i viaggi che includono una destinazione
+		 	 	in un certo intervallo di tempo
+		7.1.5. può cercare le città toccate dal maggior numero di 
+		 	 	viaggi in un certo intervallo di tempo
+		7.1.6. calcolare, per ogni regione di una data nazione, il numero 
+			 	di viaggi organizzati
+			 	in un dato periodo di tempo che toccano quella regione
+		7.1.7. dato un budget minimo, un budget massimo, un insieme 
+				di regioni, un periodo di tempo e un punteggio, 
+				calcolare l’insieme dei viaggi che hanno un budget
+				nell’intervallo richiesto, toccano almeno una delle 
+				regioni date, si svolgono completamente all’interno 
+				del periodo dato e sono organizzati da un utente
+				con un punteggio pari o superiore a quello dato
+	7.2. responsabili:
+		7.2.1. devono poter calcolare, data una città di destinazione,
+				per ognuno dei 12 mesi dell’anno, il numero di 
+				viaggi organizzati in quel mese
+				nell’ultimo anno solare
+
+- SPECIFICA INIZIALE
+
+Gli utenti di TravelPlan utilizzano il sistema per organizzare viaggi ed 
+unirsi a viaggi organizzati da altri utenti.
+Di ogni utente interessa conoscere il nome, il cognome, l’indirizzo email, 
+la città di provenienza e la data di iscrizione.
+Ogni utente può creare viaggi in qualità di organizzatore; dei viaggi 
+interessa il nome, il numero minimo e il numero massimo di partecipanti. 
+Gli utenti di TravelPlan possono quindi prendere parte ai viaggi 
+organizzati dagli altri utenti.
+Un viaggio è associato ad un certo numero di attività quali visite, 
+pasti, tour, trasporti e pernottamenti. 
+Di ogni attività interessa conoscere il nome, l’istante di inizio, 
+la durata, il prezzo, il luogo in cui si tiene, 
+delle informazioni testuali ed eventualmente un insieme
+di codici identificativi di biglietti/prenotazioni relativi all’attività.
+Di ogni luogo interessa conoscere l’indirizzo, la città, 
+la regione e la nazione.
+Per facilitare la pianificazione, il sistema deve permettere di 
+creare attività composte, cioè che raggruppano più attività semplici. 
+Ad esempio, l’attività “tour gastronomico del centro storico” includerà 
+la visita di due piazze, un percorso a piedi, un pasto al ristorante
+e la visita di una cantina.
+Il sistema deve poter rappresentare gli spostamenti 
+(con qualsiasi mezzo: treno, aereo, nave, bicicletta, a piedi, ecc.) 
+come attività, delle quali è di interesse conoscere
+sia il luogo di partenza che quello di arrivo.
+I pernottamenti sono attività particolari, poichè il sistema non 
+deve poter rappresentare più di un pernottamento al giorno per ogni 
+utente che partecipa a un viaggio.
+Poiché può succedere che gli utenti che partecipano a uno stesso viaggio 
+non prendano tutti parte alle stesse attività (p.es., due sotto-gruppi 
+possono alloggiare in hotel diversi),
+il sistema deve permettere di specificare, per ogni attività inclusa 
+in un viaggio, gli utenti che vi partecipano. 
+Se per una certa attività non è specificato nessun utente, si assume
+che tutti i partecipanti al viaggio vi prendano parte.
+I partecipanti ad un viaggio possono dare un feedback all’organizzazione 
+del viaggio, assegnando un voto da 1 a 5.
+TravelPlan prevede un sistema di punteggi per i propri utenti, in base 
+alle valutazioni ricevute sui viaggi da loro organizzati. 
+Il punteggio p di un utente è così calcolato: 
+	p è uguale a 0 se la media aritmetica dei voti ricevuti è ≤ 3, 
+	altrimenti p è uguale alla parte intera inferiore del 10% del 
+	numero dei feedback ricevuti con voto ≥ 4.
+Il sistema deve permettere agli utenti registrati di partecipare a viaggi 
+e di creare  viaggi in qualità di organizzatori, aggiungendo a essi 
+attività di vario tipo. 
+Infine, il sistema deve offrire le seguenti funzionalità avanzate:
+	1. Gli utenti registrati devono poter:
+		1.1. creare viaggi in qualità di organizzatori e aggiungere 
+		a essi attività di vario tipo;
+		1.2. trovare tutti i viaggi che includono una certa 
+		destinazione in un certo intervallo di tempo;
+		1.3. trovare la/e città toccata/e dal maggior numero 
+		di viaggi in un certo intervallO di tempo;
+		1.4. calcolare, per ogni regione di una data nazione, 
+		il numero di viaggi organizzati in un dato periodo di tempo 
+		che toccano quella regione; 
+		1.5. dato un budget minimo, un budget massimo, un insieme di regioni, 
+		un periodo di tempo e un punteggio, calcolare l’insieme dei viaggi 
+		che hanno un budget nell’intervallo richiesto, toccano almeno una 
+		delle regioni date, si svolgono completamente all’interno 
+		del periodo dato e sono organizzati da un utente
+		con un punteggio pari o superiore a quello dato. 
+	2. I responsabili del sistema devono poter calcolare, 
+	data una città di destinazione,
+	per ognuno dei 12 mesi dell’anno, il numero di viaggi organizzati 
+	in quel mese nell’ultimo anno solare.

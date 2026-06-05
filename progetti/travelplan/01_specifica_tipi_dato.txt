@@ -1,0 +1,10 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Email
+Segue standard email
+
+- Denaro
+( Valore: Reale >= 0, Valuta: Segue standard (EUR, USD, ecc...) )
+
+- Indirizzo
+( Via: Stringa, civico: Intero > 0, CAP: [0-9]{5} )

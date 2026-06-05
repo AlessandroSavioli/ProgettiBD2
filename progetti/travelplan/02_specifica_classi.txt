@@ -1,0 +1,120 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe Attività
+
+	[V.Attività.no_utente_se_non_partecipa_al_viaggio]
+		!EXISTS ute, via |
+			att_ute(this, ute) AND
+			att_via(this, via) AND
+			!partecipa(ute, via)
+
+	[V.Attività.no_prima_creazione_viaggio]
+		!EXISTS via, crea, ini |
+			att_via(this, via) AND
+			creazione(via, crea) AND
+			inizio(this, ini) AND
+			ini < crea
+
+- Classe AttivitàComposta
+
+	[V.AttivitàComposta.tutte_attività_stesso_viaggio]
+		FORALL att |
+			attcomp_att(this, att) -> 
+				EXISTS via | attcompvia(this, via) AND att_via(att, via)
+
+- Classe Utente
+
+	[V.Utente.max_un_pernottamento_al_giorno]
+		FORALL via | partecipa(this, via) ->
+		        
+            !EXISTS p1, p2, ini1, ini2, d |
+                
+                Pernottamento(p1) AND att_via(p1, via) AND
+                Pernottamento(p2) AND att_via(p2, via) AND
+                p1 != p2 AND              
+                
+                inizio(p1, ini1) AND data(ini1, d) AND
+                inizio(p2, ini2) AND data(ini2, d) AND                
+                
+                ( att_ute(p1, this) OR (!EXISTS u1 | att_ute(p1, u1)) ) AND
+                
+                ( att_ute(p2, this) OR (!EXISTS u2 | att_ute(p2, u2)) ) 
+	
+	punteggio(): Intero>= 0	
+		pre:
+			EXISTS u', via |
+				organizza(this, via) AND
+				feedback(u', via)
+		post:
+			result soddisfa la seguente formula:
+
+			FEEDS = { (u', via, v) | 
+						organizza(this, via) AND
+						feedback(u', via) AND
+						voto(u', via, v) }
+			AND
+			media = ( SUM( v | EXISTS u, via | 
+								(u, via, v) in FEEDS) / |FEEDS| )
+			AND
+			media <= 3 -> result = 0
+			AND
+			media > 3 -> 
+				result = PARTEINTERAINF( 0.10 * |{ u, via | EXISTS v |
+												(u, via, v) in FEEDS AND
+												v >= 4 }| )
+
+- Classe Feedback
+
+	[V.Feedback.no_prima_iscrizione_utente]
+		!EXISTS ist, ute, iscr, via |
+			feedback(ute, via) AND
+			istante(ute, via, ist) AND
+			iscrizione(ute, iscr) AND
+			ist < iscr
+
+	[V.Feedback.dopo_fine_viaggio]
+		!EXISTS ute, via, ist, fin |
+			feedback(ute, via) AND
+			istante(ute, via, ist) AND
+			fine(via, fin) AND
+			ist < fin
+
+	[V.Feedback.solo_se_utente_partecipa]
+		!EXISTS ute, via |
+			feedback(ute, via) AND
+			!partecipa(ute, via)
+
+- Classe Viaggio
+
+	[V.Viaggio.no_creato_prima_iscrizione_utente]
+		!EXISTS ute, iscr, crea |
+			organizza(ute, this) AND
+			creazione(this, crea) AND
+			iscrizione(ute, iscr) AND
+			crea < iscr
+
+	inizio(): DataOra
+		pre:
+			EXISTS att |
+				att_via(att, this)
+		post:
+			result soddisfa la seguente formula:
+
+			result = min( ini | EXISTS att |
+								att_via(att, this) AND
+								inizio(att, ini) )
+	
+	fine(): DataOra
+		pre:
+			EXISTS att |
+				att_via(att, this)
+		post:
+			result soddisfa la seguente formula:
+
+			result = max ( r | EXISTS a, ini, dur |
+								att_via(a, this) AND
+								inizio(a, ini) AND
+								durata_min(a, dur) AND
+								r = ini + (dur * "1 minuto") )
+	
+			
