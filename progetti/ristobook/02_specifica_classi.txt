@@ -56,6 +56,22 @@
 			ora_fine(this, fin) AND
 			fin < ini
 
+	[V.Promozione.no_prenotazioni_impossibili]
+		!EXISTS pren, orarpren, dpren, opren, di, df, oi, of, gio |
+			pre_pro(pren, this) AND
+			orario(pren, orarpren) AND
+			data(orarpren, dpren) AND
+			ora(orarpren, opren) AND
+			giorno(pren, gio) AND
+			inizio(this, di) AND
+			fine(this, df) AND
+			ora_inizio(this, oi) AND
+			ora_fine(this, of) AND
+			( ( dpren < di OR dpren > df ) OR
+			  ( opren < oi OR opren > of ) OR
+			  ( !giorni(this, gio) ) )
+			
+
     coperti_rimanenti(d:Data): Booleano
     	pre:
     		nessuna
@@ -116,6 +132,11 @@
 				completamento(this, compl) AND
 				compl < acc
 
+	[V.Prenotazione.no_promozione_altro_ristorante]
+		FORALL prom, risto |
+			pre_ris(this, risto) AND pre_pro(this, prom) -> 
+				pro_ris(prom, risto)
+	
 	giorno(): Giorno
 		pre:
 			nessuna
