@@ -1,0 +1,27 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Indirizzo
+(via:Stringa, civico:Intero>0, CAP:[0-9]{5})
+
+- IBAN
+stringa secondo standard
+
+- CodPat
+stringa secondo standard
+
+- NumCart
+stringa secondo standard
+
+- CodSmart
+stringa secondo standard azienda
+
+- Targa
+Stringa secondo standard
+Italia ~ [A-Z]{2}[0-9]{3}[A-Z]{2}
+
+- Denaro
+( Valore: Reale >= 0, 
+Valuta: stringa secondo standard [EUR, USD, ecc...] )
+
+- Coordinate
+( lat:-90..90, long:-180..180 )

@@ -1,0 +1,127 @@
+- SPECIFICA RAFFINATA 
+
+1. requisiti sui soci 
+	1.1. codice fiscale
+	1.2. nome
+	1.3. cognome
+	1.4. data di nascita
+	1.5. patente in corso di validità
+	1.6. i soci pre-registrati possono essere accettati
+		 o rifiutati da un operatore
+	1.7. alcuni soci possono essere clienti abituali:
+			Attualmente un socio è considerato abituale se ha effettuato
+			noleggi per almeno 60 ore nel corso degli ultimi 12 mesi in caso sia un privato, o almeno 
+			100 se usa il servizio per conto di una società.
+
+2. requisiti sui soci privati
+	2.1. sono soci
+	2.2. indirizzo di residenza
+	2.3. numero carta di credito
+
+3. requisiti sui soci dipendenti
+	3.1. sono soci
+	3.2. nome della società in cui lavorano
+	3.3. per essere accettati, il nome della società deve
+		 essere già conosciuta dal sistema (v. req. 4)
+		 
+4. requisiti sulle società
+	4.1. ragione sociale
+	4.2. indirizzo sede legale
+	4.3. IBAN
+	4.4. responsabile del servizio smart2go
+
+5. requisiti sulle auto
+	5.1. dove si trova l'auto (coordinate) (operazione)
+	5.2. targa
+	5.3. modello
+	5.4. numero di posti
+	5.5. data ultima manutenzione
+	5.6. categoria (v. req. 7)
+	5.7. possono essere di 2 tipologie:
+		5.7.1. alimentazione tradizionale
+			5.7.1.1. chilometri al litro
+		5.7.2. carburanti ecocompatibili
+			5.7.2.1. tipo di alimentazione
+			5.7.2.2. autonomia in km
+
+6. requisiti sui noleggi
+	6.1. istante inizio
+	6.2. classe più specifica noleggioTerminato:
+		6.2.1. istante termine
+
+7. requisiti sulle categorie
+	7.1. da queste dipendono le tariffe dei noleggi
+	7.2. nome
+
+8. requisiti sulle convenzioni 
+	8.1. società con la quale è stata stipulata (v. req. 4)
+	8.2. nome
+	8.3. sconto applicato (1..100)
+	8.4. possono essere di 2 categorie:
+		8.4.1. convenzioni che incentivano noleggi con auto ecocompatibili
+		8.4.2. convenzioni che incentivano noleggi con auto di specifiche categorie (almeno 1, v. req. 7)
+
+9. requisiti sui sinistri
+	9.1. descrizione
+	9.2. istante 
+	9.3. luogo
+	9.4. se ha provocato feriti
+	9.5. ammontare economico dei danni
+	9.6. possono essere di due tipi:
+		9.6.1. con controparte:
+			9.6.1.1. targa dell'altro veicolo
+			9.6.1.2. se il socio è responsabile
+		9.6.2. senza controparte
+
+10. funzionalità:
+	1. I soci devono poter effettuare la pre-registrazione al servizio via web, indicando i
+		loro dati anagrafici e gli estremi della loro patente di guida.
+	2. Il responsabile smart2go di una società deve poter approvare o rifiutare le pre-
+		registrazioni dei soci che dichiarano di volersi registrare al servizio per conto della
+		società. 
+	3. Il personale del centro di supporto smart2go deve poter accettare o rifiutare la
+		pre-registrazione di un socio, rilasciando una smart card (di cui interessa il codice
+		identificativo) in caso di accettazione.
+	4. I soci devono poter effettuare noleggi di auto in autonomia (via web o app per
+		smartphone), come descritto.
+	5. I soci, all’atto del loro accesso ad un veicolo (per noleggiarlo), devono poter de-
+		nunciare, utilizzando il computer di bordo, eventuali danni visibili al veicolo (una
+		stringa).
+	6. L’Ufficio Sinistri, dato un socio, vuole calcolare la sua classe di rischio, che dipende
+		dal numero n di sinistri senza controparte più quelli con controparte di cui è stato
+		responsabile avvenuti negli ultimi 3 anni. In particolare, la classe di rischio è 0 se
+		n = 0, è pari ad n se 0 < n < 10, ed è pari a 10 se n ≥ 10.
+	7. L’Ufficio Sinistri, dati un’auto (di cui si è scoperto un danno), ed un’istante di
+		tempo (nella forma di una data ed un’ora), vuole conoscere l’ultimo utente che
+		l’ha guidata (a quel dato istante di tempo).
+	8. Il sistema di fatturazione, dato un socio ed un intervallo di tempo (nella forma di
+		due date), ha bisogno di calcolare l’importo complessivo dei noleggi effettuati da
+		quel socio nell’intervallo di tempo indicato (al fine di addebitare tale somma sul
+		suo conto bancario). Il meccanismo di tariffazione prevede la possibilità di sconti:
+			• Se il socio è una società che ha stipulato convenzioni con il servizio, tutti i
+				suoi noleggi che rientrano nella convenzione sono scontati secondo i termini
+				della convenzione.
+			• In relazione alla classe di rischio c del socio, si applica un ulteriore sconto
+				o sovrapprezzo. In particolare, se c < 2 si applica uno sconto del 10%; se
+				c ≥ 5, si applica un sovrapprezzo di (c ∗ 10)% (ovvero 50% per c = 5, 60%
+				per c = 6, ecc.).
+			• Se il socio è un cliente abituale (tale al momento dell’addebito), ottiene uno
+				sconto ulteriore del 15%.
+		Gli sconti vengono applicati l’uno dopo l’altro nell’ordine dato.
+	9. L’ufficio comunicazioni esterne del servizio smart2go, dato un socio, vuole co-
+		noscere le categorie delle auto che preferisce, ovvero quelle che ha noleggiato il
+		maggior numero di volte.
+	10. Il sistema di fatturazione, data una categoria di auto, vuole conoscere le società
+		che hanno le convenzioni più vantaggiose (ovvero con tassi di sconto più elevati)
+		per auto di quella categoria.
+	11. Il sistema di fatturazione, dato un insieme di società, vuole conoscere quelle che
+		hanno stipulato con il servizio smart2go almeno una convenzione per noleggiare
+		auto ecocompatibili.
+
+
+
+
+
+
+
+

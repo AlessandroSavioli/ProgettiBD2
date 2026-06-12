@@ -1,0 +1,107 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe Auto
+	
+	ultima_manutenzione():Data
+		pre:
+			EXISTS manu |
+				auto_manu(this, manu)
+		post:
+			result soddisfa la seguente formula:
+
+			DATE_MANU = { d | EXISTS manu |
+								auto_manu(this, manu) AND
+								data(manu, d) }
+			AND
+			result = MAX( d | d in DATE_MANU )
+
+- Classe Noleggio
+
+	[V.Noleggio.no_prima_rilascio_smartcard]
+		!EXISTS scard, rila, ini |
+			inizio(this, ini) AND
+			nol_smart(this, scard) AND
+			rilascio(scard, rila) AND
+			ini < rila
+
+- Classe NoleggioTerminato
+	
+	[V.NoleggioTerminato.no_prima_inizio]
+		!EXISTS ini, fin |
+			inizio(this, ini) AND
+			fine(this, fin) AND
+			fin < ini
+
+- Classe SocioDipendente
+	
+	[V.SocioDipendente.scard_solo_se_ha_società]
+		!EXISTS societ, scard |
+			smart_soc(scard, this) AND
+			!soc_socio(societ, this)
+
+	[V.SocioDipendente.scard_solo_se_preaccettato]
+		!EXISTS scard |
+			smart_soc(scard, this) AND
+			!Pre-Accettato(this)
+
+- Classe Sinistro
+
+	[V.Sinistro.dentro_intervallo_noleggio]
+		FORALL s, nol |
+			Sinistro(s) AND
+			nol_sini(nol, s) AND
+			NoleggioTerminato(nol) ->
+				EXISTS ist, ini, fin |
+					istante(s, ist) AND
+					inizio(nol, ini) AND
+					fine(nol, fin) AND
+					ini <= ist AND
+					ist <= fin 
+
+- Classe Socio
+	
+	[V.Socio.no_scard_se_rifiutato]
+		!EXISTS scard |
+			smart_soc(scard, this) AND
+			SocioRifiutato(this)
+
+	abituale():Booleano
+		// Coming Soon
+
+	n_sin_no_controparte(d:Data):Intero >= 0
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			SIN = { s | EXISTS scard, nol, sini, 
+											ist, di |
+						smart_soc(scard, this) AND
+						nol_smart(nol, scard) AND
+						nol_sini(nol, sini) AND
+						!SinistroControparte(sini) AND
+						istante(sini, ist) AND
+						data(ist, di) AND
+						oggi - d <= di }
+			AND
+			result = |SIN|
+
+	n_sin_con_controparte(d:Data):Intero>=0
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			SIN = { s | EXISTS scard, nol, sini, 
+											ist, di |
+						smart_soc(scard, this) AND
+						nol_smart(nol, scard) AND
+						nol_sini(nol, sini) AND
+						SinistroControparte(sini) AND
+						socio_responsabile(sini, true) AND
+						istante(sini, ist) AND
+						data(ist, di) AND
+						oggi - d <= di }
+			AND
+			result = |SIN|
+
