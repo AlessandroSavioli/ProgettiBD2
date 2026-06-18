@@ -1,0 +1,90 @@
+- SPECIFICA RAFFINATA
+
+1. requisiti sui negozi
+	1.1. nome
+	1.2. indirizzo sede legale
+	1.3. email [1..*]
+	1.4. telefono per richieste [0..1]
+
+2. requisiti sugli articoli
+	2.1. nome 
+	2.2. descrizione
+	2.3. marca
+	2.4. numero del modello
+	2.5. categoria
+	2.6. tags [1..*]
+	2.7. codice articolo {id}
+
+3. requisiti sulle offerte di vendita
+	3.1. articolo che si vuole vendere (v. req. 2)
+	3.2. prezzo
+	3.3. inizio vendita
+	3.4. fine vendita[0..1]
+	3.5. spese di spedizione per i vari paesi [1..*] (v. req. 4)
+
+4. requisiti sulle spese di spedizione
+	il negozio può definire per ogni articolo spese di spedizione
+	in base al paese di destinazione e al numero di pezzi acquistati
+
+5. requisiti sui buoni regalo
+	5.1. utente che l'ha acquistato
+	5.2. importo
+	5.3. scadenza
+
+6. requisiti sulle carte di credito
+	6.1. nome del titolare
+	6.2. numero (stringa 16 cifre)
+	6.3. scadenza
+
+7. requisiti sugli utenti
+	7.1. nome utente {id}
+	7.2. istante registrazione
+	7.3. insieme delle carte [0..*] (v. req. 6) 
+
+8. requisiti sulle wish lists
+	8.1. utente proprietario (v. req. 7)
+	8.2. nome
+	8.3. insieme degli articoli [0..*]
+	8.4. isPubblica, un booleano
+
+9. requisiti sulle richieste di amicizia
+	9.1. utente che la richiede
+	9.2. utente a cui viene richiesta
+	9.3. può essere accettata o rifiutata (sottoclassi)
+
+
+*. funzionalità
+	amazzon mantiene una vetrina di tutti gli oggetti disponibili
+	ogni utente quindi potrà:
+	*.1. navigare nella vetrina di tutti gli oggetti in vendita
+	*.2. consultare per ognuno la scheda tecnica (v. req. 2)
+	*.3. accedere alle offerte riguardanti un articolo
+
+	quando un negozio mette vuole mettere in vendita un oggetto,
+	il sistema deve permettere di creare una nuova scheda
+	tecnica solo se non esiste già
+
+	se un negozio si dovesse rendere conto, durante la creazione
+	di un'offerta per un articolo già in vetrina, che la sua
+	scheda tecnica è errata, deve poterlo segnalare
+
+	al momento di un pagamento, l'utente può decidere se 
+	usare o meno un buono regalo
+
+	sia utenti registrati che non possono visualizzare
+	offerte e articoli in vetrina
+
+	Periodicamente amazzon effettua una verifica del prezzo più 
+	basso disponibile per ogni oggetto presente nelle wish list 
+	di ogni utente e, se rileva un abbassamento di prezzo,
+	notifica la cosa all’utente. 
+
+	Infine, il sistema deve permettere:
+		• al management di calcolare, dato un periodo di tempo, il paese dal quale sono
+		provenuti più acquisti nel periodo dato
+		• visualizzare tutti gli oggetti in vendita di una data categoria e contenente un dato
+		insieme di tag (mostrando, per ognuno, il prezzo più basso, comprensivo del costo
+		di spedizione)
+		• visualizzare gli articoli attualmente più moda, che sono gli articoli il cui volume
+		di vendite è salito percentualmente di più nell’ultimo mese, rispetto alla media
+		mensile dei due mesi precedenti.

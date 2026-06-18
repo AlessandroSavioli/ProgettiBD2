@@ -1,0 +1,103 @@
+- SPECIFICA DELLE CLASSI
+
+- Classe CartaDiCredito
+
+	valida(): Booleano
+		pre: 
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> EXISTS scad |
+								scadenza(this, scad) AND
+								scad > oggi
+
+- Classe AmiciziaAccettata
+	
+	[V.AmiciziaAccettata.dopo_invio_richiesta]
+		!EXISTS inv, acc |
+			invio(this, inv) AND
+			accettata(this, acc) AND
+			acc < inv
+
+- Associazione spedizione
+	
+	ha_tariffe(): Booleano
+		pre: 	
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			result = true <-> EXISTS tar | 
+								sped_tar(this, tar)
+
+	[V.spedizione.una_sola_tariffa_finale]
+		FORALL tar |
+			sped_tar(this, tar) ->
+				|{ tar_fin | sped_tar(this, tar_fin) AND
+					quant_fine(tar_fin, null) }| = 1
+
+	[V.spedizione.tariffe_contigue]
+		FORALL tar, val |
+			sped_tar(this, tar) AND quant_fine(tar, val) AND val != null 
+			-> EXISTS tar2, ini2 |
+				sped_tar(this, tar2) AND
+				quant_inizio(tar2, ini2) AND
+				val + 1 = ini2
+
+- Classe Utente
+
+	paese(): Paese
+		pre:
+			nessuna
+		post:
+			result soddisfa la seguente formula:
+
+			EXISTS citt |
+				citt_ute(citt, this) AND
+				citt_paese(citt, result)
+
+
+- Classe Carrello
+	
+	[V.Carrello.nessun_articolo_non_spedibile_paese_utente]
+		!EXISTS ute, pae, off |
+			car_ute(this, ute) AND
+			paese(ute, pae) AND
+			info(this, off) AND
+			!spedizione(off, pae)
+
+	prezzo_tot(): Denaro
+		pre:
+			ALL off, fineoff |
+				info(this, off) AND
+				fine(off, fineoff) AND
+				fineoff != null -> fineoff > oggi
+			AND
+			[V.Carrello.nessun_articolo_non_spedibile_paese_utente]
+		post:
+			result soddisfa la seguente formula:
+
+			EXISTS ute, pae |
+				car_ute(this, ute) AND
+				paese(ute, pae) AND
+				ARTICOLI = { (off, prezz, quant, sped) | info(this, off) AND
+											quantità(this, off, quant) AND
+											prezzo(off, prezz) AND
+											spedizione(off, pae) AND
+											ha_tariffe(off, pae, false) ->
+												tariffa_base(off, pae, sped)
+											AND
+											ha_tariffe(off, pae, true) ->
+												EXISTS tar, qi, qf |
+													sped_tar(off, pae, tar) AND
+													quant_inizio(tar, qi) AND
+													quant_fine(tar, qf) AND
+													qf != null ->
+														quant >= qi AND
+														quant <= qf AND
+														costo_unitario(tar, sped) } 
+				AND
+				result = SUM( (quant * prezz) + (quant * sped) | EXISTS off |
+													(off, prezz, quant, sped) in ARTICOLI )
+

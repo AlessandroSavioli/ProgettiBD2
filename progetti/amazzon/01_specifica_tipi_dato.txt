@@ -1,0 +1,20 @@
+- SPECIFICA DEI TIPI DI DATO
+
+- Indirizzo
+(Via: Stringa, Civico: Intero>0, CAP:[0-9]{5})
+
+- Email
+stringa secondo standard
+
+- Tel
+stringa secondo standard
+
+- CodArt
+stringa secondo standard globale
+
+- NumCart
+[0-9]{16}
+
+- Denaro
+( Valore: Reale>=0, 
+  Valuta:Stringa secondo standard (EUR, USD, ecc...) )
